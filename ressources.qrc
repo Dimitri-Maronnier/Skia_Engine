@@ -1,0 +1,25 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Shaders/fs.glsl</file>
+        <file>Shaders/vs.glsl</file>
+        <file>Images/test.png</file>
+        <file>Images/folder.png</file>
+        <file>Images/file.png</file>
+        <file>DarkOrangeStyle.qss</file>
+        <file>Images/checkbox.png</file>
+        <file>Images/down_arrow.png</file>
+        <file>Images/handle.png</file>
+        <file>Shaders/glslOverall</file>
+        <file>Shaders/functions.glsl</file>
+        <file>Shaders/fromEquirectangularToCubemapFragment.glsl</file>
+        <file>Shaders/cubemapVertex.glsl</file>
+        <file>Shaders/simpleSkyboxFragment.glsl</file>
+        <file>Shaders/simpleSyboxVertex.glsl</file>
+        <file>Shaders/irradiance_convolution.glsl</file>
+        <file>Shaders/prefilter.glsl</file>
+        <file>Shaders/brdfFragment.glsl</file>
+        <file>Shaders/brdfVertex.glsl</file>
+        <file>Shaders/deferredShadingFragment.glsl</file>
+        <file>Shaders/deferredShadingVertex.glsl</file>
+    </qresource>
+</RCC>

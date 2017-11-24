@@ -1,0 +1,743 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ImageEditor</class>
+ <widget class="QMainWindow" name="ImageEditor">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>801</width>
+      <height>561</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QGroupBox" name="groupBox">
+       <property name="title">
+        <string>Setting</string>
+       </property>
+       <widget class="QToolBox" name="toolBox">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>371</width>
+          <height>521</height>
+         </rect>
+        </property>
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <widget class="QWidget" name="page_4">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>371</width>
+           <height>386</height>
+          </rect>
+         </property>
+         <attribute name="label">
+          <string>Filtering</string>
+         </attribute>
+         <widget class="QWidget" name="formLayoutWidget">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>371</width>
+            <height>381</height>
+           </rect>
+          </property>
+          <layout class="QFormLayout" name="formLayout">
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>Min Filter</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QComboBox" name="MinFilterCombo">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <item>
+              <property name="text">
+               <string>LINEAR</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>NEAREST</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>NEAREST MIPMAP NEAREST</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>NEAREST MIPMAP LINEAR</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>LINEAR MIPMAP NEAREST</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>LINEAR MIPMAP LINEAR</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string>Max Filter</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="2" column="0">
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="3" column="1">
+            <widget class="QComboBox" name="MagFilterCombo">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <item>
+              <property name="text">
+               <string>LINEAR</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>NEAREST</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>NEAREST MIPMAP NEAREST</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>NEAREST MIPMAP LINEAR</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>LINEAR MIPMAP NEAREST</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>LINEAR MIPMAP LINEAR</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="page">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>371</width>
+           <height>386</height>
+          </rect>
+         </property>
+         <attribute name="label">
+          <string>Wrapping</string>
+         </attribute>
+         <widget class="QWidget" name="formLayoutWidget_2">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>371</width>
+            <height>381</height>
+           </rect>
+          </property>
+          <layout class="QFormLayout" name="formLayout_2">
+           <item row="0" column="0">
+            <spacer name="verticalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>Wrap S</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QComboBox" name="WrapSCombo">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <item>
+              <property name="text">
+               <string>REPEAT</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>MIRRORED REPEAT</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CLAMP TO EDGE</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CLAMP TO BORDER</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <spacer name="verticalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>Wrap T</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QComboBox" name="WrapTCombo">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <item>
+              <property name="text">
+               <string>REPEAT</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>MIRRORED REPEAT</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CLAMP TO EDGE</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CLAMP TO BORDER</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="page_2">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>371</width>
+           <height>386</height>
+          </rect>
+         </property>
+         <attribute name="label">
+          <string>MipMapping</string>
+         </attribute>
+         <widget class="QWidget" name="formLayoutWidget_3">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>371</width>
+            <height>381</height>
+           </rect>
+          </property>
+          <layout class="QFormLayout" name="formLayout_3">
+           <item row="0" column="0">
+            <spacer name="verticalSpacer_5">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>Base Level</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <spacer name="verticalSpacer_6">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_7">
+             <property name="text">
+              <string>Max Level</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <spacer name="verticalSpacer_7">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="6" column="0">
+            <spacer name="verticalSpacer_8">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="7" column="0">
+            <widget class="QLabel" name="label_9">
+             <property name="text">
+              <string>Lod Bias</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QCheckBox" name="UseMipMap">
+             <property name="text">
+              <string>Generate MipMap</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QDoubleSpinBox" name="BaseSpin">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="QDoubleSpinBox" name="MaxSpin">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="1">
+            <widget class="QDoubleSpinBox" name="BiasSpin">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="page_3">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>371</width>
+           <height>386</height>
+          </rect>
+         </property>
+         <attribute name="label">
+          <string>Anisotropy</string>
+         </attribute>
+         <widget class="QWidget" name="formLayoutWidget_4">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>361</width>
+            <height>391</height>
+           </rect>
+          </property>
+          <layout class="QFormLayout" name="formLayout_4">
+           <item row="0" column="0">
+            <spacer name="verticalSpacer_9">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="1" column="0">
+            <widget class="QCheckBox" name="UseAnisotropy">
+             <property name="text">
+              <string>Use Anisotropy</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <spacer name="verticalSpacer_10">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_8">
+             <property name="text">
+              <string>Quantity</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QDoubleSpinBox" name="QuatitySpin">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="page_5">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>371</width>
+           <height>386</height>
+          </rect>
+         </property>
+         <attribute name="label">
+          <string>Compression</string>
+         </attribute>
+         <widget class="QWidget" name="formLayoutWidget_5">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>361</width>
+            <height>381</height>
+           </rect>
+          </property>
+          <layout class="QFormLayout" name="formLayout_5">
+           <item row="0" column="0">
+            <spacer name="verticalSpacer_11">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_10">
+             <property name="text">
+              <string>Format</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QComboBox" name="CompressionCombo">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <item>
+              <property name="text">
+               <string>NONE</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>RED</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>RG</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>RGB</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>RGBA</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>SRGB</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>SRGB_ALPHA</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>RED_RGTC1</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>SIGNED_RED_RGTC1</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>RG_RGTC2</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>SIGNED_RG_RGTC2</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>RGBA_BPTC_UNORM</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>SRGB_ALPHA_BPTC_UNORM</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>RGB_BPTC_SIGNED_FLOAT</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>RGB_BPTC_UNSIGNED_FLOAT</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>RGB8_ETC2</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>SRGB8_ETC2</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>RGB8_PUNCHTHROUGH_ALPHA1_ETC2</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>SRGB8_PUNCHTHROUGH_ALPHA1_ETC2</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>RGB8_ETC2_EAC</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>SRGB8_ALPHA8_ETC2_EAC</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>R11_EAC</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>SIGNED_R11_EAC</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>RG11_EAC</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>SIGNED_RG11_EAC</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionSave"/>
+   </widget>
+   <addaction name="menuFile"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionSave">
+   <property name="text">
+    <string>Save</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

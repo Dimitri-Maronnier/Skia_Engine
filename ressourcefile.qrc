@@ -1,0 +1,49 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Shaders/fs.glsl</file>
+        <file>Shaders/vs.glsl</file>
+        <file>glew-2.0.0/include/GL/eglew.h</file>
+        <file>glew-2.0.0/include/GL/glew.h</file>
+        <file>glew-2.0.0/include/GL/glxew.h</file>
+        <file>glew-2.0.0/include/GL/wglew.h</file>
+        <file>GnuWin32/include/libpng12/png.h</file>
+        <file>GnuWin32/include/libpng12/pngconf.h</file>
+        <file>GnuWin32/include/png.h</file>
+        <file>GnuWin32/include/pngconf.h</file>
+        <file>Images/test.png</file>
+		<file>Images/checkbox.png</file>
+		<file alias="down_arrow.png">Images/down_arrow.png</file>
+		<file>Images/handle.png</file>
+        <file>camera.cpp</file>
+        <file>camera.h</file>
+        <file>camerafirst.cpp</file>
+        <file>camerafirst.h</file>
+        <file>camerathird.cpp</file>
+        <file>camerathird.h</file>
+        <file>glwidget.cpp</file>
+        <file>glwidget.h</file>
+        <file>imgloader.cpp</file>
+        <file>imgloader.h</file>
+        <file>light.cpp</file>
+        <file>light.h</file>
+        <file>loader.cpp</file>
+        <file>loader.h</file>
+        <file>main.cpp</file>
+        <file>mainwindow.cpp</file>
+        <file>mainwindow.h</file>
+        <file>matrix.cpp</file>
+        <file>matrix.h</file>
+        <file>mesh.cpp</file>
+        <file>mesh.h</file>
+        <file>point.cpp</file>
+        <file>point.h</file>
+        <file>shader.cpp</file>
+        <file>shader.h</file>
+        <file>shaderprogram.cpp</file>
+        <file>shaderprogram.h</file>
+        <file>utils.cpp</file>
+        <file>utils.h</file>
+        <file>vector.cpp</file>
+        <file>vector.h</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MaterialEditorDialog</class>
+ <widget class="QDialog" name="MaterialEditorDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1178</width>
+    <height>735</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QWidget" name="gridLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>30</y>
+     <width>1171</width>
+     <height>701</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

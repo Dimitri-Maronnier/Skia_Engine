@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MaterialEditorWindow</class>
+ <widget class="QMainWindow" name="MaterialEditorWindow">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>720</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Material Editor</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1241</width>
+      <height>802</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetNoConstraint</enum>
+     </property>
+     <property name="spacing">
+      <number>6</number>
+     </property>
+     <item row="0" column="0">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="GLMaterialPreview" name="openGLWidget">
+         <property name="minimumSize">
+          <size>
+           <width>400</width>
+           <height>400</height>
+          </size>
+         </property>
+         <property name="mouseTracking">
+          <bool>true</bool>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::ClickFocus</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="sphereButton">
+           <property name="text">
+            <string>sphere</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="planeButton">
+           <property name="text">
+            <string>plane</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="cubeButton">
+           <property name="text">
+            <string>cube</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="cylinderButton">
+           <property name="text">
+            <string>cylinder</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="customButton">
+           <property name="text">
+            <string>custom</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QTabWidget" name="tabWidget_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="currentIndex">
+          <number>1</number>
+         </property>
+         <widget class="QWidget" name="Details">
+          <attribute name="title">
+           <string>Details</string>
+          </attribute>
+         </widget>
+         <widget class="QWidget" name="Settings">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <attribute name="title">
+           <string>Material Settings</string>
+          </attribute>
+          <widget class="QToolBox" name="toolBox">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>391</width>
+             <height>311</height>
+            </rect>
+           </property>
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <widget class="QWidget" name="page_3">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>391</width>
+              <height>257</height>
+             </rect>
+            </property>
+            <attribute name="label">
+             <string>Preview Settings</string>
+            </attribute>
+            <widget class="QWidget" name="formLayoutWidget">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>401</width>
+               <height>361</height>
+              </rect>
+             </property>
+             <layout class="QFormLayout" name="PreviewSettings">
+              <item row="0" column="0">
+               <widget class="QCheckBox" name="lightAutoRotatecheckBox">
+                <property name="text">
+                 <string>Light Auto Rotate</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label">
+                <property name="text">
+                 <string>Light Color</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QPushButton" name="lightColorButton">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Color</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+           <widget class="QWidget" name="page_4">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>98</width>
+              <height>28</height>
+             </rect>
+            </property>
+            <attribute name="label">
+             <string>Material</string>
+            </attribute>
+           </widget>
+          </widget>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="2">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="MaterialGraphWidget" name="MaterialView">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>600</height>
+          </size>
+         </property>
+         <property name="sizeAdjustPolicy">
+          <enum>QAbstractScrollArea::AdjustIgnored</enum>
+         </property>
+         <property name="transformationAnchor">
+          <enum>QGraphicsView::AnchorUnderMouse</enum>
+         </property>
+         <property name="resizeAnchor">
+          <enum>QGraphicsView::NoAnchor</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTextBrowser" name="DebugBrowser">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="3">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="ListFunctionsView" name="listFunctionView">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="dragDropMode">
+          <enum>QAbstractItemView::DragOnly</enum>
+         </property>
+         <attribute name="headerVisible">
+          <bool>false</bool>
+         </attribute>
+         <column>
+          <property name="text">
+           <string notr="true">1</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1280</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionSave"/>
+    <addaction name="actionLoad"/>
+   </widget>
+   <addaction name="menuFile"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionSave">
+   <property name="text">
+    <string>Save</string>
+   </property>
+  </action>
+  <action name="actionLoad">
+   <property name="text">
+    <string>Load</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MaterialGraphWidget</class>
+   <extends>QGraphicsView</extends>
+   <header>src/Editor/Materials/materialgraphwidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ListFunctionsView</class>
+   <extends>QTreeWidget</extends>
+   <header>src/Editor/Materials/listfunctionsview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>GLMaterialPreview</class>
+   <extends>QOpenGLWidget</extends>
+   <header>src/Editor/Materials/glmaterialpreview.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

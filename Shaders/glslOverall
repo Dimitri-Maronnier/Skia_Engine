@@ -1,0 +1,72 @@
+[Category=Constant,Name=float,Type=float,Input={},Output={x},HaveImage=false,IsVariable=true,Params=1,OutputType=float,Uniform=false,Code="//#numberOccurance = //#value ;"]
+[Category=Constant,Name=bool,Type=float,Input={},Output={x},HaveImage=false,IsVariable=true,Params=1,OutputType=bool,Uniform=false,Code="//#numberOccurance = //#value ;"]
+[Category=Constant,Name=vec3,Type=vector3,Input={},Output={.xyz},HaveImage=false,IsVariable=true,Params=3,OutputType=vec3,Uniform=false,Code="//#numberOccurance = //#value ;"]
+[Category=Constant,Name=vec2,Type=vector2,Input={},Output={.xy},HaveImage=false,IsVariable=true,Params=2,OutputType=vec2,Uniform=false,Code="//#numberOccurance = //#value ;"]
+[Category=Constant,Name=vec4,Type=vector4,Input={},Output={.xy},HaveImage=false,IsVariable=true,Params=2,OutputType=vec4,Uniform=false,Code="//#numberOccurance = //#value ;"]
+
+[Category=Maths,Name=if,Type=function,Input={x;y;x<y;x>y;x==y},Output={result},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance; if(//#input0 < //#input1 ){ //#varName = //#input2;}else if(//#input0 > //#input1 ){ //#varName = //#input3;}else{ //#varName = //#input4;} "]
+COMMON FUNCTIONS
+[Category=Maths,Name=mod,Type=function,Input={x;y},Output={x%y},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = mod (//#input0 , //#input1 );"]
+[Category=Maths,Name=min,Type=function,Input={x;y},Output={min},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = min (//#input0 , //#input1 );"]
+[Category=Maths,Name=max,Type=function,Input={x;y},Output={max},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = max (//#input0 , //#input1 );"]
+[Category=Maths,Name=clamp,Type=function,Input={x;minVal;maxVal},Output={clamp},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = clamp (//#input0 , //#input1 , //#input2 );"]
+[Category=Maths,Name=mix,Type=function,Input={x;y;a},Output={mix},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = mix (//#input0 , //#input1 , //#input2 );"]
+[Category=Maths,Name=step,Type=function,Input={edge;x},Output={step},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = step (//#input0 , //#input1 );"]
+[Category=Maths,Name=smoothstep,Type=function,Input={edge0;edge1;x},Output={smoothstep},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = smoothstep (//#input0 , //#input1 , //#input2 );"]
+[Category=Maths,Name=add,Type=function,Input={x;y},Output={x+y},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = //#input0 + //#input1 ;"]
+[Category=Maths,Name=minus,Type=function,Input={x;y},Output={x-y},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = //#input0 - //#input1 ;"]
+[Category=Maths,Name=mul,Type=function,Input={x;y},Output={x*y},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = //#input0 * //#input1 ;"]
+[Category=Maths,Name=div,Type=function,Input={x;y},Output={x/y},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = //#input0 / //#input1 ;"]
+[Category=Maths,Name=one_minus_x,Type=function,Input={x},Output={1-x},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = 1 - //#input0 ;"]
+[Category=Maths,Name=abs,Type=function,Input={x},Output={abs},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = abs ( //#input0 ) ;"]
+[Category=Maths,Name=sign,Type=function,Input={x},Output={sign},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = sign ( //#input0 ) ;"]
+[Category=Maths,Name=floor,Type=function,Input={x},Output={floor},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = floor ( //#input0 ) ;"]
+[Category=Maths,Name=ceil,Type=function,Input={x},Output={ceil},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = ceil ( //#input0 ) ;"]
+[Category=Maths,Name=fract,Type=function,Input={x},Output={fract},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = fract ( //#input0 ) ;"]
+
+ANGLE & TRIGONOMETRY FUNCTIONS
+[Category=Maths,Name=radians,Type=function,Input={x},Output={sin},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = radians ( //#input0 );"]
+[Category=Maths,Name=degrees,Type=function,Input={x},Output={sin},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = degrees ( //#input0 );"]
+[Category=Maths,Name=sin,Type=function,Input={x},Output={sin},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = sin ( //#input0 );"]
+[Category=Maths,Name=sinClamp,Type=function,Input={x},Output={sin},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = ( sin ( //#input0 ) + 1 )/2.0;"]
+[Category=Maths,Name=cos,Type=function,Input={x},Output={cos},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = cos ( //#input0 ) ;"]
+[Category=Maths,Name=tan,Type=function,Input={x},Output={tan},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = tan ( //#input0 ) ;"]
+[Category=Maths,Name=asin,Type=function,Input={x},Output={tan},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = asin ( //#input0 ) ;"]
+[Category=Maths,Name=acos,Type=function,Input={x},Output={tan},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = acos ( //#input0 ) ;"]
+[Category=Maths,Name=atan,Type=function,Input={x},Output={tan},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = atan ( //#input0 ) ;"]
+[Category=Maths,Name=atan2,Type=function,Input={x;y},Output={tan},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = atan ( //#input0 , //#input1 ) ;"]
+
+EXPONENTIAL FUNCTIONS
+[Category=Maths,Name=pow,Type=function,Input={x;y},Output={pow},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = pow ( //#input0 , //#input1 ) ;"]
+[Category=Maths,Name=exp,Type=function,Input={x},Output={exp},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = exp ( //#input0 ) ;"]
+[Category=Maths,Name=log,Type=function,Input={x},Output={log},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = log ( //#input0 ) ;"]
+[Category=Maths,Name=exp2,Type=function,Input={x},Output={exp2},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = exp2 ( //#input0 ) ;"]
+[Category=Maths,Name=log2,Type=function,Input={x},Output={log2},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = log2 ( //#input0 ) ;"]
+[Category=Maths,Name=sqrt,Type=function,Input={x},Output={sqrt},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = sqrt ( //#input0 ) ;"]
+[Category=Maths,Name=inversesqrt,Type=function,Input={x},Output={inversesqrt},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = inversesqrt ( //#input0 ) ;"]
+
+GEOMETRIC FUNCTIONS
+[Category=Maths,Name=normalize,Type=function,Input={x},Output={|x|},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = normalize ( //#input0 ) ;"]
+[Category=Maths,Name=dot,Type=float,Input={vec1;vec2},Output={x.y},HaveImage=false,IsVariable=false,Params=0,OutputType=float,Uniform=false,Code="//#numberOccurance = dot( //#input0 , //#input1 );"]
+[Category=Maths,Name=distance,Type=float,Input={p0;p1},Output={distance},HaveImage=false,IsVariable=false,Params=0,OutputType=float,Uniform=false,Code="//#numberOccurance = distance( //#input0 , //#input1 );"]
+[Category=Maths,Name=cross,Type=function,Input={x;y},Output={cross},HaveImage=false,IsVariable=false,Params=0,OutputType=vec3,Uniform=false,Code="//#numberOccurance = cross( //#input0 , //#input1 );"]
+[Category=Maths,Name=faceforward,Type=function,Input={N;I;Nref},Output={faceforward},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = faceforward( //#input0 , //#input1 , //#input2 );"]
+[Category=Maths,Name=refract,Type=function,Input={I;N;eta},Output={refract},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = refract( //#input0 , //#input1 , //#input2 );"]
+[Category=Maths,Name=reflect,Type=function,Input={I;N},Output={reflect},HaveImage=false,IsVariable=false,Params=0,OutputType=abstract,Uniform=false,Code="//#numberOccurance = reflect( //#input0 , //#input1 );"]
+[Category=Maths,Name=length,Type=function,Input={x},Output={length},HaveImage=false,IsVariable=false,Params=0,OutputType=float,Uniform=false,Code="//#numberOccurance = length ( //#input0 ) ;"]
+
+[Category=Textures,Name=sampler2D,Type=texture,Input={},Output={x},HaveImage=true,IsVariable=false,Params=0,OutputType=sampler2D,Uniform=true,Code="//#numberOccurance ;"]
+[Category=Textures,Name=textureSampler2D,Type=textureSampler,Input={texture;uv},Output={sampler},HaveImage=false,IsVariable=false,Params=0,OutputType=vec4,Uniform=false,Code="//#numberOccurance = texture2D( //#input0 , //#input1 );"]
+[Category=Textures,Name=parallaxMapping,Type=parrallax,Input={uv;heightMap;heightScale;discardOver;minLayers;maxLayers},Output={uv},HaveImage=false,IsVariable=false,Params=0,OutputType=vec2,Uniform=false,Code="//#numberOccurance = parallaxMapping( //#input0 , //#input1 , //#input2 , //#input3 ,//#input4 ,//#input5 );"]
+
+
+[Category=Coordinate,Name=textureCoordinate,Type=vector2,Input={},Output={tc},HaveImage=false,IsVariable=false,Params=0,OutputType=vec2,Uniform=false,Code="//#numberOccurance = fs_in.textureCoord;"]
+[Category=Coordinate,Name=toCameraVectorTangent,Type=vector3,Input={},Output={viewDir},HaveImage=false,IsVariable=false,Params=0,OutputType=vec3,Uniform=false,Code="//#numberOccurance = normalize(fs_in.toCameraVectorTangent) ;"]
+[Category=Coordinate,Name=time,Type= ,Input={},Output={time},HaveImage=false,IsVariable=false,Params=0,OutputType=float,Uniform=false,Code="//#numberOccurance = time ;"]
+
+
+[Category=Convert,Name=redComponent,Type=float,Input={vec4},Output={.r},HaveImage=false,IsVariable=false,Params=0,OutputType=float,Uniform=false,Code="//#numberOccurance = //#input0.r ;"]
+[Category=Convert,Name=append,Type=convert,Input={a;b},Output={(ab)},HaveImage=false,IsVariable=false,Params=0,OutputType=abstractPlus,Uniform=false,Code="//#numberOccurance = append( //#input0 , //#input1 ) ;"]
+[Category=Convert,Name=greenComponent,Type=float,Input={vec4},Output={.g},HaveImage=false,IsVariable=false,Params=0,OutputType=float,Uniform=false,Code="//#numberOccurance = //#input0.g ;"]
+[Category=Convert,Name=blueComponent,Type=float,Input={vec4},Output={.b},HaveImage=false,IsVariable=false,Params=0,OutputType=float,Uniform=false,Code="//#numberOccurance = //#input0.b ;"]
+[Category=Convert,Name=alphaComponent,Type=float,Input={vec4},Output={.a},HaveImage=false,IsVariable=false,Params=0,OutputType=float,Uniform=false,Code="//#numberOccurance = //#input0.a ;"]
