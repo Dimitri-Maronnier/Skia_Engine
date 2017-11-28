@@ -4,28 +4,28 @@ The rendering Engine of Skia Engine is OpenGL-based, support Physically Based Re
 The Engine aim to make recents looking games with an easy Material Editor based Nodes.
 
 ## Platforms
-- Windows(Win32, x64, msvc2015): [![Build Status](https://travis-ci.org/simkimsia/UtilityBehaviors.png)](https://travis-ci.org/simkimsia/UtilityBehaviors)
+- Windows(Win32, x64, msvc 14.0): [![Build Status](https://travis-ci.org/simkimsia/UtilityBehaviors.png)](https://travis-ci.org/simkimsia/UtilityBehaviors)
 
 ## Dependencies
 - QT>5.2
 - CMake 3.2
 - OpenGL>=4.1
-- External Libraries 
+- [External Libraries](https://www.dropbox.com/s/4ref9596ppjznti/external.zip?dl=0)
 
 ## Current State
 - PBR
 - Material Editor Based Nodes
 - Scene Editor(unfinished)
-- Content Browser
-- Import(Texture/Mesh/HRD)
-- Object Editions
+- Contents Browser
+- Import(Texture/Mesh/HDRI)
+- Objects Edition
 
 ## RoadMap
 - Script Engine
-- Animation import
+- Animation Import
 - Scene Editor
 - Scene Save
 - GPU Particles Engine
 
 ## ScreenShots
-![Alt text](Images/ScreenMaterialEditor.png?raw=true "Title")
+![Alt text](Images/ScreenMaterialEditor.png?raw=true "Material Editor")
