@@ -1,6 +1,9 @@
 #include "foldergestion.h"
-#include "iostream"
-
+#include <iostream>
+#include <QDir>
+#include <QFileInfoList>
+#include "src/Editor/Utils/projectinfo.h"
+#include "src/utils.h"
 
 char FolderGestion::rootProjectsFolderPath[MAX_PATH] = "";
 char FolderGestion::my_documentsPath[MAX_PATH] = "";
@@ -146,6 +149,91 @@ void FolderGestion::recursive_copy(const boost::filesystem::path &src, const boo
   else if (boost::filesystem::is_regular_file(src)) {
     boost::filesystem::copy(src, dst);
   }
+}
 
+QString FolderGestion::addProjectPath(const QString str)
+{
+    QString path = QString(rootProjectsFolderPath);
+    path += str;
+    return path;
+}
+
+QString FolderGestion::subFolderCheckout(const QString filePath,const std::string name, const QString path)
+{
+    QDir* rootDir = new QDir(filePath);
+    QFileInfoList filesList = rootDir->entryInfoList(QDir::NoDotAndDotDot|QDir::AllEntries);
+
+    foreach(QFileInfo fileInfo, filesList)
+    {
+
+        if(fileInfo.isFile() && !(fileInfo.baseName() + "." + fileInfo.suffix()).toStdString().compare(name))
+        {
+
+            if(!fileInfo.path().compare(path)){
+                return path + "\\" + QString(name.c_str()); //The reference still right
+            }else{//Need to rebuild reference
+                return fileInfo.path() + "\\" + QString(name.c_str());
+            }
+
+        }
+
+        if(fileInfo.isDir())
+        {
+            return subFolderCheckout(fileInfo.filePath(),name,path);
+        }
+
+
+    }
+    return "";
+}
+
+QString FolderGestion::checkoutReferences(const QString path)
+{
+    std::string strRef = path.toStdString();
+    std::replace( strRef.begin(), strRef.end(), '/', '\\');
+    const std::vector<std::string> split = Utils::split(strRef,'\\');
+
+    const std::string name = (split.size()>0)?split.at(split.size()-1):path.toStdString();
+    char temp[MAX_PATH]="";
+    strcat(temp,FolderGestion::rootProjectsFolderPath);
+    strcat(temp,"\\");
+    QDir* rootDir = new QDir(strcat(temp,ProjectInfo::name.c_str()));
+
+    QFileInfoList filesList = rootDir->entryInfoList(QDir::NoDotAndDotDot|QDir::AllEntries);
+
+
+    foreach(QFileInfo fileInfo, filesList)
+    {
+
+        if(fileInfo.isFile() && !(fileInfo.baseName() + "." + fileInfo.suffix()).toStdString().compare(name))//The reference still right
+        {
+            return FolderGestion::addProjectPath("\\" + QString(ProjectInfo::name.c_str()) + "\\" + QString(name.c_str()));
+        }
+
+        if(fileInfo.isDir())
+        {
+            QString found = subFolderCheckout(fileInfo.filePath(),name,path);
+            if(found.size()>0){
+                if(found.at(0) == "/" || found.at(0) == "\\"){
+                    return FolderGestion::addProjectPath(found);
+                }
+                return found;
+            }
+        }
+
+    }
+
+}
+
+
+QString FolderGestion::removeProjectPath(const QString str)
+{
+    std::cout << str.toStdString() << std::endl;
+    std::string varUtf8 = str.toUtf8().constData();
+    unsigned int position = 0;
+    while(position<MAX_PATH && rootProjectsFolderPath[position] == varUtf8.at(position))
+        position++;
+    std::string var = varUtf8.substr(position,varUtf8.size()-1);
+    return QString(var.c_str());
 }
 

@@ -310,7 +310,7 @@ GLuint Utils::irradianceConvolution(GLuint envCubemap)
     glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
 
     IrradianceConvolutionShader irradianceShader;
-    irradianceShader.init("cubemapVertex.glsl","irradiance_convolution.glsl");
+    irradianceShader.init("cubemapVertex.glsl","PBR_Pipeline/irradiance_convolution.glsl");
     // pbr: create an irradiance cubemap, and re-scale capture FBO to irradiance scale.
     // --------------------------------------------------------------------------------
     GLuint irradianceMap;
@@ -385,7 +385,7 @@ GLuint Utils::prefilterCubeMap(GLuint envCubemap)
     glGenRenderbuffers(1, &captureRBO);
 
     PreFilterShader prefilterShader;
-    prefilterShader.init("cubemapVertex.glsl","prefilter.glsl");
+    prefilterShader.init("cubemapVertex.glsl","PBR_Pipeline/prefilter.glsl");
 
     // pbr: set up projection and view matrices for capturing data onto the 6 cubemap face directions
     // ----------------------------------------------------------------------------------------------
@@ -476,7 +476,7 @@ GLuint Utils::generate2DLut()
     glGenTextures(1, &brdfLUTTexture);
 
     BRDFShader brdfShader;
-    brdfShader.init("brdfVertex.glsl","brdfFragment.glsl");
+    brdfShader.init("PBR_Pipeline/brdfVertex.glsl","PBR_Pipeline/brdfFragment.glsl");
 
     // pre-allocate enough memory for the LUT texture.
     glBindTexture(GL_TEXTURE_2D, brdfLUTTexture);

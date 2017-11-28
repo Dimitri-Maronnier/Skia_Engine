@@ -103,7 +103,7 @@ int ShaderProgram::loadShader(QString fileName,int type){
         GLint maxLength = 0;
         glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &maxLength);
 
-        //The maxLength includes the NULL character
+
         std::vector<GLchar> infoLog(maxLength);
         glGetShaderInfoLog(shaderID, maxLength, &maxLength, &infoLog[0]);
 
@@ -111,12 +111,11 @@ int ShaderProgram::loadShader(QString fileName,int type){
         for(int i=0;i<infoLog.size();i++)
             bugReport.push_back(infoLog[i]);
 
-        //We don't need the shader anymore.
+
         glDeleteShader(shaderID);
         std::cerr << "Cannot compile shader " << fileName.toStdString() << " " << bugReport << std::endl;
-        //Use the infoLog as you see fit.
 
-        //In this simple program, we'll just leave
+
         return 0;
     }
 
@@ -154,7 +153,9 @@ int ShaderProgram::loadShaderWithSource(QString source, int type)
     if(posStr != std::string::npos)
         source.replace(posStr,QString("//#toReplaceFunctions\n").length(),ShaderCode);
 
-    const GLchar * SourcePointer = (const GLchar *)source.toUtf8();
+    GLchar * SourcePointer = new char[source.size() + 1];
+    strcpy(SourcePointer, source.toStdString().c_str());
+    //const GLchar * SourcePointer = (const GLchar *)source.toA;
 
     int shaderID = glCreateShader(type);
     glShaderSource(shaderID, 1, &SourcePointer, NULL);
@@ -167,7 +168,7 @@ int ShaderProgram::loadShaderWithSource(QString source, int type)
         GLint maxLength = 0;
         glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &maxLength);
 
-        //The maxLength includes the NULL character
+
         std::vector<GLchar> infoLog(maxLength);
         glGetShaderInfoLog(shaderID, maxLength, &maxLength, &infoLog[0]);
 
@@ -175,15 +176,12 @@ int ShaderProgram::loadShaderWithSource(QString source, int type)
         for(int i=0;i<infoLog.size();i++)
             bugReport.push_back(infoLog[i]);
 
-        //We don't need the shader anymore.
+
         glDeleteShader(shaderID);
         std::cerr << "Cannot compile shader " << bugReport << std::endl;
-        //Use the infoLog as you see fit.
-
-        //In this simple program, we'll just leave
         return 0;
     }
-
+    delete SourcePointer;
     return shaderID;
 }
 

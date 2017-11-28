@@ -1,6 +1,7 @@
 #include "material.h"
 #include <QDataStream>
 #include <QFile>
+#include "src/Editor/Utils/foldergestion.h"
 
 QString Material::DefaultSourceFragmentShader =
         "#version 430 core\n"
@@ -225,7 +226,7 @@ Material::Material( )
 Material::Material(unsigned int handle, const std::string name, std::string path)
     :Asset(handle, name, path)
 {
-
+    try{
     QFile archiveFile;
     archiveFile.setFileName(QString(path.c_str()));
     if (!archiveFile.open(QIODevice::ReadOnly))
@@ -248,6 +249,7 @@ Material::Material(unsigned int handle, const std::string name, std::string path
         for(int i=0;i<size;i++){
             QString path;
             dataStream >> path;
+            path = FolderGestion::checkoutReferences(path);
             m_texturespath.push_back(path.toStdString());
             unsigned int handle = AssetsCollections::addTexture(path.toStdString(),path.toStdString());
         }
@@ -261,6 +263,9 @@ Material::Material(unsigned int handle, const std::string name, std::string path
     m_shaderInit = true;
 
     archiveFile.close();
+    }catch(const std::exception &e){
+        std::cerr << "Exception rise in Material Loader " << name << " " << e.what() << std::endl;
+    }
 }
 
 Material::~Material()

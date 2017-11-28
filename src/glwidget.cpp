@@ -26,12 +26,18 @@ GLWidget::GLWidget( QWidget *parent) : QGLWidget(parent){
     this->setContext(MainWindow::contxt);
     mainHandle = this->context();
 
+    this->makeCurrent();
+    m_isInitialize = false;
+    camera = CameraThird(50);
+    camera.move(0,0,0,0,0,0,0);
 }
 
 GLWidget::~GLWidget(){
     destroy(time);
     shader.cleanUp();
     scene.cleanUp();
+    SAFE_DELETE(cubeVAO);
+    SAFE_DELETE(cubeVBO);
 }
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event){
@@ -105,11 +111,29 @@ void GLWidget::initializeGL(){
 
     glClearColor(0,0,0,1);
     glEnable(GL_DEPTH_TEST);
+    glEnable (GL_TEXTURE_2D);
+    glDepthFunc(GL_LEQUAL);
 
     camera.setProjectionMatrix(Matrix::createProjectionMatrix(camera,width,height));
 
+    cubeVAO = new GLuint();
+    cubeVBO = new GLuint();
+    Utils::generateCube(cubeVAO,cubeVBO);
+
+    hdr = Loader::loadHdr((char*)"reflexion.hdr");
+    m_skyboxHdr = Utils::equirectangularToCubeMap(hdr);
+    m_irradianceMap = Utils::irradianceConvolution(m_skyboxHdr);
+    m_prefilterMap = Utils::prefilterCubeMap(m_skyboxHdr);
+    m_brdfMap = Utils::generate2DLut();
+
+    m_skyShader.init("simpleSyboxVertex.glsl","simpleSkyboxFragment.glsl");
+    m_skyShader.start();
+    m_skyShader.connectTextureUnits();
+    m_skyShader.loadProjection(camera.getProjectionMatrix());
+    m_skyShader.stop();
+
     shader.init("vs.glsl","fs.glsl");
-    glEnable (GL_TEXTURE_2D);
+
 
     shader.start();
     shader.loadProjectionMatrix(camera.getProjectionMatrix());
@@ -118,8 +142,10 @@ void GLWidget::initializeGL(){
 
     glViewport(0, 0, (GLint)width, (GLint)height);
 
+
     light.setTint(glm::vec3(1,1,1));
     haveBeenRezizeOnce = true;
+    m_isInitialize = true;
 }
 
 
@@ -164,11 +190,10 @@ void GLWidget::dropEvent(QDropEvent *event)
             path += ".sobj";
 
 
-            //std::cout << path << " " << item->text(0).toStdString() << std::endl;
-
             unsigned int handle = AssetsCollections::Object3DStaticCollection.Add(item->text(0).toStdString(),path);
             AssetsCollections::HandlesObject3DStatic.push_back(handle);
             scene.addObject3DStatic(AssetsCollections::Object3DStaticCollection.GetElement(handle));
+
         }
     }
 }
@@ -180,44 +205,76 @@ void GLWidget::dragEnterEvent(QDragEnterEvent *event)
 
 void GLWidget::paintGL(){
     this->makeCurrent();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    if(m_isInitialize){
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    i+=0.1;
-    j+=0.1;
-    w+=0.1;
+        i+=0.1;
+        j+=0.1;
+        w+=0.1;
 
-    light.setPosition(glm::vec3(1000*sin(i),1000*sin(w),1000*cos(j)));
-    foreach(Object3DStatic *object,scene.StaticObjects){
+        light.setPosition(glm::vec3(1000*sin(i),1000*sin(w),1000*cos(j)));
+        foreach(Object3DStatic *object,scene.StaticObjects){
 
-        shader.start();
-        shader.loadModelMatrix(object->getModelMatrix());
-        shader.stop();
+            foreach(Model* model,object->getModels()){
 
-        foreach(Model* model,object->getModels()){
-            glBindVertexArray(model->getMesh().getVaoID());
-            glEnableVertexAttribArray(0);
-            glEnableVertexAttribArray(1);
-            glEnableVertexAttribArray(2);
-            glEnableVertexAttribArray(3);
-            shader.start();
-            shader.loadViewMatrix(camera.getPosition(), camera.getViewMatrix());
-            shader.loadLightPosition(light.getPosition());
-            shader.loadLightTint(light.getTint());
-            glDrawElements(GL_TRIANGLES,model->getMesh().getVertexCount(),GL_UNSIGNED_INT, 0);
-            shader.stop();
+                glBindVertexArray(model->getMesh().getVaoID());
+                glEnableVertexAttribArray(0);
+                glEnableVertexAttribArray(1);
+                glEnableVertexAttribArray(2);
+                glEnableVertexAttribArray(3);
 
-            glDisableVertexAttribArray(3);
-            glDisableVertexAttribArray(2);
-            glDisableVertexAttribArray(1);
-            glDisableVertexAttribArray(0);
-            glBindVertexArray(0);
+                if(model->getMaterial() && model->getMaterial()->isShaderInit()){
+                    model->getMaterial()->getShader().start();
+                    model->getMaterial()->getShader().loadModelMatrix(object->getModelMatrix());
+                    model->getMaterial()->getShader().loadProjectionMatrix(camera.getProjectionMatrix());
+                    model->getMaterial()->getShader().loadViewMatrix(camera.getPosition(), camera.getViewMatrix());
+                    model->getMaterial()->getShader().loadLightPosition(light.getPosition());
+                    model->getMaterial()->getShader().loadLightTint(light.getTint());
+                    glActiveTexture(GL_TEXTURE0);
+                    glBindTexture(GL_TEXTURE_CUBE_MAP, m_irradianceMap);
+                    glActiveTexture(GL_TEXTURE1);
+                    glBindTexture(GL_TEXTURE_CUBE_MAP, m_prefilterMap);
+                    glActiveTexture(GL_TEXTURE2);
+                    glBindTexture(GL_TEXTURE_2D, m_brdfMap);
+                    for(unsigned int i=0;i<model->getMaterial()->getTexturesPath().size();i++){
+
+                        glActiveTexture(GL_TEXTURE0+i+3);
+                        Texture *t = AssetsCollections::TexturesCollection.GetElementByPath(model->getMaterial()->getTexturesPath().at(i));
+                        if (t)
+                            glBindTexture(GL_TEXTURE_2D, t->getTextureID() );
+                    }
+                    glDrawElements(GL_TRIANGLES,model->getMesh().getVertexCount(),GL_UNSIGNED_INT, 0);
+                    model->getMaterial()->getShader().stop();
+                }else{
+                    shader.start();
+                    shader.loadViewMatrix(camera.getPosition(), camera.getViewMatrix());
+                    shader.loadLightPosition(light.getPosition());
+                    shader.loadLightTint(light.getTint());
+                    glDrawElements(GL_TRIANGLES,model->getMesh().getVertexCount(),GL_UNSIGNED_INT, 0);
+                    shader.stop();
+                }
+
+
+                glDisableVertexAttribArray(3);
+                glDisableVertexAttribArray(2);
+                glDisableVertexAttribArray(1);
+                glDisableVertexAttribArray(0);
+                glBindVertexArray(0);
+            }
         }
-    }
-    swapBuffers();
-    GLenum err;
-    if ((err = glGetError()) != GL_NO_ERROR) {
-       std::cerr << "OpenGL error: " << err << " " << gluErrorString(err)<< std::endl;
+
+        m_skyShader.start();
+        m_skyShader.loadView( camera.getViewMatrix());
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, m_skyboxHdr);
+        Utils::renderCube(*cubeVAO);
+        m_skyShader.stop();
+        swapBuffers();
+        GLenum err;
+        if ((err = glGetError()) != GL_NO_ERROR) {
+           std::cerr << "OpenGL error: " << err << " " << gluErrorString(err)<< std::endl;
+        }
     }
 
 }

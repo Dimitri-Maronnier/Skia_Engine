@@ -43,7 +43,13 @@ vec2 parallaxMapping(vec2 texCoords,sampler2D depthMap,float heightScale, bool d
     return finalTexCoords;
 }
 
-// ----------------------------------------------------------------------------
+/*
+*   Normal Distribution Functions : Approximate the ratio of microfacets aligned to some HalWay vector
+*/
+
+/*
+*   GGX (Trowbridge-Reitz) : We adopted Disney's to squared the roughness
+*/
 float DistributionGGX(vec3 N, vec3 H, float roughness)
 {
     float a = roughness*roughness;
@@ -57,7 +63,14 @@ float DistributionGGX(vec3 N, vec3 H, float roughness)
 
     return nom / denom;
 }
-// ----------------------------------------------------------------------------
+
+/*
+*   Geometry functions : self shadowing/occlusion propery of microfacets
+*/
+
+/*
+*   GGX
+*/
 float GeometrySchlickGGX(float NdotV, float roughness)
 {
     float r = (roughness + 1.0);
@@ -68,7 +81,10 @@ float GeometrySchlickGGX(float NdotV, float roughness)
 
     return nom / denom;
 }
-// ----------------------------------------------------------------------------
+
+/*
+*   Geometry_Smith : combine geometry shodowing and occlusion
+*/
 float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
 {
     float NdotV = max(dot(N, V), 0.0);
@@ -78,17 +94,26 @@ float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
 
     return ggx1 * ggx2;
 }
-// ----------------------------------------------------------------------------
+
+/*
+*   Fresnel functions :  The Fresnel calulate ratio of surface reflection at different surface angles
+*/
+
+/*
+*   Schilck : F0 is base reflectivity of material
+*/
 vec3 fresnelSchlick(float cosTheta, vec3 F0)
 {
     return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
 }
-// ----------------------------------------------------------------------------
+
+/*
+*   Schilck with roughness : F0 is base reflectivity of material
+*/
 vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
 {
     return F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(1.0 - cosTheta, 5.0);
 }
-// ----------------------------------------------------------------------------
 
 
 //----------------------Append Function-----------------------------------------//

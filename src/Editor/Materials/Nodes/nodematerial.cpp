@@ -3,6 +3,7 @@
 #include <iostream>
 #include "src/utils.h"
 #include "src/Assets/assetscollections.h"
+#include "src/Editor/Utils/foldergestion.h"
 
 std::map<std::string,int> NodeMaterial::occurence;
 std::vector<int> NodeMaterial::bindingAvailable;
@@ -276,7 +277,13 @@ void NodeMaterial::save(QDataStream &ds)
     ds << m_imageLoad;
     ds << m_binding;
     ds << m_isAbstract;
-    ds << m_imagePath;
+    QString copy;
+    if(m_hasImage){
+        copy = FolderGestion::removeProjectPath(FolderGestion::checkoutReferences(m_imagePath));
+    }
+    else
+        copy = m_imagePath;
+    ds << copy;
 
 }
 
@@ -310,6 +317,10 @@ void NodeMaterial::load(QDataStream &ds)
     ds >> m_binding;
     ds >> m_isAbstract;
     ds >> m_imagePath;
+    if(m_hasImage && m_imageLoad){
+        m_imagePath = FolderGestion::checkoutReferences(m_imagePath);
+    }
+
 
     while(occurence["binding"] <3)
         occurence["binding"]++;

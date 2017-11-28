@@ -15,11 +15,11 @@
         <file>Shaders/cubemapVertex.glsl</file>
         <file>Shaders/simpleSkyboxFragment.glsl</file>
         <file>Shaders/simpleSyboxVertex.glsl</file>
-        <file>Shaders/irradiance_convolution.glsl</file>
-        <file>Shaders/prefilter.glsl</file>
-        <file>Shaders/brdfFragment.glsl</file>
-        <file>Shaders/brdfVertex.glsl</file>
         <file>Shaders/deferredShadingFragment.glsl</file>
         <file>Shaders/deferredShadingVertex.glsl</file>
+        <file>Shaders/PBR_Pipeline/brdfFragment.glsl</file>
+        <file>Shaders/PBR_Pipeline/brdfVertex.glsl</file>
+        <file>Shaders/PBR_Pipeline/irradiance_convolution.glsl</file>
+        <file>Shaders/PBR_Pipeline/prefilter.glsl</file>
     </qresource>
 </RCC>

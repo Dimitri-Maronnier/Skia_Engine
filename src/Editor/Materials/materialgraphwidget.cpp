@@ -10,11 +10,13 @@
 #include <math.h>
 #include "src/qnodeseditor/qneport.h"
 #include "src/Editor/Materials/Nodes/nodematerial.h"
+#include "src/Editor/Utils/foldergestion.h"
 #include <QPixmap>
 #include <iostream>
 #include <QMimeData>
 #include <QTreeWidget>
 #include "src/Editor/Materials/glsltreewidgetitem.h"
+#include "src/Editor/Utils/foldergestion.h"
 #include <QDataStream>
 #include "src/define.h"
 
@@ -176,8 +178,7 @@ void MaterialGraphWidget::loadMaterial()
     ds >> fragmentSource;
     size_t size;
     ds >> size;
-    std::cout << vertexSource.toStdString() << std::endl;
-    for(int i=0;i<size;i++){
+    for(unsigned int i=0;i<size;i++){
         QString path;
         ds >> path;
 
@@ -202,7 +203,7 @@ void MaterialGraphWidget::saveMaterial()
 
     ds << m_nodeBase->getTexturesPath().size();
     foreach(QString path,m_nodeBase->getTexturesPath())
-        ds << path;
+        ds << FolderGestion::removeProjectPath(FolderGestion::checkoutReferences(path));
 
     nodesEditor->save(ds);
     f.close();

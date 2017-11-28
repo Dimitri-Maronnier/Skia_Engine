@@ -40,10 +40,14 @@ public:
 
 public slots:
     void setMaterial(MatButton *button);
+    void saveObject();
 
 private:
     Ui::Object3DStaticEditor *ui;
     unsigned int m_handleObject;
+    QString m_path;
+    unsigned int m_models_count;
+    std::vector<QString>* m_materialsPath;
 
 };
 

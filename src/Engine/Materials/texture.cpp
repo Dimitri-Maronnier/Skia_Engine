@@ -27,26 +27,30 @@ Texture::Texture()
 Texture::Texture(const unsigned int handle, const std::string name, const std::string path)
     :Asset(handle, name, path)
 {
+    try{
+        QVector<QString> list_files = Compressor::uncompressTextureData(QString(path.c_str()),this);
+        if(list_files.size()==0){
+            std::cerr << "Couldn't decompress Texture Data" << std::endl;
 
-    QVector<QString> list_files = Compressor::uncompressTextureData(QString(path.c_str()),this);
-    if(list_files.size()==0){
-        std::cerr << "Couldn't decompress Texture Data" << std::endl;
+        }else{
 
-    }else{
+            foreach(QString file,list_files){
+                if(file.contains("texture", Qt::CaseSensitive)){
 
-        foreach(QString file,list_files){
-            if(file.contains("texture", Qt::CaseSensitive)){
-
-                if(!m_isHDR)
-                    m_textureID = Loader::loadTexture((char*)file.toStdString().c_str(),this);
-                else
-                    m_textureID = Loader::loadHdr((char*)file.toStdString().c_str());
-            }
-            else if(file.contains("thumnail", Qt::CaseSensitive)){
-                m_thumnail.load(file);
-                break;
+                    if(!m_isHDR)
+                        m_textureID = Loader::loadTexture((char*)file.toStdString().c_str(),this);
+                    else
+                        m_textureID = Loader::loadHdr((char*)file.toStdString().c_str());
+                }
+                else if(file.contains("thumnail", Qt::CaseSensitive)){
+                    m_thumnail.load(file);
+                    break;
+                }
             }
         }
+    }
+    catch(const std::exception& e){
+        std::cerr << e.what();
     }
 
 

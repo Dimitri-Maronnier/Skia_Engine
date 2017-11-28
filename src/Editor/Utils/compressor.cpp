@@ -5,6 +5,7 @@
 #include <QDataStream>
 #include <boost/filesystem.hpp>
 #include "src/utils.h"
+#include "src/Editor/Utils/foldergestion.h"
 #include <iostream>
 
 bool Compressor::compressTextureData(QString archive, QVector<QString> files, QVector<QString> fileNames,Texture textureData)
@@ -251,75 +252,103 @@ int Compressor::compressObject3D(QString archive,const aiScene *scene)
 
     }
 
-
+    dataStream << "Properties";
+    dataStream << 0;
     archiveFile.close();
     return 1;
 }
 
-bool Compressor::uncompressObject3D(QString archive, unsigned int *nomberMeshs, std::vector<Object3dData *> *meshs)
+bool Compressor::uncompressObject3D(const QString archive, unsigned int *nomberMeshs, std::vector<Object3dData *> *meshs,std::vector<QString>* materialsPath)
 {
-    QFile archiveFile;
-    archiveFile.setFileName(archive);
-    if (!archiveFile.open(QIODevice::ReadOnly))
-        return false;
+    try{
+        QFile archiveFile;
+        archiveFile.setFileName(archive);
+        if (!archiveFile.open(QIODevice::ReadOnly))
+            return false;
 
-    QDataStream dataStream;
-    dataStream.setDevice(&archiveFile);
+        QDataStream dataStream;
+        dataStream.setDevice(&archiveFile);
 
-    dataStream >> *nomberMeshs;
-
-
-    for(int numMesh=0;numMesh<*nomberMeshs;numMesh++){
-
-        QString name;
-
-        unsigned int nomberFaces,nomberVertices,nomberTextures;
-
-        //Reading name
-        dataStream >> name;
-        meshs->push_back(new Object3dData);
-        meshs->at(numMesh)->name = name.toStdString();
-
-        //Reading size
-        dataStream >> nomberFaces;
-        dataStream >> nomberVertices;
-        dataStream >> nomberTextures;
-
-        meshs->at(numMesh)->nomberFace = nomberFaces;
-        meshs->at(numMesh)->nomberVertices = nomberVertices;
-        meshs->at(numMesh)->nomberTextures = nomberTextures;
-
-        //Allocation
-        meshs->at(numMesh)->facesArray = (unsigned int *)malloc(sizeof(unsigned int) * nomberFaces);
-        meshs->at(numMesh)->positionsArray = (float*)malloc(sizeof(float) * nomberVertices);
-        meshs->at(numMesh)->normalsArray = (float*)malloc(sizeof(float) * nomberVertices);
-        meshs->at(numMesh)->tangentsArray = (float*)malloc(sizeof(float) * nomberVertices);
-        meshs->at(numMesh)->texturesArray = (float*)malloc(sizeof(float) * nomberTextures);
+        dataStream >> *nomberMeshs;
 
 
-         //Read face Array
-         for(int i=0;i<nomberFaces;i++)
-            dataStream >> meshs->at(numMesh)->facesArray[i];
-
-         //Read positions array
-         for(int i=0;i<nomberVertices ;i++)
-            dataStream >> meshs->at(numMesh)->positionsArray[i];
+        for(int numMesh=0;numMesh<*nomberMeshs;numMesh++){
 
 
-         //Read normals array
-         for(int i=0;i<nomberVertices ;i++)
-            dataStream >> meshs->at(numMesh)->normalsArray[i];
+            QString name;
+
+            unsigned int nomberFaces,nomberVertices,nomberTextures;
+
+            //Reading name
+            dataStream >> name;
+            meshs->push_back(new Object3dData);
+            meshs->at(numMesh)->name = name.toStdString();
+
+            //Reading size
+            dataStream >> nomberFaces;
+            dataStream >> nomberVertices;
+            dataStream >> nomberTextures;
+
+            meshs->at(numMesh)->nomberFace = nomberFaces;
+            meshs->at(numMesh)->nomberVertices = nomberVertices;
+            meshs->at(numMesh)->nomberTextures = nomberTextures;
+
+            //Allocation
+            meshs->at(numMesh)->facesArray = (unsigned int *)malloc(sizeof(unsigned int) * nomberFaces);
+            meshs->at(numMesh)->positionsArray = (float*)malloc(sizeof(float) * nomberVertices);
+            meshs->at(numMesh)->normalsArray = (float*)malloc(sizeof(float) * nomberVertices);
+            meshs->at(numMesh)->tangentsArray = (float*)malloc(sizeof(float) * nomberVertices);
+            meshs->at(numMesh)->texturesArray = (float*)malloc(sizeof(float) * nomberTextures);
 
 
-         //Read texture array
-         for(int i=0;i<nomberTextures;i++)
-             dataStream >> meshs->at(numMesh)->texturesArray[i];
+             //Read face Array
+             for(int i=0;i<nomberFaces;i++)
+                dataStream >> meshs->at(numMesh)->facesArray[i];
 
-         //Read tangent array
-         for(int i=0;i<nomberVertices;i++)
-            dataStream >> meshs->at(numMesh)->tangentsArray[i];
+             //Read positions array
+             for(int i=0;i<nomberVertices ;i++)
+                dataStream >> meshs->at(numMesh)->positionsArray[i];
 
+
+             //Read normals array
+             for(int i=0;i<nomberVertices ;i++)
+                dataStream >> meshs->at(numMesh)->normalsArray[i];
+
+
+             //Read texture array
+             for(int i=0;i<nomberTextures;i++)
+                 dataStream >> meshs->at(numMesh)->texturesArray[i];
+
+             //Read tangent array
+             for(int i=0;i<nomberVertices;i++)
+                dataStream >> meshs->at(numMesh)->tangentsArray[i];
+
+        }
+
+        char* trash;
+        dataStream >> trash;
+        delete trash;
+        unsigned int materialsDefined_Count;
+        dataStream >> materialsDefined_Count;
+        if(materialsDefined_Count>0){
+            for(unsigned int numMesh=0;numMesh<*nomberMeshs;numMesh++){
+                char* materialPath;
+                dataStream >> materialPath;
+
+                if(materialPath[0] != 0)
+                    materialsPath->push_back(FolderGestion::checkoutReferences(QString(materialPath)));
+                else//case broken path
+                    materialsPath->push_back("");
+            }
+        }else{
+            for(unsigned int numMesh=0;numMesh<*nomberMeshs;numMesh++){
+
+                materialsPath->push_back("");
+            }
+        }
+
+        archiveFile.close();
+    }catch(const std::exception &e){
+        std::cerr << "Excption rise while uncompressing " << archive.toStdString() << " " << e.what() << std::endl;
     }
-
-    archiveFile.close();
 }

@@ -1501,6 +1501,7 @@
      <string>File</string>
     </property>
     <addaction name="actionNew_Project"/>
+    <addaction name="actionOpen_Project"/>
    </widget>
    <addaction name="menufile"/>
   </widget>
@@ -1520,6 +1521,11 @@
    </property>
    <property name="text">
     <string>New Project</string>
+   </property>
+  </action>
+  <action name="actionOpen_Project">
+   <property name="text">
+    <string>Open Project</string>
    </property>
   </action>
  </widget>

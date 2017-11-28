@@ -130,6 +130,7 @@ void GLObjectPreview::update()
 void GLObjectPreview::paintGL(){
     this->makeCurrent();
     if(m_isInitialize){
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         GLenum err;

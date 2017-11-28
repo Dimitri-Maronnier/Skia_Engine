@@ -2,6 +2,7 @@
 #include "src/qnodeseditor/qneport.h"
 #include <iostream>
 #include "src/Engine/Materials/material.h"
+#include "src/Editor/Utils/foldergestion.h"
 
 NodeBase::NodeBase()
 {
@@ -37,7 +38,6 @@ NodeBase::NodeBase(QPoint pos, QGraphicsScene *scene)
                        "    float shineDamper=10;\n"
                        "    vec4 normalValue = vec4(0);\n"
                        "//#toReplace\n"
-
                        "    vec3 unitLightVector;\n"
                        "    vec3 unitVectorToCamera;\n"
                        "    vec3 unitNormal;\n"
@@ -50,17 +50,14 @@ NodeBase::NodeBase(QPoint pos, QGraphicsScene *scene)
                        "        unitVectorToCamera = normalize(fs_in.toCameraVector);\n"
                        "        unitNormal = normalize(fs_in.normal);\n"
                        "    }\n"
-
                        "    float nDotl = dot(unitNormal,unitLightVector);\n"
                        "    float brightness = max(nDotl,0.2);\n"
-
                        "    vec3 lightDirection = -unitLightVector;\n"
                        "    vec3 reflectedLightDirection = reflect(lightDirection,unitNormal);\n"
                        "    float specularFactor = dot(reflectedLightDirection, unitVectorToCamera);\n"
                        "    specularFactor = max(specularFactor,0.0);\n"
                        "    float dampedFactor = pow(specularFactor,shineDamper);\n"
                        "    vec3 totalSpecular = dampedFactor * reflectivity*lightTint;\n"
-
                        "    fragmentColor = BaseColor*(brightness*lightTint) +vec4(totalSpecular,1.0);\n"
                        "}";*/
 
@@ -132,8 +129,9 @@ void NodeBase::save(QDataStream &ds)
     ds << m_buildShaderString;
     ds << m_buildShaderUniformString;
     ds << m_texturesPath.size();
-    foreach(QString path,m_texturesPath)
-        ds << path;
+    foreach(QString path,m_texturesPath){
+        ds << FolderGestion::removeProjectPath(FolderGestion::checkoutReferences(path));
+    }
 
 
 }
@@ -151,7 +149,7 @@ void NodeBase::load(QDataStream &ds)
     for(int i=0;i<size;i++){
         QString path;
         ds >> path;
-        m_texturesPath.push_back(path);
+        m_texturesPath.push_back(FolderGestion::checkoutReferences(path));
     }
 }
 

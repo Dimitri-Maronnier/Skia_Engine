@@ -259,6 +259,7 @@ void GLMaterialPreview::compilShader(QString)
         }
 
     }*/
+
     m_shader.at(m_currentShader).initWithSource(m_node->getVertexSource(),m_node->getFragmentSource());
 
 
@@ -266,6 +267,7 @@ void GLMaterialPreview::compilShader(QString)
     m_shader.at(m_currentShader).loadProjectionMatrix(camera.getProjectionMatrix());
 
     m_shader.at(m_currentShader).stop();
+
 
 }
 

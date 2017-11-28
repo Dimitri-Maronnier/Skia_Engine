@@ -25,6 +25,7 @@ public:
 
 public slots:
     void newProject();
+    void openProject();
 
 private:
     Ui::MainWindow *ui;

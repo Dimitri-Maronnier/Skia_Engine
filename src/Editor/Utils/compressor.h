@@ -21,7 +21,7 @@ public:
        @param aiScene* scene : refenrece to loading assimp scene
        @return int : 0 cannot open Archive File,1 sucess */
     static int compressObject3D(QString archive, const aiScene *scene);
-    static bool uncompressObject3D(QString archive, unsigned int *nomberMeshs , std::vector<Object3dData *> *meshs);
+    static bool uncompressObject3D(const QString archive, unsigned int *nomberMeshs , std::vector<Object3dData *> *meshs, std::vector<QString > *materialsPath);
 };
 
 #endif // COMPRESSOR_H

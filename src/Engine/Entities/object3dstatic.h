@@ -32,6 +32,7 @@ public:
     Object3DStatic(const unsigned int handle, const std::string name, const std::string path ,glm::vec3 position,glm::vec3 rotation,glm::vec3 scale,std::string label);
     Object3DStatic(const unsigned int handle, const std::string name, const std::string path ,glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, std::string label, std::vector<Model*> model);
 
+    std::vector<QString> *getMaterialsPath();
     Model* getModel(int i);
     std::vector<Model*> getModels();
     void setModel(Model* model, int i);
@@ -40,6 +41,7 @@ public:
 
 private:
     std::vector<Model*> m_models;
+    std::vector<QString> m_materialsPath;
 
 
 };

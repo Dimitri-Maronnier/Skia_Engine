@@ -13,6 +13,7 @@
 #include "Engine/Models/mesh.h"
 #include "Engine/Entities/light.h"
 #include "Engine/scene.h"
+#include "Engine/Shaders/simpleskyboxshader.h"
 #include <QTime>
 
 class GLWidget : public QGLWidget
@@ -66,6 +67,17 @@ private:
     bool click;
     Light light;
     GLuint texture;
+    GLuint hdr;
+    GLuint m_skyboxHdr;
+    GLuint m_prefilterMap;
+    GLuint m_irradianceMap;
+    GLuint m_brdfMap;
+    SimpleSkyboxShader m_skyShader;
+
+    GLuint *cubeVAO;
+    GLuint *cubeVBO;
+    bool m_isInitialize;
+
     QTimer * time;
     QTime timer;
     bool haveBeenRezizeOnce;
