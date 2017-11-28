@@ -48,7 +48,7 @@ vec2 parallaxMapping(vec2 texCoords,sampler2D depthMap,float heightScale, bool d
 */
 
 /*
-*   GGX (Trowbridge-Reitz) : We adopted Disney's to squared the roughness
+*   GGX (Trowbridge-Reitz) : We adopted Disney's solution about squared the roughness
 */
 float DistributionGGX(vec3 N, vec3 H, float roughness)
 {
