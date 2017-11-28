@@ -1,7 +1,7 @@
 # Skia_Engine
 Skia Engine is a Qt-based 3D Game Engine with editor.
-The rendering Engine of Skia Engine is OpenGL-based, actually the rendering supporting Physically Based Rendering.
-The Engine is developped in aimed to make recent looking games with a easy Material Editor based Nodes.
+The rendering Engine of Skia Engine is OpenGL-based, support Physically Based Rendering.
+The Engine aim to make recents looking games with an easy Material Editor based Nodes.
 
 ## Platforms
 - Windows(Win32, x64, msvc2015): [![Build Status](https://travis-ci.org/simkimsia/UtilityBehaviors.png)](https://travis-ci.org/simkimsia/UtilityBehaviors)
