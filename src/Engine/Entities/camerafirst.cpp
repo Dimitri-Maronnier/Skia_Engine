@@ -31,15 +31,11 @@ void CameraFirst::move(float dx, float dy , int dw, int z, int s, int q, int d){
     float phiRadian = Utils::toRadians(pitch);
     float thetaRadian = Utils::toRadians(yaw);
 
-    // Si l'axe vertical est l'axe X
 
 
   if(m_axeVertical[1] == 1.0)
 
     {
-
-        // Calcul des coordonnées sphériques
-
 
         m_orientation[0] = distance * cos(phiRadian) * -sin(thetaRadian);
 
@@ -55,12 +51,6 @@ void CameraFirst::move(float dx, float dy , int dw, int z, int s, int q, int d){
 
 
     }
-
-
-
-    // Sinon c'est l'axe Z
-
-
 
 
     m_deplacementLateral = glm::cross(m_axeVertical, m_orientation);

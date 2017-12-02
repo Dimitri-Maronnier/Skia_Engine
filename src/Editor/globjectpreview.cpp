@@ -114,7 +114,7 @@ void GLObjectPreview::initializeGL(){
 
     glViewport(0, 0, (GLint)width, (GLint)height);
 
-    light.setTint(glm::vec3(1,1,1));
+    light.setColor(glm::vec3(1,1,1));
     light.setPosition(glm::vec3(-200,200,0));
 
     m_isInitialize = true;
@@ -156,7 +156,7 @@ void GLObjectPreview::paintGL(){
                 model->getMaterial()->getShader().loadProjectionMatrix(camera.getProjectionMatrix());
                 model->getMaterial()->getShader().loadViewMatrix(camera.getPosition(), camera.getViewMatrix());
                 model->getMaterial()->getShader().loadLightPosition(light.getPosition());
-                model->getMaterial()->getShader().loadLightTint(light.getTint());
+                model->getMaterial()->getShader().loadLightColor(light.getColor());
                 glActiveTexture(GL_TEXTURE0);
                 glBindTexture(GL_TEXTURE_CUBE_MAP, m_irradianceMap);
                 glActiveTexture(GL_TEXTURE1);
@@ -176,7 +176,7 @@ void GLObjectPreview::paintGL(){
                 shader.start();
                 shader.loadViewMatrix(camera.getPosition(), camera.getViewMatrix());
                 shader.loadLightPosition(light.getPosition());
-                shader.loadLightTint(light.getTint());
+                shader.loadLightColor(light.getColor());
                 glDrawElements(GL_TRIANGLES,model->getMesh().getVertexCount(),GL_UNSIGNED_INT, 0);
                 shader.stop();
             }

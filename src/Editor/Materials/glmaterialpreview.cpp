@@ -184,7 +184,7 @@ void GLMaterialPreview::initializeGL(){
     glViewport(0, 0, (GLint)width, (GLint)height);
 
     light.setPosition(glm::vec3(1500,1500,0));
-    light.setTint(glm::vec3(1,1,1));
+    light.setColor(glm::vec3(1,1,1));
     haveBeenRezizeOnce = true;
     std::string nameFile = "sphere_previewMat.sobj";
     std::string path = QDir::currentPath().toStdString() + "/mesh/sphere_previewMat.sobj";
@@ -362,7 +362,7 @@ void GLMaterialPreview::lightAutoRotate(bool check)
 
 void GLMaterialPreview::setLightColor(glm::vec3 color)
 {
-    light.setTint(color);
+    light.setColor(color);
 }
 
 void GLMaterialPreview::changeHDRI(Texture* texture)
@@ -422,7 +422,7 @@ void GLMaterialPreview::paintGL(){
                     m_shader.at(m_currentShader).start();
                     m_shader.at(m_currentShader).loadViewMatrix(camera.getPosition(), camera.getViewMatrix());
                     m_shader.at(m_currentShader).loadLightPosition(light.getPosition());
-                    m_shader.at(m_currentShader).loadLightTint(light.getTint());
+                    m_shader.at(m_currentShader).loadLightColor(light.getColor());
                     m_shader.at(m_currentShader).loadTime(frameCount/1000.0);
 
                     glActiveTexture(GL_TEXTURE0);

@@ -13,7 +13,7 @@ void DeferredShader::getAllUniformLocations(){
 void DeferredShader::loadLight(Light light)
 {
     ShaderProgram::loadVector(location_lightPosition,light.getPosition());
-    ShaderProgram::loadVector(location_lightTint,light.getTint());
+    ShaderProgram::loadVector(location_lightTint,light.getColor());
 }
 
 void DeferredShader::loadViewPos(glm::vec3 viewPos)

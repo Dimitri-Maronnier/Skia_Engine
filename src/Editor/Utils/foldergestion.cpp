@@ -228,7 +228,6 @@ QString FolderGestion::checkoutReferences(const QString path)
 
 QString FolderGestion::removeProjectPath(const QString str)
 {
-    std::cout << str.toStdString() << std::endl;
     std::string varUtf8 = str.toUtf8().constData();
     unsigned int position = 0;
     while(position<MAX_PATH && rootProjectsFolderPath[position] == varUtf8.at(position))

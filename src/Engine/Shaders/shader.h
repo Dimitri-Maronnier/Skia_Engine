@@ -13,7 +13,7 @@ private:
     int location_modelMatrix;
     int location_viewMatrix;
     int location_lightPosition;
-    int location_lightTint;
+    int location_lightColor;
     int location_diffuseMap;
     int location_viewPos;
     int location_time;
@@ -32,7 +32,7 @@ public:
     void loadModelMatrix(glm::mat4 matrix);
     void loadViewMatrix(glm::vec3 viewPos, glm::mat4 matrix);
     void loadLightPosition(glm::vec3 position);
-    void loadLightTint(glm::vec3 tint);
+    void loadLightColor(glm::vec3 color);
     void loadTime(float time);
 
     bool isInit();

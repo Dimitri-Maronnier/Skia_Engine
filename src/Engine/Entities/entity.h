@@ -35,13 +35,13 @@ public:
 
     void computeModelMatrix();
 private:
-    glm::vec3 m_position;
-    glm::vec3 m_rotation;
-    glm::vec3 m_scale;
+    glm::vec3 _position;
+    glm::vec3 _rotation;
+    glm::vec3 _scale;
 
-    std::string m_label;
+    std::string _label;
 
-    glm::mat4 m_modelMatrix;
+    glm::mat4 _modelMatrix;
 
 };
 

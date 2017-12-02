@@ -27,6 +27,7 @@ public:
     void mouseReleaseEvent(QMouseEvent *event);
     void wheelEvent ( QWheelEvent * event );
     void keyPressEvent(QKeyEvent* event);
+    void keyReleaseEvent(QKeyEvent* event);
     void initializeGL();
     void paintGL();
     void rezizeGL(int w,int h);
@@ -50,10 +51,8 @@ private:
 
     }
 
+
     virtual void dropEvent(QDropEvent *event);
-    float i;
-    float j;
-    float w;
     float lastTime;
     int frameCount;
     double fps;
@@ -82,6 +81,7 @@ private:
     QTime timer;
     bool haveBeenRezizeOnce;
     Scene scene;
+    bool _zKeyPressed,_sKeyPressed,_qKeyPressed,_dKeyPressed;
 };
 
 #endif // GLWIDGET_H

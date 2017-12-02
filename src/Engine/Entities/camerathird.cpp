@@ -50,19 +50,19 @@ void CameraThird::move(float dx, float dy, int dw, int z, int s, int q, int d){
         lookAt.x += 1.5f * sin(Utils::toRadians(angleAroundPivot));
 
     }
-    else if(s){
+    if(s){
 
         lookAt.z -= 1.5f * cos(Utils::toRadians(angleAroundPivot));
 
         lookAt.x -= 1.5f * sin(Utils::toRadians(angleAroundPivot));
     }
-    else if(q){
+    if(q){
 
         lookAt.z -= 1.5f * sin(Utils::toRadians(angleAroundPivot));
 
         lookAt.x += 1.5f * cos(Utils::toRadians(angleAroundPivot));
     }
-    else if(d){
+    if(d){
 
         lookAt.z += 1.5f * sin(Utils::toRadians(angleAroundPivot));
 

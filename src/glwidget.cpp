@@ -30,6 +30,7 @@ GLWidget::GLWidget( QWidget *parent) : QGLWidget(parent){
     m_isInitialize = false;
     camera = CameraThird(50);
     camera.move(0,0,0,0,0,0,0);
+    _zKeyPressed=false;_sKeyPressed=false;_qKeyPressed=false;_dKeyPressed=false;
 }
 
 GLWidget::~GLWidget(){
@@ -67,29 +68,40 @@ void GLWidget::mouseReleaseEvent(QMouseEvent *event){
 void GLWidget::wheelEvent ( QWheelEvent * event )
 {
     camera.move(0,0,event->delta()/120,0,0,0,0);
-    //paintGL();
 }
 
 
 void GLWidget::keyPressEvent(QKeyEvent* event){
 
-    int z=0,s=0,q=0,d=0;
-
     if(event->text() == "z"){
-        z=1;
+        _zKeyPressed=true;
     }
     if(event->text() == "s"){
-        s=1;
+        _sKeyPressed=true;
     }
     if(event->text() == "q"){
-        q=1;
+        _qKeyPressed=true;
     }
     if(event->text() == "d"){
-        d=1;
+        _dKeyPressed=true;
     }
-    if(click)
-        camera.move(0,0,0,z,s,q,d);
-    //paintGL();
+
+}
+
+void GLWidget::keyReleaseEvent(QKeyEvent *event)
+{
+    if(event->text() == "z"){
+        _zKeyPressed=false;
+    }
+    if(event->text() == "s"){
+        _sKeyPressed=false;
+    }
+    if(event->text() == "q"){
+        _qKeyPressed=false;
+    }
+    if(event->text() == "d"){
+        _dKeyPressed=false;
+    }
 
 }
 
@@ -143,7 +155,7 @@ void GLWidget::initializeGL(){
     glViewport(0, 0, (GLint)width, (GLint)height);
 
 
-    light.setTint(glm::vec3(1,1,1));
+    light.setColor(glm::vec3(1,1,1));
     haveBeenRezizeOnce = true;
     m_isInitialize = true;
 }
@@ -205,15 +217,13 @@ void GLWidget::dragEnterEvent(QDragEnterEvent *event)
 
 void GLWidget::paintGL(){
     this->makeCurrent();
+    if(click)
+        camera.move(0,0,0,_zKeyPressed,_sKeyPressed,_qKeyPressed,_dKeyPressed);
     if(m_isInitialize){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-        i+=0.1;
-        j+=0.1;
-        w+=0.1;
 
-        light.setPosition(glm::vec3(1000*sin(i),1000*sin(w),1000*cos(j)));
         foreach(Object3DStatic *object,scene.StaticObjects){
 
             foreach(Model* model,object->getModels()){
@@ -230,7 +240,7 @@ void GLWidget::paintGL(){
                     model->getMaterial()->getShader().loadProjectionMatrix(camera.getProjectionMatrix());
                     model->getMaterial()->getShader().loadViewMatrix(camera.getPosition(), camera.getViewMatrix());
                     model->getMaterial()->getShader().loadLightPosition(light.getPosition());
-                    model->getMaterial()->getShader().loadLightTint(light.getTint());
+                    model->getMaterial()->getShader().loadLightColor(light.getColor());
                     glActiveTexture(GL_TEXTURE0);
                     glBindTexture(GL_TEXTURE_CUBE_MAP, m_irradianceMap);
                     glActiveTexture(GL_TEXTURE1);
@@ -250,7 +260,7 @@ void GLWidget::paintGL(){
                     shader.start();
                     shader.loadViewMatrix(camera.getPosition(), camera.getViewMatrix());
                     shader.loadLightPosition(light.getPosition());
-                    shader.loadLightTint(light.getTint());
+                    shader.loadLightColor(light.getColor());
                     glDrawElements(GL_TRIANGLES,model->getMesh().getVertexCount(),GL_UNSIGNED_INT, 0);
                     shader.stop();
                 }

@@ -59,8 +59,6 @@ QString Material::DefaultSourceFragmentShader =
 
         "   vec3 reflectNormal = reflect(-unitVectorToCamera, unitNormal);\n"
 
-        "   // calculate reflectance at normal incidence; if dia-electric (like plastic) use F0\n"
-        "   // of 0.04 and if it's a metal, use the albedo color as F0 (metallic workflow)\n"
         "   vec3 F0 = vec3(0.04);\n"
         "   F0 = mix(F0, albedo, metallic);\n"
 
@@ -87,16 +85,12 @@ QString Material::DefaultSourceFragmentShader =
         "   vec3 kS = F;\n"
         "   // Diffuse amount\n"
         "   vec3 kD = vec3(1.0) - kS;\n"
-        "   // multiply kD by the inverse metalness such that only non-metals\n"
-        "   // have diffuse lighting, or a linear blend if partly metal (pure metals\n"
-        "   // have no diffuse light).\n"
         "   kD *= 1.0 - metallic;\n"
 
         "   // scale light by NdotL\n"
         "   float brightNess = max(dot(unitNormal, unitLightVector), 0.0);\n"
 
-        "   // add to outgoing radiance Lo\n"
-        "   Lo += (kD * albedo / PI + specular) * radiance * brightNess; // note that we already multiplied the BRDF by the Fresnel (kS) so we won't multiply by kS again\n"
+        "   Lo += (kD * albedo / PI + specular) * radiance * brightNess;\n"
 
         "   F = fresnelSchlickRoughness(max(dot(unitNormal, unitVectorToCamera), 0.0), F0, roughness);\n"
 
@@ -107,7 +101,6 @@ QString Material::DefaultSourceFragmentShader =
         "   vec3 irradiance = texture(irradianceMap, unitNormal).rgb;\n"
         "   vec3 diffuse      = irradiance * albedo;\n"
 
-        "   // sample both the pre-filter map and the BRDF lut and combine them together as per the Split-Sum approximation to get the IBL specular part.\n"
         "   const float MAX_REFLECTION_LOD = 4.0;\n"
         "   vec3 prefilteredColor = textureLod(prefilterMap, reflectNormal,  roughness * MAX_REFLECTION_LOD).rgb;\n"
         "   vec2 brdf  = texture(brdfLUT, vec2(max(dot(unitNormal, unitVectorToCamera), 0.0), roughness)).rg;\n"
@@ -195,9 +188,8 @@ QString Material::DefaultSourceVertexShader = "#version 430 core\n"
         "void main(void)\n"
         "{\n"
         "  vec4 worldPosition = modelMatrix * vec4(position,1.0);\n"
-        "  mat3 normalMatrix = transpose(inverse(mat3(modelMatrix)));\n"
-        "  vec3 T = normalize(normalMatrix * tangent);\n"
-        "  vec3 N = normalize(normalMatrix * normal);\n"
+        "  vec3 T = normalize( tangent);\n"
+        "  vec3 N = normalize( normal);\n"
         "  vec3 B = normalize(cross(N,T));\n"
         "  vs_out.TBN = mat3(T.x, B.x, N.x,T.y, B.y, N.y,T.z, B.z, N.z);\n"
         "  vec3 TangentLightPos =  vs_out.TBN * lightPosition;\n"

@@ -13,7 +13,7 @@ void Shader::getAllUniformLocations(){
     location_viewMatrix = ShaderProgram::getUniformLocation("viewMatrix");
     location_modelMatrix = ShaderProgram::getUniformLocation("modelMatrix");
     location_lightPosition = ShaderProgram::getUniformLocation("lightPosition");
-    location_lightTint = ShaderProgram::getUniformLocation("lightTint");
+    location_lightColor = ShaderProgram::getUniformLocation("lightTint");
     location_viewPos = ShaderProgram::getUniformLocation("viewPos");
     location_time = ShaderProgram::getUniformLocation("time");
 
@@ -42,8 +42,8 @@ void Shader::loadLightPosition(glm::vec3 position){
     ShaderProgram::loadVector(location_lightPosition,position);
 }
 
-void Shader::loadLightTint(glm::vec3 tint){
-    ShaderProgram::loadVector(location_lightTint,tint);
+void Shader::loadLightColor(glm::vec3 color){
+    ShaderProgram::loadVector(location_lightColor,color);
 }
 
 void Shader::loadTime(float time)

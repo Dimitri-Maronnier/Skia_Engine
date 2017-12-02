@@ -2,27 +2,32 @@
 
 Light::Light()
 {
-    position = glm::vec3(0);
-    tint = glm::vec3(1);
+    _position = glm::vec3(0);
+    _color = glm::vec3(1);
 }
 
-Light::Light(glm::vec3 position,glm::vec3 tint){
-    this->position = position;
-    this->tint = tint;
+Light::Light(glm::vec3 position, glm::vec3 color){
+    _position = position;
+    _color = color;
 }
 
 glm::vec3 Light::getPosition(){
-    return position;
+    return _position;
 }
 
-glm::vec3 Light::getTint(){
-    return tint;
+glm::vec3 Light::getColor(){
+    return _color;
+}
+
+glm::mat4 Light::getLightViewMatrix()
+{
+    return glm::lookAt(_position,glm::vec3(0,0,0),glm::vec3(0,1,0));
 }
 
 void Light::setPosition(glm::vec3 position){
-    this->position = position;
+    _position = position;
 }
 
-void Light::setTint(glm::vec3 tint){
-    this->tint = tint;
+void Light::setColor(glm::vec3 color){
+    _color = color;
 }

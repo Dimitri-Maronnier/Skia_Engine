@@ -84,7 +84,8 @@ SOURCES += \
     src/Editor/Objects3dStatic/object3dstaticeditor.cpp \
     src/Editor/Materials/glmaterialpreview.cpp \
     src/Editor/globjectpreview.cpp \
-    src/Engine/Shaders/deferredshader.cpp
+    src/Engine/Shaders/deferredshader.cpp \
+    src/Engine/Shadows/shadowmap.cpp
 
 HEADERS += \
         src/mainwindow.h \
@@ -140,7 +141,8 @@ HEADERS += \
     src/Editor/Objects3dStatic/object3dstaticeditor.h \
     src/Editor/Materials/glmaterialpreview.h \
     src/Editor/globjectpreview.h \
-    src/Engine/Shaders/deferredshader.h
+    src/Engine/Shaders/deferredshader.h \
+    src/Engine/Shadows/shadowmap.h
 FORMS += \
         src/mainwindow.ui \
     src/Editor/newprojectdialog.ui \
