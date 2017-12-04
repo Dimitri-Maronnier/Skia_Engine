@@ -56,25 +56,14 @@ private:
     float lastTime;
     int frameCount;
     double fps;
-    CameraThird camera;
-    Shader shader;
+
     int width;
     int height;
     QPoint anchor;
     Loader loader;
     Mesh mesh;
     bool click;
-    Light light;
-    GLuint texture;
-    GLuint hdr;
-    GLuint m_skyboxHdr;
-    GLuint m_prefilterMap;
-    GLuint m_irradianceMap;
-    GLuint m_brdfMap;
-    SimpleSkyboxShader m_skyShader;
 
-    GLuint *cubeVAO;
-    GLuint *cubeVBO;
     bool m_isInitialize;
 
     QTimer * time;

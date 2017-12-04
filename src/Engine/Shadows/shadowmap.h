@@ -1,6 +1,7 @@
 #ifndef SHADOWMAP_H
 #define SHADOWMAP_H
 
+#include "src/Engine/scene.h"
 #include <stdlib.h>
 #include <GL/glew.h>
 
@@ -23,7 +24,7 @@ public:
     /**
      * @brief shadowPass
      */
-    void shadowPass();
+    void shadowPass(Scene &scene);
 private:
     GLuint _depthFBO;
     GLuint _shadowMap;

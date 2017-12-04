@@ -28,17 +28,14 @@ GLWidget::GLWidget( QWidget *parent) : QGLWidget(parent){
 
     this->makeCurrent();
     m_isInitialize = false;
-    camera = CameraThird(50);
-    camera.move(0,0,0,0,0,0,0);
+
     _zKeyPressed=false;_sKeyPressed=false;_qKeyPressed=false;_dKeyPressed=false;
 }
 
 GLWidget::~GLWidget(){
     destroy(time);
-    shader.cleanUp();
     scene.cleanUp();
-    SAFE_DELETE(cubeVAO);
-    SAFE_DELETE(cubeVBO);
+
 }
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event){
@@ -46,7 +43,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event){
     float dx = (event->x()-anchor.x());
     float dy = (event->y()-anchor.y());
     if(click)
-        camera.move(dx,dy,0,0,0,0,0);
+        Scene::camera.move(dx,dy,0,0,0,0,0);
     anchor = event->pos();
 
 }
@@ -67,7 +64,7 @@ void GLWidget::mouseReleaseEvent(QMouseEvent *event){
 
 void GLWidget::wheelEvent ( QWheelEvent * event )
 {
-    camera.move(0,0,event->delta()/120,0,0,0,0);
+    Scene::camera.move(0,0,event->delta()/120,0,0,0,0);
 }
 
 
@@ -126,36 +123,12 @@ void GLWidget::initializeGL(){
     glEnable (GL_TEXTURE_2D);
     glDepthFunc(GL_LEQUAL);
 
-    camera.setProjectionMatrix(Matrix::createProjectionMatrix(camera,width,height));
-
-    cubeVAO = new GLuint();
-    cubeVBO = new GLuint();
-    Utils::generateCube(cubeVAO,cubeVBO);
-
-    hdr = Loader::loadHdr((char*)"reflexion.hdr");
-    m_skyboxHdr = Utils::equirectangularToCubeMap(hdr);
-    m_irradianceMap = Utils::irradianceConvolution(m_skyboxHdr);
-    m_prefilterMap = Utils::prefilterCubeMap(m_skyboxHdr);
-    m_brdfMap = Utils::generate2DLut();
-
-    m_skyShader.init("simpleSyboxVertex.glsl","simpleSkyboxFragment.glsl");
-    m_skyShader.start();
-    m_skyShader.connectTextureUnits();
-    m_skyShader.loadProjection(camera.getProjectionMatrix());
-    m_skyShader.stop();
-
-    shader.init("vs.glsl","fs.glsl");
 
 
-    shader.start();
-    shader.loadProjectionMatrix(camera.getProjectionMatrix());
-    shader.connectTextureUnits();
-    shader.stop();
-
+    Scene::camera.setProjectionMatrix(Matrix::createProjectionMatrix(Scene::camera,width,height));
+    scene.init();
     glViewport(0, 0, (GLint)width, (GLint)height);
 
-
-    light.setColor(glm::vec3(1,1,1));
     haveBeenRezizeOnce = true;
     m_isInitialize = true;
 }
@@ -218,68 +191,15 @@ void GLWidget::dragEnterEvent(QDragEnterEvent *event)
 void GLWidget::paintGL(){
     this->makeCurrent();
     if(click)
-        camera.move(0,0,0,_zKeyPressed,_sKeyPressed,_qKeyPressed,_dKeyPressed);
+        Scene::camera.move(0,0,0,_zKeyPressed,_sKeyPressed,_qKeyPressed,_dKeyPressed);
     if(m_isInitialize){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 
-        foreach(Object3DStatic *object,scene.StaticObjects){
-
-            foreach(Model* model,object->getModels()){
-
-                glBindVertexArray(model->getMesh().getVaoID());
-                glEnableVertexAttribArray(0);
-                glEnableVertexAttribArray(1);
-                glEnableVertexAttribArray(2);
-                glEnableVertexAttribArray(3);
-
-                if(model->getMaterial() && model->getMaterial()->isShaderInit()){
-                    model->getMaterial()->getShader().start();
-                    model->getMaterial()->getShader().loadModelMatrix(object->getModelMatrix());
-                    model->getMaterial()->getShader().loadProjectionMatrix(camera.getProjectionMatrix());
-                    model->getMaterial()->getShader().loadViewMatrix(camera.getPosition(), camera.getViewMatrix());
-                    model->getMaterial()->getShader().loadLightPosition(light.getPosition());
-                    model->getMaterial()->getShader().loadLightColor(light.getColor());
-                    glActiveTexture(GL_TEXTURE0);
-                    glBindTexture(GL_TEXTURE_CUBE_MAP, m_irradianceMap);
-                    glActiveTexture(GL_TEXTURE1);
-                    glBindTexture(GL_TEXTURE_CUBE_MAP, m_prefilterMap);
-                    glActiveTexture(GL_TEXTURE2);
-                    glBindTexture(GL_TEXTURE_2D, m_brdfMap);
-                    for(unsigned int i=0;i<model->getMaterial()->getTexturesPath().size();i++){
-
-                        glActiveTexture(GL_TEXTURE0+i+3);
-                        Texture *t = AssetsCollections::TexturesCollection.GetElementByPath(model->getMaterial()->getTexturesPath().at(i));
-                        if (t)
-                            glBindTexture(GL_TEXTURE_2D, t->getTextureID() );
-                    }
-                    glDrawElements(GL_TRIANGLES,model->getMesh().getVertexCount(),GL_UNSIGNED_INT, 0);
-                    model->getMaterial()->getShader().stop();
-                }else{
-                    shader.start();
-                    shader.loadViewMatrix(camera.getPosition(), camera.getViewMatrix());
-                    shader.loadLightPosition(light.getPosition());
-                    shader.loadLightColor(light.getColor());
-                    glDrawElements(GL_TRIANGLES,model->getMesh().getVertexCount(),GL_UNSIGNED_INT, 0);
-                    shader.stop();
-                }
+        scene.render();
 
 
-                glDisableVertexAttribArray(3);
-                glDisableVertexAttribArray(2);
-                glDisableVertexAttribArray(1);
-                glDisableVertexAttribArray(0);
-                glBindVertexArray(0);
-            }
-        }
-
-        m_skyShader.start();
-        m_skyShader.loadView( camera.getViewMatrix());
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, m_skyboxHdr);
-        Utils::renderCube(*cubeVAO);
-        m_skyShader.stop();
         swapBuffers();
         GLenum err;
         if ((err = glGetError()) != GL_NO_ERROR) {
@@ -295,10 +215,9 @@ void GLWidget::rezizeGL(int w, int h){
     if(haveBeenRezizeOnce){
 
         glViewport(0, 0, (GLint)w, (GLint)h);
-        camera.setProjectionMatrix(Matrix::createProjectionMatrix(camera,width,height));
-        shader.start();
-        shader.loadProjectionMatrix(camera.getProjectionMatrix());
-        shader.stop();
+
+        scene.resize(Matrix::createProjectionMatrix(Scene::camera,width,height));
+
     }
 }
 

@@ -72,9 +72,9 @@ SOURCES += \
     src/Editor/Materials/customlabeltype.cpp \
     src/Engine/Shaders/equirectangulartocubemapshader.cpp \
     src/Engine/Shaders/simpleskyboxshader.cpp \
-    src/Engine/Shaders/irradianceconvolutionshader.cpp \
-    src/Engine/Shaders/prefiltershader.cpp \
-    src/Engine/Shaders/brdfshader.cpp \
+    src/Engine/Shaders/PBR/irradianceconvolutionshader.cpp \
+    src/Engine/Shaders/PBR/prefiltershader.cpp \
+    src/Engine/Shaders/PBR/brdfshader.cpp \
     src/Editor/imageeditor.cpp \
     src/Editor/Utils/compressor.cpp \
     src/Engine/Materials/texture.cpp \
@@ -84,8 +84,9 @@ SOURCES += \
     src/Editor/Objects3dStatic/object3dstaticeditor.cpp \
     src/Editor/Materials/glmaterialpreview.cpp \
     src/Editor/globjectpreview.cpp \
-    src/Engine/Shaders/deferredshader.cpp \
-    src/Engine/Shadows/shadowmap.cpp
+    src/Engine/Shaders/PBR/deferredshader.cpp \
+    src/Engine/Shadows/shadowmap.cpp \
+    src/Engine/Utils/rendertools.cpp
 
 HEADERS += \
         src/mainwindow.h \
@@ -128,9 +129,9 @@ HEADERS += \
     src/Editor/Materials/customlabeltype.h \
     src/Engine/Shaders/equirectangulartocubemapshader.h \
     src/Engine/Shaders/simpleskyboxshader.h \
-    src/Engine/Shaders/irradianceconvolutionshader.h \
-    src/Engine/Shaders/prefiltershader.h \
-    src/Engine/Shaders/brdfshader.h \
+    src/Engine/Shaders/PBR/irradianceconvolutionshader.h \
+    src/Engine/Shaders/PBR/prefiltershader.h \
+    src/Engine/Shaders/PBR/brdfshader.h \
     src/Editor/imageeditor.h \
     src/Editor/Utils/compressor.h \
     src/Engine/Materials/texture.h \
@@ -141,8 +142,9 @@ HEADERS += \
     src/Editor/Objects3dStatic/object3dstaticeditor.h \
     src/Editor/Materials/glmaterialpreview.h \
     src/Editor/globjectpreview.h \
-    src/Engine/Shaders/deferredshader.h \
-    src/Engine/Shadows/shadowmap.h
+    src/Engine/Shaders/PBR/deferredshader.h \
+    src/Engine/Shadows/shadowmap.h \
+    src/Engine/Utils/rendertools.h
 FORMS += \
         src/mainwindow.ui \
     src/Editor/newprojectdialog.ui \

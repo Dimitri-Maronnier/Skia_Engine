@@ -87,10 +87,10 @@ QString Material::DefaultSourceFragmentShader =
         "   vec3 kD = vec3(1.0) - kS;\n"
         "   kD *= 1.0 - metallic;\n"
 
-        "   // scale light by NdotL\n"
-        "   float brightNess = max(dot(unitNormal, unitLightVector), 0.0);\n"
 
-        "   Lo += (kD * albedo / PI + specular) * radiance * brightNess;\n"
+        "   float brightNess = max(dot(unitNormal, unitLightVector), 0.0);\n"
+        "   vec3 emittance = radiance * brightNess;\n"
+        "   Lo += (kD * albedo / PI + specular) * emittance;\n"
 
         "   F = fresnelSchlickRoughness(max(dot(unitNormal, unitVectorToCamera), 0.0), F0, roughness);\n"
 

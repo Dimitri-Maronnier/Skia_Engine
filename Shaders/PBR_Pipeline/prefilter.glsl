@@ -1,3 +1,8 @@
+/**
+*
+*   Compute the prefilter (first part of Epic's game is Split Sum approximation)
+*
+*/
 #version 330 core
 out vec4 FragColor;
 in vec3 worldPosition;

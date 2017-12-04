@@ -1,3 +1,8 @@
+/**
+*
+*   Compute BRDF Lut according to Epic's Game work
+*
+**/
 #version 330 core
 out vec2 FragColor;
 in vec2 textureCoord;

@@ -7,8 +7,8 @@
 #include "src/Engine/Entities/camerathird.h"
 #include "src/Editor/Materials/Nodes/nodebase.h"
 #include "src/Engine/Shaders/simpleskyboxshader.h"
-#include "src/Engine/Shaders/deferredshader.h"
-
+#include "src/Engine/Shaders/PBR/deferredshader.h"
+#include "src/Engine/Utils/rendertools.h"
 #include "src/Engine/Entities/light.h"
 #include "src/Loaders/loader.h"
 #include <QTime>

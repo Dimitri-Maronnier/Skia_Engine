@@ -33,7 +33,7 @@ void ShadowMap::initFrameBuffer()
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void ShadowMap::shadowPass()
+void ShadowMap::shadowPass(Scene &scene)
 {
     glViewport(0, 0, _WIDTH, _HEIGHT);
     glBindFramebuffer(GL_FRAMEBUFFER, _depthFBO);

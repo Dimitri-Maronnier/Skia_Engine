@@ -222,7 +222,7 @@ QString FolderGestion::checkoutReferences(const QString path)
         }
 
     }
-
+    return "";
 }
 
 

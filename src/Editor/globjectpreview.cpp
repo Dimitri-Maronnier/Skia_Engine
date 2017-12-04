@@ -86,7 +86,7 @@ void GLObjectPreview::initializeGL(){
 
     cubeVAO = new GLuint(1);
     cubeVBO = new GLuint(1);
-    Utils::generateCube(cubeVAO,cubeVBO);
+    RenderTools::generateCube(cubeVAO,cubeVBO);
 
     glClearColor(0,0,0,1);
     glEnable(GL_DEPTH_TEST);
@@ -95,10 +95,10 @@ void GLObjectPreview::initializeGL(){
     camera.setProjectionMatrix(glm::perspective(45.0f,(float)width/(float)height,1.0f,1000.0f));
 
     hdr = Loader::loadHdr((char*)"reflexion.hdr");
-    m_skyboxHdr = Utils::equirectangularToCubeMap(hdr);
-    m_irradianceMap = Utils::irradianceConvolution(m_skyboxHdr);
-    m_prefilterMap = Utils::prefilterCubeMap(m_skyboxHdr);
-    m_brdfMap = Utils::generate2DLut();
+    m_skyboxHdr = RenderTools::equirectangularToCubeMap(hdr);
+    m_irradianceMap = RenderTools::irradianceConvolution(m_skyboxHdr);
+    m_prefilterMap = RenderTools::prefilterCubeMap(m_skyboxHdr);
+    m_brdfMap = RenderTools::generate2DLut();
 
     m_skyShader.init("simpleSyboxVertex.glsl","simpleSkyboxFragment.glsl");
     m_skyShader.start();
@@ -193,7 +193,7 @@ void GLObjectPreview::paintGL(){
         m_skyShader.loadView( camera.getViewMatrix());
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_CUBE_MAP, m_skyboxHdr);
-        Utils::renderCube(*cubeVAO);
+        RenderTools::renderCube(*cubeVAO);
         m_skyShader.stop();
         swapBuffers();
 

@@ -1,3 +1,8 @@
+/**
+*
+*   Compute Irradiance Convultion, the diffuse part of Reflectance Equation
+*
+*/
 #version 330 core
 out vec4 FragColor;
 in vec3 worldPosition;

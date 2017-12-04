@@ -135,13 +135,13 @@ void GLMaterialPreview::initializeGL(){
     width = this->size().width();
     height = this->size().height();
 
-    cubeVAO = new GLuint(1);
-    cubeVBO = new GLuint(1);
-    Utils::generateCube(cubeVAO,cubeVBO);
+    cubeVAO = new GLuint();
+    cubeVBO = new GLuint();
+    RenderTools::generateCube(cubeVAO,cubeVBO);
 
     quadVAO = new GLuint;
     quadVBO = new GLuint;
-    Utils::generateQuad(quadVAO,quadVBO);
+    RenderTools::generateQuad(quadVAO,quadVBO);
 
     glClearColor(0,0,0,1);
     glEnable(GL_DEPTH_TEST);
@@ -151,10 +151,10 @@ void GLMaterialPreview::initializeGL(){
     camera.setProjectionMatrix(Matrix::createProjectionMatrix(camera,width,height));
 
     hdr = Loader::loadHdr((char*)"reflexion.hdr");
-    m_skyboxHdr = Utils::equirectangularToCubeMap(hdr);
-    m_irradianceMap = Utils::irradianceConvolution(m_skyboxHdr);
-    m_prefilterMap = Utils::prefilterCubeMap(m_skyboxHdr);
-    m_brdfMap = Utils::generate2DLut();
+    m_skyboxHdr = RenderTools::equirectangularToCubeMap(hdr);
+    m_irradianceMap = RenderTools::irradianceConvolution(m_skyboxHdr);
+    m_prefilterMap = RenderTools::prefilterCubeMap(m_skyboxHdr);
+    m_brdfMap = RenderTools::generate2DLut();
 
 
     m_skyShader.init("simpleSyboxVertex.glsl","simpleSkyboxFragment.glsl");
@@ -163,7 +163,7 @@ void GLMaterialPreview::initializeGL(){
     m_skyShader.loadProjection(camera.getProjectionMatrix());
     m_skyShader.stop();
 
-    m_deferredShader.init("deferredShadingVertex.glsl","deferredShadingFragment.glsl");
+    //m_deferredShader.init("deferredShadingVertex.glsl","deferredShadingFragment.glsl");
 
     /*get Node Base*/
     MaterialEditorWindow* win = (MaterialEditorWindow*)this->parent()->parent();
@@ -206,7 +206,7 @@ void GLMaterialPreview::initializeGL(){
     m_albedoRoughness = new GLuint;
     m_metalOcclusion = new GLuint;
 
-    Utils::setupDeferredShading(this->width,this->height,m_gBuffer,m_position,m_normal,m_albedoRoughness,m_metalOcclusion);
+    //RenderTools::setupDeferredShading(this->width,this->height,m_gBuffer,m_position,m_normal,m_albedoRoughness,m_metalOcclusion);
 
 }
 
@@ -382,10 +382,10 @@ void GLMaterialPreview::changeHDRI(Texture* texture)
     }
 
     hdr = texture->getTextureID();
-    m_skyboxHdr = Utils::equirectangularToCubeMap(hdr);
-    m_irradianceMap = Utils::irradianceConvolution(m_skyboxHdr);
-    m_prefilterMap = Utils::prefilterCubeMap(m_skyboxHdr);
-    m_brdfMap = Utils::generate2DLut();
+    m_skyboxHdr = RenderTools::equirectangularToCubeMap(hdr);
+    m_irradianceMap = RenderTools::irradianceConvolution(m_skyboxHdr);
+    m_prefilterMap = RenderTools::prefilterCubeMap(m_skyboxHdr);
+    m_brdfMap = RenderTools::generate2DLut();
 
 
 
@@ -459,7 +459,7 @@ void GLMaterialPreview::paintGL(){
         m_skyShader.loadView( camera.getViewMatrix());
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_CUBE_MAP, m_skyboxHdr);
-        Utils::renderCube(*cubeVAO);
+        RenderTools::renderCube(*cubeVAO);
         m_skyShader.stop();
 
         /*m_deferredShader.start();
