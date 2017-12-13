@@ -28,7 +28,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 INCLUDEPATH += $$PWD/external/include
 LIBS += -L$$PWD/external/lib -lboost_regex-vc140-mt-1_64 -lboost_system-vc140-mt-1_64 -lboost_iostreams-vc140-mt-1_64 -lboost_filesystem-vc140-mt-1_64
 LIBS += -lglew32 -lfreeglut -L$$PWD/external/bin -L$$PWD/external/lib
-LIBS += -L$$PWD/external/bin -L$$PWD/external/lib -lsoil2 -lassimp
+LIBS += -L$$PWD/external/bin -L$$PWD/external/lib -lsoil2 -lassimp -lBullet3Collision_vs2010 -lBullet3Common_vs2010 -lBullet3Dynamics_vs2010 -lBullet3Geometry_vs2010 -lBullet3OpenCL_clew_vs2010 -lLinearMath_vs2010
 
 SOURCES += \
         src/main.cpp \
@@ -86,7 +86,10 @@ SOURCES += \
     src/Editor/globjectpreview.cpp \
     src/Engine/Shaders/PBR/deferredshader.cpp \
     src/Engine/Shadows/shadowmap.cpp \
-    src/Engine/Utils/rendertools.cpp
+    src/Engine/Utils/rendertools.cpp \
+    src/Editor/scenetree.cpp \
+    src/Engine/Shaders/pivotshader.cpp \
+    src/Engine/Utils/smath.cpp
 
 HEADERS += \
         src/mainwindow.h \
@@ -144,7 +147,10 @@ HEADERS += \
     src/Editor/globjectpreview.h \
     src/Engine/Shaders/PBR/deferredshader.h \
     src/Engine/Shadows/shadowmap.h \
-    src/Engine/Utils/rendertools.h
+    src/Engine/Utils/rendertools.h \
+    src/Editor/scenetree.h \
+    src/Engine/Shaders/pivotshader.h \
+    src/Engine/Utils/smath.h
 FORMS += \
         src/mainwindow.ui \
     src/Editor/newprojectdialog.ui \

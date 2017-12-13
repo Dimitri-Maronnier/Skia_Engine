@@ -251,6 +251,10 @@ void ContentBrowser::prepareMenuContentBrowser( const QPoint & pos )
     newMat->setStatusTip(tr("new Material"));
     connect(newMat, SIGNAL(triggered()), this, SLOT(newMat()));
 
+    QAction *newMap = new QAction( tr("&New Map"), this);
+    newMap->setStatusTip(tr("new Map"));
+    connect(newMap, SIGNAL(triggered()), this, SLOT(newMat()));
+
     QAction *renameAct = new QAction( tr("&Rename"), this);
     renameAct->setStatusTip(tr("rename file/folder"));
     connect(renameAct, SIGNAL(triggered()), this, SLOT(triggerRename()));
@@ -270,6 +274,7 @@ void ContentBrowser::prepareMenuContentBrowser( const QPoint & pos )
     insertMenu->addAction(insertHdri);
 
     newMenu->addAction(newMat);
+    newMenu->addAction(newMap);
 
     menu.exec( tree->mapToGlobal(pos) );
 }
@@ -467,6 +472,64 @@ void ContentBrowser::importHDRI()
             ImgLoader::import(path,pathProject,true);
 
         }
+    }
+}
+
+void ContentBrowser::newMap()
+{
+
+
+    std::string nameFile = "new";
+
+    std::string pathProject = FolderGestion::rootProjectsFolderPath;
+    pathProject += "\\";
+    pathProject += ProjectInfo::name;
+    CTreeWidgetItem *upperParent = (CTreeWidgetItem *)this->currentItem();
+    if(upperParent){
+        if(!upperParent->isDirectory() && upperParent->parent()){
+            upperParent = (CTreeWidgetItem *)upperParent->parent();
+            std::vector<std::string> reversePath;
+            reversePath.push_back(this->currentItem()->text(0).toStdString());
+            while(upperParent->parent()){
+
+               upperParent = (CTreeWidgetItem *)upperParent->parent();
+               reversePath.push_back(upperParent->text(0).toStdString());
+            }
+            for (int i=reversePath.size()-1;i>=0;i--) {
+               pathProject += "\\";
+               pathProject += reversePath.at(i);
+
+            }
+        }
+    }
+    pathProject += "\\";
+    pathProject += nameFile;
+    pathProject += ".smap";
+
+
+    if(!FolderGestion::isFileExists(pathProject)){
+
+        CTreeWidgetItem* newItem = new CTreeWidgetItem();
+        newItem->setIcon(0,*(new QIcon(":/Images/file.png")));
+        newItem->setText(0,QString(nameFile.c_str()));
+        newItem->setText(2,"smap");
+        newItem->setExt("smap");
+        newItem->setOldName(nameFile);
+        newItem->setType(file);
+        CTreeWidgetItem* copy = (CTreeWidgetItem *)this->currentItem();
+        if(this->currentItem()){
+            if(copy->parent())
+                 copy->parent()->addChild(newItem);
+            else
+                this->addTopLevelItem(newItem);
+        }
+        else{
+             this->addTopLevelItem(newItem);
+        }
+
+        Material::newEmptyMat(QString(pathProject.c_str()));
+
+
     }
 }
 

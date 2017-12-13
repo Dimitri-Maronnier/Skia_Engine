@@ -156,7 +156,7 @@ int Compressor::compressObject3D(QString archive,const aiScene *scene)
 
     dataStream << scene->mNumMeshes;
 
-    for(int numMesh=0;numMesh<scene->mNumMeshes;numMesh++){
+    for(unsigned int numMesh=0;numMesh<scene->mNumMeshes;numMesh++){
         aiMesh* amesh = scene->mMeshes[numMesh];
         QString name = (amesh->mName.length)?QString(amesh->mName.C_Str()):"Element_" + QString::number(numMesh);
         dataStream << name;
@@ -178,18 +178,18 @@ int Compressor::compressObject3D(QString archive,const aiScene *scene)
          }
 
          //Write face Array
-         for(int i=0;i<amesh->mNumFaces * 3;i++)
+         for(unsigned int i=0;i<amesh->mNumFaces * 3;i++)
             dataStream << faceArray[i];
 
          //Write positions array
          if (amesh->HasPositions()){
-             for(int i=0;i<amesh->mNumVertices ;i++){
+             for(unsigned int i=0;i<amesh->mNumVertices ;i++){
                 dataStream << amesh->mVertices[i].x;
                 dataStream << amesh->mVertices[i].y;
                 dataStream << amesh->mVertices[i].z;
              }
          }else{
-             for(int i=0;i<amesh->mNumVertices ;i++){
+             for(unsigned int i=0;i<amesh->mNumVertices ;i++){
                 dataStream << 0;
                 dataStream << 0;
                 dataStream << 0;
@@ -199,13 +199,13 @@ int Compressor::compressObject3D(QString archive,const aiScene *scene)
 
          //Write normals array
          if(amesh->HasNormals()){
-             for(int i=0;i<amesh->mNumVertices ;i++){
+             for(unsigned int i=0;i<amesh->mNumVertices ;i++){
                 dataStream << amesh->mNormals[i].x;
                 dataStream << amesh->mNormals[i].y;
                 dataStream << amesh->mNormals[i].z;
              }
          }else{
-             for(int i=0;i<amesh->mNumVertices;i++){
+             for(unsigned int i=0;i<amesh->mNumVertices;i++){
                 dataStream << 0;
                 dataStream << 0;
                 dataStream << 0;
@@ -231,18 +231,18 @@ int Compressor::compressObject3D(QString archive,const aiScene *scene)
              }
 
          }
-         for(int i=0;i<2*amesh->mNumVertices;i++)
+         for(unsigned int i=0;i<2*amesh->mNumVertices;i++)
              dataStream << texCoords[i];
 
          //Write tangent array
          if(amesh->HasTangentsAndBitangents()){
-             for(int i=0;i<amesh->mNumVertices;i++){
+             for(unsigned int i=0;i<amesh->mNumVertices;i++){
                 dataStream << amesh->mTangents[i].x;
                 dataStream << amesh->mTangents[i].y;
                 dataStream << amesh->mTangents[i].z;
              }
          }else{
-             for(int i=0;i<amesh->mNumVertices;i++){
+             for(unsigned int i=0;i<amesh->mNumVertices;i++){
                 dataStream << 0;
                 dataStream << 0;
                 dataStream << 0;

@@ -22,7 +22,7 @@ CustomLabelType::CustomLabelType(QString path, bool isHdriLoader, QWidget *paren
 
 }
 
-void CustomLabelType::mousePressEvent(QMouseEvent *event)
+void CustomLabelType::mousePressEvent(QMouseEvent *)
 {
     QString fileName;
     if(m_isHdriLoader){

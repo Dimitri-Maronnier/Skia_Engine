@@ -14,10 +14,10 @@ CameraThird Scene::camera = CameraThird(50);
 
 Scene::Scene()
 {
-
+    _entitySelected = false;
 }
 
-void Scene::init(){
+void Scene::init(SceneTree* scenetree){
     camera.move(0,0,0,0,0,0,0);
 
     cubeVAO = new GLuint();
@@ -37,7 +37,7 @@ void Scene::init(){
     m_skyShader.stop();
 
     shader.init("vs.glsl","fs.glsl");
-
+    pivotShader.init("Utils/pivotVertex.glsl","Utils/pivotArrowGeo.glsl","Utils/pivotArrowFragment.glsl");
 
     light.setColor(glm::vec3(1,1,1));
     light.setPosition(glm::vec3(-200,200,0));
@@ -45,14 +45,44 @@ void Scene::init(){
     shader.start();
     shader.loadProjectionMatrix(camera.getProjectionMatrix());
     shader.stop();
+
+    pivotShader.start();
+    pivotShader.loadProjectionMatrix(camera.getProjectionMatrix());
+    pivotShader.stop();
+
+    #if IN_EDITOR
+       connect(this,SIGNAL(oneEntityHaveBeenAdded(Entity*)),scenetree,SLOT(addEntity(Entity*)));
+    #endif
 }
 
 void Scene::addObject3DStatic(Object3DStatic *object)
 {
-    selectedEntity = object;
-    emit oneEntityHaveBeenSelected(selectedEntity);
-    StaticObjects.push_back(object);
+    std::vector<Object3DStatic*>::iterator it;
+    it = find(StaticObjects.begin(),StaticObjects.end(),object);
+    _entitySelected = true;
+    if(it != StaticObjects.end()){
+        Object3DStatic* copy = new Object3DStatic(*object);
+        selectedEntity = copy;
+        emit oneEntityHaveBeenSelected(selectedEntity);
+        emit oneEntityHaveBeenAdded(selectedEntity);
+        StaticObjects.push_back(copy);
+    }
+    else{
+        selectedEntity = object;
+        emit oneEntityHaveBeenSelected(selectedEntity);
+        emit oneEntityHaveBeenAdded(selectedEntity);
+        StaticObjects.push_back(object);
+    }
 }
+
+
+void Scene::selectEntity(Entity* entity)
+{
+    selectedEntity = static_cast<Object3DStatic *>(entity);
+    _entitySelected = true;
+    emit oneEntityHaveBeenSelected(selectedEntity);
+}
+
 
 void Scene::cleanUp()
 {
@@ -67,6 +97,7 @@ void Scene::render()
     foreach(Object3DStatic *object,StaticObjects){
         shader.start();
         shader.loadModelMatrix(object->getModelMatrix());
+        shader.loadProjectionMatrix(camera.getProjectionMatrix());
         shader.stop();
         foreach(Model* model,object->getModels()){
 
@@ -107,7 +138,6 @@ void Scene::render()
                 shader.stop();
             }
 
-
             glDisableVertexAttribArray(3);
             glDisableVertexAttribArray(2);
             glDisableVertexAttribArray(1);
@@ -116,8 +146,28 @@ void Scene::render()
         }
     }
 
+
+#if IN_EDITOR
+    if(_entitySelected){
+        glDepthFunc(GL_GREATER);
+        pivotShader.start();
+        pivotShader.loadViewMatrix(camera.getPosition(),camera.getViewMatrix());
+        glm::mat4 modelMatrix = selectedEntity->getModelMatrix();
+        pivotShader.loadModelMatrix(modelMatrix);
+        glm::vec3 upVector = glm::vec3(modelMatrix[1][0],modelMatrix[1][1],modelMatrix[1][2]);
+        glm::vec3 position = selectedEntity->getPostion()+upVector;
+
+        pivotShader.loadPoint(selectedEntity->getPostion(),position);
+        glLineWidth(10);
+        glDrawArrays(GL_POINTS,0,1);
+        pivotShader.stop();
+        glDepthFunc(GL_LEQUAL);
+    }
+#endif
+
     m_skyShader.start();
     m_skyShader.loadView( camera.getViewMatrix());
+    m_skyShader.loadProjection(camera.getProjectionMatrix());
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_CUBE_MAP, m_skyboxHdr);
     RenderTools::renderCube(*cubeVAO);

@@ -19,7 +19,7 @@ GLuint RenderTools::equirectangularToCubeMap(GLuint hdrTexture)
     glGenFramebuffers(1, &captureFBO);
     glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
     EquirectangularToCubemapShader equirectangularToCubemapShader;
-    equirectangularToCubemapShader.init("cubemapVertex.glsl","fromEquirectangularToCubemapFragment.glsl");
+    equirectangularToCubemapShader.init("cubemapVertex.glsl","Utils/fromEquirectangularToCubemapFragment.glsl");
 
     GLuint envCubemap;
     glGenTextures(1, &envCubemap);

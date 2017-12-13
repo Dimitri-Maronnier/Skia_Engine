@@ -10,7 +10,7 @@ ShaderProgram::ShaderProgram()
 
 }
 
-void ShaderProgram::init(QString vertexStr,QString fragmentStr)
+void ShaderProgram::init(QString vertexStr, QString fragmentStr)
 {
 
     programID = glCreateProgram();
@@ -23,6 +23,25 @@ void ShaderProgram::init(QString vertexStr,QString fragmentStr)
     bindAttributes();
     glLinkProgram(programID);
     glValidateProgram(programID);
+    getAllUniformLocations();
+}
+
+void ShaderProgram::init(QString vertexStr, QString geoStr, QString fragmentStr)
+{
+
+    programID = glCreateProgram();
+
+    vertexID = loadShader(vertexStr,GL_VERTEX_SHADER);
+    fragmentID = loadShader(fragmentStr,GL_FRAGMENT_SHADER);
+    geoID = loadShader(geoStr,GL_GEOMETRY_SHADER);
+
+    glAttachShader(programID, vertexID);
+    glAttachShader(programID, fragmentID);
+    glAttachShader(programID, geoID);
+    bindAttributes();
+    glLinkProgram(programID);
+    glValidateProgram(programID);
+    glValidateProgram(geoID);
     getAllUniformLocations();
 }
 
@@ -62,6 +81,7 @@ void ShaderProgram::cleanUp(){
     glDetachShader(programID, fragmentID);
     glDeleteShader(vertexID);
     glDeleteShader(fragmentID);
+    glDeleteShader(geoID);
     glDeleteProgram(programID);
 }
 

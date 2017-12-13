@@ -20,16 +20,16 @@ public:
 
     NodeBase* getNodeBase();
 
-    virtual  void dragEnterEvent(QDragEnterEvent *event);
+    virtual  void dragEnterEvent(QDragEnterEvent *);
 
-    virtual  void dragLeaveEvent(QDragLeaveEvent *event){
-
-    }
-    virtual void dragMoveEvent ( QDragMoveEvent * event ){
+    virtual  void dragLeaveEvent(QDragLeaveEvent *){
 
     }
+    virtual void dragMoveEvent ( QDragMoveEvent *  ){
 
-    virtual void dropEvent(QDropEvent *event);
+    }
+
+    virtual void dropEvent(QDropEvent *);
 
 
 

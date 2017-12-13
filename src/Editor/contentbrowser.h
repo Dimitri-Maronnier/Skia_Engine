@@ -26,6 +26,7 @@ public slots:
     void importTexture();
     void importHDRI();
     void newMat();
+    void newMap();
     void renameItem();
     void triggerRename();
 private:

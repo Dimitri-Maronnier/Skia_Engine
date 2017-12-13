@@ -1,6 +1,10 @@
 #include "matrix.h"
 #include <iostream>
 #include <math.h>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
+
+
 
 Matrix::Matrix()
 {
@@ -25,16 +29,16 @@ glm::mat4 Matrix::createViewMatrix(CameraThird camera){
 
 }
 
-glm::mat4 Matrix::createTransformationMatrix(glm::vec3 translation, glm::vec3 rotation, glm::vec3 scale){
+glm::mat4 Matrix::createTransformationMatrix(glm::vec3 translation, glm::mat4 rotation, glm::vec3 scale){
     glm::mat4 matrix = glm::mat4(1.0);
     matrix = glm::translate(matrix,translation);
 
-    matrix = glm::rotate(matrix,Utils::toRadians(rotation.x), glm::vec3(1.0,0.0,0.0));
+    /*matrix = glm::rotate(matrix,Utils::toRadians(rotation.x), glm::vec3(1.0,0.0,0.0));
     matrix = glm::rotate(matrix,Utils::toRadians(rotation.y), glm::vec3(0.0,1.0,0.0));
-    matrix = glm::rotate(matrix,Utils::toRadians(rotation.z), glm::vec3(0.0,0.0,1.0));
+    matrix = glm::rotate(matrix,Utils::toRadians(rotation.z), glm::vec3(0.0,0.0,1.0));*/
 
-    matrix = glm::scale(matrix,scale);
-    return matrix;
+    glm::mat4 matrixScale = glm::scale(glm::mat4(),scale);
+    return matrix*rotation*matrixScale;
 }
 
 glm::mat4 Matrix::createProjectionMatrix(Camera camera, int w, int h) {

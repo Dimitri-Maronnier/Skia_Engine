@@ -12,6 +12,7 @@ class ShaderProgram
 public:
     ShaderProgram();
     void init(QString vertexStr,QString fragmentStr);
+    void init(QString vertexStr,QString geoStr,QString fragmentStr);
     void initWithSource(QString vertexStr,QString fragmentStr);
     void start();
     void stop();
@@ -35,6 +36,7 @@ private:
     int programID;
     int vertexID;
     int fragmentID;
+    int geoID;
 
     int loadShader(QString fileName,int type);
     int loadShaderWithSource(QString source ,int type);

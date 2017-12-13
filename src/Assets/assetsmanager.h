@@ -210,7 +210,7 @@ public:
             handle = m_handles.top();
             m_handles.pop();
         }
-        else handle = m_list->size();
+        else handle = (unsigned int)m_list->size();
 
         // Create the asset, preferably through the application specific
         // function if it is available.

@@ -124,9 +124,12 @@ void GLWidget::initializeGL(){
     glDepthFunc(GL_LEQUAL);
 
 
+    MainWindow* win = (MainWindow*)this->parent()->parent();
 
     Scene::camera.setProjectionMatrix(Matrix::createProjectionMatrix(Scene::camera,width,height));
-    scene.init();
+    scene.init(win->getSceneTree());
+    connect(win->getSceneTree(),SIGNAL(clicked(Entity*)),&scene,SLOT(selectEntity(Entity*)));
+
     glViewport(0, 0, (GLint)width, (GLint)height);
 
     haveBeenRezizeOnce = true;

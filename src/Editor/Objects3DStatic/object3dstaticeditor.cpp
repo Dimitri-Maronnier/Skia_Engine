@@ -115,7 +115,7 @@ void Object3DStaticEditor::saveObject()
     std::vector<std::vector<unsigned int>> faceArrayTotal;
     std::vector<std::vector<float>> positionArrayTotal,normalsArrayTotal,texturesArrayTotal,tangentsArrayTotal;
 
-    for(int numMesh=0;numMesh<nomberMeshs;numMesh++){
+    for(unsigned int numMesh=0;numMesh<nomberMeshs;numMesh++){
 
         QString name;
         std::vector<unsigned int> faceArray;
@@ -139,14 +139,14 @@ void Object3DStaticEditor::saveObject()
 
 
         //Read face Array
-        for(int i=0;i<nomberFace;i++){
+        for(unsigned int i=0;i<nomberFace;i++){
             unsigned int face;
             dataStream >> face;
             faceArray.push_back(face);
         }
 
         //Read positions array
-        for(int i=0;i<nomberVertice ;i++){
+        for(unsigned int i=0;i<nomberVertice ;i++){
             float position;
             dataStream >> position;
             positionArray.push_back(position);
@@ -160,13 +160,13 @@ void Object3DStaticEditor::saveObject()
         }
 
         //Read texture array
-        for(int i=0;i<nomberTexture;i++){
+        for(unsigned int i=0;i<nomberTexture;i++){
             float texture;
             dataStream >> texture;
             texturesArray.push_back(texture);
         }
         //Read tangent array
-        for(int i=0;i<nomberVertice;i++){
+        for(unsigned int i=0;i<nomberVertice;i++){
             float tangent;
             dataStream >> tangent;
             tangentsArray.push_back(tangent);
@@ -186,7 +186,7 @@ void Object3DStaticEditor::saveObject()
     QDataStream dsWrite(&fwrite);
     dsWrite << nomberMeshs;
 
-    for(int numMesh=0;numMesh<nomberMeshs;numMesh++){
+    for(unsigned int numMesh=0;numMesh<nomberMeshs;numMesh++){
 
         //write name
         dsWrite << names.at(numMesh);
@@ -197,17 +197,17 @@ void Object3DStaticEditor::saveObject()
         dsWrite << nomberTextures.at(numMesh);
 
         //write face Array
-        for(int i=0;i<nomberFaces.at(numMesh);i++){
+        for(unsigned int i=0;i<nomberFaces.at(numMesh);i++){
             dsWrite << faceArrayTotal.at(numMesh).at(i);
         }
 
         //write positions array
-        for(int i=0;i<nomberVertices.at(numMesh) ;i++){
+        for(unsigned int i=0;i<nomberVertices.at(numMesh) ;i++){
             dsWrite << positionArrayTotal.at(numMesh).at(i);
         }
 
         //write normals array
-        for(int i=0;i<nomberVertices.at(numMesh) ;i++){
+        for(unsigned int i=0;i<nomberVertices.at(numMesh) ;i++){
             dsWrite << normalsArrayTotal.at(numMesh).at(i);
         }
 
@@ -216,7 +216,7 @@ void Object3DStaticEditor::saveObject()
             dsWrite << texturesArrayTotal.at(numMesh).at(i);
         }
         //write tangent array
-        for(int i=0;i<nomberVertices.at(numMesh);i++){
+        for(unsigned int i=0;i<nomberVertices.at(numMesh);i++){
             dsWrite << tangentsArrayTotal.at(numMesh).at(i);
         }
     }

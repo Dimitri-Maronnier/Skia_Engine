@@ -105,7 +105,7 @@ private:
 public slots:
     void oneInputPortHaveBeenConnect(QNEPort*in, QNEPort *out);
     void onePortHaveBeenDisconnect(QNEPort*in,QNEPort*out);
-    void paramChanged(float value, bool b);
+    void paramChanged();
     void changeImage(Texture *texture);
 
 signals:

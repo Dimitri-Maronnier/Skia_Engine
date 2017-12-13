@@ -27,6 +27,9 @@
 *.out
 *.app
 
+ 	
+/external/*
+
 # =========================
 # Operating System Files
 # =========================

@@ -9,9 +9,7 @@
         <file>Images/checkbox.png</file>
         <file>Images/down_arrow.png</file>
         <file>Images/handle.png</file>
-        <file>Shaders/glslOverall</file>
         <file>Shaders/functions.glsl</file>
-        <file>Shaders/fromEquirectangularToCubemapFragment.glsl</file>
         <file>Shaders/cubemapVertex.glsl</file>
         <file>Shaders/simpleSkyboxFragment.glsl</file>
         <file>Shaders/simpleSyboxVertex.glsl</file>
@@ -21,5 +19,10 @@
         <file>Shaders/PBR_Pipeline/brdfVertex.glsl</file>
         <file>Shaders/PBR_Pipeline/irradiance_convolution.glsl</file>
         <file>Shaders/PBR_Pipeline/prefilter.glsl</file>
+        <file>Shaders/Utils/fromEquirectangularToCubemapFragment.glsl</file>
+        <file>Shaders/Utils/glslOverall</file>
+        <file>Shaders/Utils/pivotVertex.glsl</file>
+        <file>Shaders/Utils/pivotArrowGeo.glsl</file>
+        <file>Shaders/Utils/pivotArrowFragment.glsl</file>
     </qresource>
 </RCC>

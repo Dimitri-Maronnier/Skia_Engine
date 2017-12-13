@@ -834,7 +834,7 @@
     <item row="0" column="6">
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QTreeWidget" name="treeWidget">
+       <widget class="SceneTree" name="treeWidget">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -842,6 +842,24 @@
          </sizepolicy>
         </property>
         <property name="acceptDrops">
+         <bool>true</bool>
+        </property>
+        <property name="showDropIndicator" stdset="0">
+         <bool>true</bool>
+        </property>
+        <property name="dragEnabled">
+         <bool>true</bool>
+        </property>
+        <property name="dragDropOverwriteMode">
+         <bool>false</bool>
+        </property>
+        <property name="dragDropMode">
+         <enum>QAbstractItemView::DragDrop</enum>
+        </property>
+        <property name="defaultDropAction">
+         <enum>Qt::MoveAction</enum>
+        </property>
+        <property name="headerHidden">
          <bool>true</bool>
         </property>
         <column>
@@ -1328,7 +1346,7 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>259</width>
+              <width>241</width>
               <height>201</height>
              </rect>
             </property>
@@ -1502,6 +1520,8 @@
     </property>
     <addaction name="actionNew_Project"/>
     <addaction name="actionOpen_Project"/>
+    <addaction name="separator"/>
+    <addaction name="actionSave_Map"/>
    </widget>
    <addaction name="menufile"/>
   </widget>
@@ -1528,6 +1548,11 @@
     <string>Open Project</string>
    </property>
   </action>
+  <action name="actionSave_Map">
+   <property name="text">
+    <string>Save Map</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -1547,6 +1572,11 @@
    <extends>QToolBox</extends>
    <header>src/Editor/detailsarea.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>SceneTree</class>
+   <extends>QTreeWidget</extends>
+   <header>src/Editor/scenetree.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

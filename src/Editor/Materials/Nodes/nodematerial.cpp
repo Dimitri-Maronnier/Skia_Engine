@@ -77,7 +77,7 @@ NodeMaterial::NodeMaterial(QPoint pos, QGraphicsScene *scene, GlslTreeWidgetItem
         }
     }
 
-    int posStr = m_fragmentSourceOld.toStdString().find("//#numberOccurance");
+    size_t posStr = m_fragmentSourceOld.toStdString().find("//#numberOccurance");
     m_varName = m_name + "_" + QString::number(occurence[m_name.toStdString()]);
     QString varNameAndType;
     m_binding = binding;
@@ -105,7 +105,7 @@ NodeMaterial::NodeMaterial(QPoint pos, QGraphicsScene *scene, GlslTreeWidgetItem
 
     for(int i=0;i<m_nbParams;i++){
         m_value.push_back(new Param(0,false));
-        connect(m_value.at(i),SIGNAL(paramHaveBeenChanged(float,bool)),this,SLOT(paramChanged(float,bool)));
+        connect(m_value.at(i),SIGNAL(paramHaveBeenChanged(float,bool)),this,SLOT(paramChanged()));
     }
 
     m_imageLoad = false;
@@ -200,7 +200,7 @@ void NodeMaterial::freeBinding()
 void NodeMaterial::setTypeVar()
 {
 
-    int posStr = m_fragmentSource.toStdString().find("//#varType");
+    size_t posStr = m_fragmentSource.toStdString().find("//#varType");
 
     if(posStr!=std::string::npos){
         m_fragmentSource.replace(posStr,QString("//#varType").length(),Utils::typeVarToString(m_returnType));
@@ -215,7 +215,7 @@ bool NodeMaterial::isAbstract()
 void NodeMaterial::setDefaultValue()
 {
     QString string;
-    int posStr = m_fragmentSource.toStdString().find("//#value");
+    size_t posStr = m_fragmentSource.toStdString().find("//#value");
     if(posStr != std::string::npos){
         m_fragmentSource = m_fragmentSourceOld;
         QString newValueStr = m_name + "(";
@@ -373,7 +373,7 @@ void NodeMaterial::addPort(QNEPort *port)
 
 void NodeMaterial::oneInputPortHaveBeenConnect(QNEPort *in ,QNEPort *out)
 {
-    int posStr;
+    size_t posStr;
     if(in->getNode() == this){
         m_parents.push_back(out->getNode());
 
@@ -482,11 +482,11 @@ void NodeMaterial::onePortHaveBeenDisconnect(QNEPort *in, QNEPort *out)
 
 }
 
-void NodeMaterial::paramChanged(float value,bool b)
+void NodeMaterial::paramChanged()
 {
 
     QString string;
-    int posStr = m_fragmentSourceOld.toStdString().find("//#value");
+    size_t posStr = m_fragmentSourceOld.toStdString().find("//#value");
     m_fragmentSource = m_fragmentSourceOld;
     QString newValueStr = m_name + "(";
     for(int i=0;i<m_nbParams;i++){

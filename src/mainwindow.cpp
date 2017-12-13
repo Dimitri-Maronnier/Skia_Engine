@@ -46,6 +46,11 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+SceneTree *MainWindow::getSceneTree()
+{
+    return ui->treeWidget;
+}
+
 void MainWindow::newProject(){
     NewProjectDialog newProjectDialog;
     if(newProjectDialog.exec() == QDialog::Accepted){

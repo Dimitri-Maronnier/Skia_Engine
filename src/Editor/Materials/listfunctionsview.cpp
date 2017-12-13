@@ -12,7 +12,7 @@
 ListFunctionsView::ListFunctionsView(QWidget *parent)
     : QTreeWidget(parent)
 {
-    QString QfileName = ":/Shaders/glslOverall";
+    QString QfileName = ":/Shaders/Utils/glslOverall";
     QFile fichier(QfileName);
 
     fichier.open(QIODevice::ReadOnly);

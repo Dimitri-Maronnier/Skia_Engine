@@ -24,6 +24,6 @@ void main(void)
     vec4 worldPosition = modelMatrix * vec4(position,1.0);
     gl_Position = projectionMatrix * viewMatrix * worldPosition;
     vs_out.toLightVector =  (lightPosition - worldPosition.xyz);
-    vs_out.normal = normal;
+    vs_out.normal = (modelMatrix*vec4(normal,0.0)).xyz;
     vs_out.textureCoord = textureCoord;
 }

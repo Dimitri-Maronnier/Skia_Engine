@@ -8,13 +8,25 @@ Object3DStatic::Object3DStatic()
 {
 }
 
+Object3DStatic::Object3DStatic(Object3DStatic const&toCopy)
+    :Asset(toCopy), Entity(toCopy),
+      m_models(toCopy.m_models),m_materialsPath(toCopy.m_materialsPath)
+{
+    /*foreach(Model*model,toCopy.getModels()){
+        m_models.push_back(model);
+    }
+    foreach(QString string,toCopy.getMaterialsPath()){
+        m_materialsPath.push_back(string);
+    }*/
+}
+
 Object3DStatic::~Object3DStatic()
 {
 
 }
 
 Object3DStatic::Object3DStatic(const unsigned int handle, const std::string name, const std::string path)
-    :Asset(handle,name,path)
+    :Asset(handle,name,path), Entity(glm::vec3(0,0,0),glm::vec3(0,0,0),glm::vec3(1,1,1),QString(name.c_str()),handle,name,path)
 {
 
     try{
@@ -23,14 +35,14 @@ Object3DStatic::Object3DStatic(const unsigned int handle, const std::string name
 
         Compressor::uncompressObject3D(QString(path.c_str()),&nomberMesh,meshs,&m_materialsPath);
 
-        for(int numMesh=0;numMesh<nomberMesh;numMesh++){
+        for(unsigned int numMesh=0;numMesh<nomberMesh;numMesh++){
 
             Mesh mesh = Loader::loadToVAO(*meshs->at(numMesh));
 
             m_models.push_back(new Model(mesh,NULL,meshs->at(numMesh)->name));
         }
 
-        for(int numMesh=0;numMesh<nomberMesh;numMesh++){
+        for(unsigned int numMesh=0;numMesh<nomberMesh;numMesh++){
             SAFE_DELETE(meshs->at(numMesh)->facesArray);
             SAFE_DELETE(meshs->at(numMesh)->positionsArray);
             SAFE_DELETE(meshs->at(numMesh)->normalsArray);
@@ -42,7 +54,7 @@ Object3DStatic::Object3DStatic(const unsigned int handle, const std::string name
 
         /*Load Materials*/
         if(m_materialsPath.size()>0){
-            for(int numMesh=0;numMesh<nomberMesh;numMesh++){
+            for(unsigned int numMesh=0;numMesh<nomberMesh;numMesh++){
                 if(m_materialsPath.at(numMesh) != ""){
                     std::replace( m_materialsPath.at(numMesh).begin(), m_materialsPath.at(numMesh).end(), '/', '\\');
                     std::vector<std::string> split = Utils::split(m_materialsPath.at(numMesh).toStdString(),'\\');
@@ -64,15 +76,14 @@ Object3DStatic::Object3DStatic(const unsigned int handle, const std::string name
 }
 
 Object3DStatic::Object3DStatic(const unsigned int handle, const std::string name, const std::string path, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, std::string label)
-    :Asset(handle,name,path)
+    :Asset(handle,name,path),Entity(position,rotation,scale,QString(name.c_str()),handle,name,path)
 {
-    Entity(position,rotation,scale,label);
+
 }
 
 Object3DStatic::Object3DStatic(const unsigned int handle, const std::string name, const std::string path ,glm::vec3 position, glm::vec3 rotation, glm::vec3 scale, std::string label, std::vector<Model*> model)
-    :Asset(handle,name,path)
+    :Asset(handle,name,path),Entity(position,rotation,scale,QString(name.c_str()),handle,name,path)
 {
-   Entity(position,rotation,scale,label);
    m_models = model;
 }
 

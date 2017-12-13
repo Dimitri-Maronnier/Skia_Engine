@@ -27,6 +27,7 @@ class Object3DStatic :public Asset, public Entity
 {
 public:
     Object3DStatic();
+    Object3DStatic(Object3DStatic const&toCopy);
     ~Object3DStatic();
     Object3DStatic(const unsigned int handle, const std::string name, const std::string path);
     Object3DStatic(const unsigned int handle, const std::string name, const std::string path ,glm::vec3 position,glm::vec3 rotation,glm::vec3 scale,std::string label);
@@ -42,6 +43,7 @@ public:
 private:
     std::vector<Model*> m_models;
     std::vector<QString> m_materialsPath;
+
 
 
 };

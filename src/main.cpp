@@ -5,7 +5,7 @@
 #include "Editor/Utils/projectinfo.h"
 #include <QFile>
 #include "Editor/Materials/materialeditorwindow.h"
-
+#include "bullet/btBulletDynamicsCommon.h"
 
 #pragma comment(lib, "shell32.lib")
 
@@ -15,6 +15,8 @@
 
 int main(int argc, char *argv[])
 {
+
+
     QApplication a(argc, argv);
     std::cout << "Skia Engine Run" << std::endl << std::endl;
 
