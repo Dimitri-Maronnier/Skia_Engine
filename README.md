@@ -19,6 +19,9 @@ The Engine aim to make recents looking games with an easy Material Editor based 
 - Choose your working directory (e.g lab/VersusDanmaku)
 - You can pick Arena Scene from VersusDanmaku to test the game
 
+## Compilation
+- Put the external libraries folder in your Source directory 
+
 ## Current State
 - PBR
 - Material Editor Based Nodes
