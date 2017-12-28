@@ -44,3 +44,4 @@ The Engine aim to make recents looking games with an easy Material Editor based 
 
 ## Thanks
 - LoneWolf for his wonderful QT StyleSheet
+- LearnOpenGL and Epic's game documentations for the comprehension of IBL PBR
