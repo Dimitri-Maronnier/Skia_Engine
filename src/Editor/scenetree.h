@@ -27,7 +27,7 @@ public:
         event->accept();
         _item = (EntityTreeWidgetItem*)this->currentItem();
     }
-
+    void cleanUp();
     ~SceneTree();
 public slots:
     void addEntity(Entity *entity);

@@ -4,8 +4,13 @@
 #include <string>
 #include <sstream>
 #include "Editor/Materials/Nodes/nodematerial.h"
-
-
+#include "src/Engine/Entities/actor.h"
+#include "src/Editor/Utils/foldergestion.h"
+#include "src/Editor/Utils/projectinfo.h"
+#include <cstring>
+#include <tchar.h>
+#include <stdio.h>
+#include <strsafe.h>
 
 class Utils
 {
@@ -23,8 +28,7 @@ public:
     static TypeVarType extToTypeVar(QString ext);
     static TypeVarType above(TypeVarType type);
     static TypeVarType addTypeVar(TypeVarType type1,TypeVarType type2);
-
-
+    static std::wstring s2ws(const std::string& s);
 private:
 
 };

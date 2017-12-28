@@ -10,6 +10,21 @@ ShaderProgram::ShaderProgram()
 
 }
 
+void ShaderProgram::init(QString vertexStr)
+{
+
+    programID = glCreateProgram();
+
+    vertexID = loadShader(vertexStr,GL_VERTEX_SHADER);
+
+
+    glAttachShader(programID, vertexID);
+    bindAttributes();
+    glLinkProgram(programID);
+    glValidateProgram(programID);
+    getAllUniformLocations();
+}
+
 void ShaderProgram::init(QString vertexStr, QString fragmentStr)
 {
 

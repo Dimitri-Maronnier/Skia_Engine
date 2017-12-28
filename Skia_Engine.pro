@@ -1,9 +1,3 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2017-07-13T17:56:36
-#
-#-------------------------------------------------
-
 QT       += core gui
 QT       += opengl
 
@@ -14,21 +8,11 @@ CONFIG += c++11
 TARGET = Skia_Engine
 TEMPLATE = app
 
-# The following define makes your compiler emit warnings if you use
-# any feature of Qt which as been marked as deprecated (the exact warnings
-# depend on your compiler). Please consult the documentation of the
-# deprecated API in order to know how to port your code away from it.
-DEFINES += QT_DEPRECATED_WARNINGS
-
-# You can also make your code fail to compile if you use deprecated APIs.
-# In order to do so, uncomment the following line.
-# You can also select to disable deprecated APIs only up to a certain version of Qt.
-#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 INCLUDEPATH += $$PWD/external/include
-LIBS += -L$$PWD/external/lib -lboost_regex-vc140-mt-1_64 -lboost_system-vc140-mt-1_64 -lboost_iostreams-vc140-mt-1_64 -lboost_filesystem-vc140-mt-1_64
+LIBS += -L$$PWD/external/lib -lboost_regex-vc140-mt-1_64 -lboost_system-vc140-mt-1_64 -lboost_iostreams-vc140-mt-1_64 -lboost_filesystem-vc140-mt-1_64 -lboost_regex-vc140-mt-gd-1_64 -lboost_system-vc140-mt-gd-1_64 -lboost_iostreams-vc140-mt-gd-1_64 -lboost_filesystem-vc140-mt-gd-1_64
 LIBS += -lglew32 -lfreeglut -L$$PWD/external/bin -L$$PWD/external/lib
-LIBS += -L$$PWD/external/bin -L$$PWD/external/lib -lsoil2 -lassimp -lBullet3Collision_vs2010 -lBullet3Common_vs2010 -lBullet3Dynamics_vs2010 -lBullet3Geometry_vs2010 -lBullet3OpenCL_clew_vs2010 -lLinearMath_vs2010
+LIBS += -L$$PWD/external/bin -L$$PWD/external/lib -lsoil2 -lassimp
 
 SOURCES += \
         src/main.cpp \
@@ -89,7 +73,17 @@ SOURCES += \
     src/Engine/Utils/rendertools.cpp \
     src/Editor/scenetree.cpp \
     src/Engine/Shaders/pivotshader.cpp \
-    src/Engine/Utils/smath.cpp
+    src/Engine/Utils/smath.cpp \
+    src/Engine/Entities/actor.cpp \
+    src/Engine/Shadows/shadowpassshader.cpp \
+    src/Editor/newactordialog.cpp \
+    src/Engine/Controller/inputhandler.cpp \
+    src/Game/game.cpp \
+    src/Game/mainperso.cpp \
+    src/Engine/Entities/springcamera.cpp \
+    src/Engine/Controller/inputabstract.cpp \
+    src/Game/projectile.cpp \
+    src/Engine/Entities/collision.cpp
 
 HEADERS += \
         src/mainwindow.h \
@@ -150,13 +144,24 @@ HEADERS += \
     src/Engine/Utils/rendertools.h \
     src/Editor/scenetree.h \
     src/Engine/Shaders/pivotshader.h \
-    src/Engine/Utils/smath.h
+    src/Engine/Utils/smath.h \
+    src/Engine/Entities/actor.h \
+    src/Engine/Shadows/shadowpassshader.h \
+    src/Editor/newactordialog.h \
+    src/Engine/Controller/inputhandler.h \
+    src/Game/game.h \
+    src/Game/mainperso.h \
+    src/Engine/Entities/springcamera.h \
+    src/Engine/Controller/inputabstract.h \
+    src/Game/projectile.h \
+    src/Engine/Entities/collision.h
 FORMS += \
         src/mainwindow.ui \
     src/Editor/newprojectdialog.ui \
     src/Editor/Materials/materialeditorwindow.ui \
     src/Editor/imageeditor.ui \
-    src/Editor/Objects3dStatic/object3dstaticeditor.ui
+    src/Editor/Objects3dStatic/object3dstaticeditor.ui \
+    src/Editor/newactordialog.ui
 
 
 RESOURCES += \

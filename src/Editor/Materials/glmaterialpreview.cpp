@@ -28,8 +28,9 @@ GLMaterialPreview::GLMaterialPreview( QWidget *parent) : QGLWidget(parent){
     camera.move(0,0,0,0,0,0,0);
     m_lightAutoRotate = false;
     m_isInitialize = false;
-    //this->setContext(MainWindow::contxt,GLWidget::mainHandle);
-    this->context()->create(GLWidget::mainHandle);
+    this->setContext(MainWindow::contxt,GLWidget::mainHandle);
+    //this->context()->create(GLWidget::mainHandle);
+    //this->setContext(GLWidget::mainHandle);
     materialHandle = this->context();
     m_cleanFirstHdrUse = true;
     m_callSphere = false;m_callCube = false;m_callPlane = false;m_callCylinder = false;m_callCustom = false;
@@ -150,7 +151,10 @@ void GLMaterialPreview::initializeGL(){
 
     camera.setProjectionMatrix(Matrix::createProjectionMatrix(camera,width,height));
 
-    hdr = Loader::loadHdr((char*)"reflexion.hdr");
+    unsigned int handleTex = AssetsCollections::TexturesCollection.AddR("reflexion",":/Images/reflexion.shdrtex");
+    AssetsCollections::HandlesTextures.push_back(handleTex);
+
+    hdr = AssetsCollections::TexturesCollection.GetElement(handleTex)->getTextureID();
     m_skyboxHdr = RenderTools::equirectangularToCubeMap(hdr);
     m_irradianceMap = RenderTools::irradianceConvolution(m_skyboxHdr);
     m_prefilterMap = RenderTools::prefilterCubeMap(m_skyboxHdr);
@@ -187,9 +191,9 @@ void GLMaterialPreview::initializeGL(){
     light.setColor(glm::vec3(1,1,1));
     haveBeenRezizeOnce = true;
     std::string nameFile = "sphere_previewMat.sobj";
-    std::string path = QDir::currentPath().toStdString() + "/mesh/sphere_previewMat.sobj";
+    std::string path = ":/Mesh/sphere_previewMat.sobj";
 
-    unsigned int handle = AssetsCollections::Object3DStaticCollection.Add(nameFile,path);
+    unsigned int handle = AssetsCollections::Object3DStaticCollection.AddR(nameFile,path);
     AssetsCollections::HandlesObject3DStatic.push_back(handle);
 
 
@@ -276,9 +280,9 @@ void GLMaterialPreview::switchToSphere()
     time->blockSignals(true);
 
     std::string nameFile = "sphere_previewMat.sobj";
-    std::string path = QDir::currentPath().toStdString() + "/mesh/sphere_previewMat.sobj";
+    std::string path = ":/Mesh/sphere_previewMat.sobj";
 
-    unsigned int handle = AssetsCollections::Object3DStaticCollection.Add(nameFile,path);
+    unsigned int handle = AssetsCollections::Object3DStaticCollection.AddR(nameFile,path);
     if(handle!=-1){
         AssetsCollections::HandlesObject3DStatic.push_back(handle);
         m_newObject = AssetsCollections::Object3DStaticCollection.GetElement(handle);
@@ -292,9 +296,9 @@ void GLMaterialPreview::switchToCube()
 
 
     std::string nameFile = "cube_previewMat.sobj";
-    std::string path = QDir::currentPath().toStdString() + "/mesh/cube_previewMat.sobj";
+    std::string path = ":/Mesh/cube_previewMat.sobj";
 
-    unsigned int handle = AssetsCollections::Object3DStaticCollection.Add(nameFile,path);
+    unsigned int handle = AssetsCollections::Object3DStaticCollection.AddR(nameFile,path);
     if(handle!=-1){
         AssetsCollections::HandlesObject3DStatic.push_back(handle);
         m_newObject = AssetsCollections::Object3DStaticCollection.GetElement(handle);
@@ -307,9 +311,9 @@ void GLMaterialPreview::switchToPlane()
     time->blockSignals(true);
 
     std::string nameFile = "plane_previewMat.sobj";
-    std::string path = QDir::currentPath().toStdString() + "/mesh/plane_previewMat.sobj";
+    std::string path = ":/Mesh/plane_previewMat.sobj";
 
-    unsigned int handle = AssetsCollections::Object3DStaticCollection.Add(nameFile,path);
+    unsigned int handle = AssetsCollections::Object3DStaticCollection.AddR(nameFile,path);
     if(handle!=-1){
         AssetsCollections::HandlesObject3DStatic.push_back(handle);
         m_newObject = AssetsCollections::Object3DStaticCollection.GetElement(handle);
@@ -322,9 +326,9 @@ void GLMaterialPreview::switchToCylinder()
     time->blockSignals(true);
 
     std::string nameFile = "cylinder_previewMat.sobj";
-    std::string path = QDir::currentPath().toStdString() + "/mesh/cylinder_previewMat.sobj";
+    std::string path = ":/Mesh/cylinder_previewMat.sobj";
 
-    unsigned int handle = AssetsCollections::Object3DStaticCollection.Add(nameFile,path);
+    unsigned int handle = AssetsCollections::Object3DStaticCollection.AddR(nameFile,path);
     AssetsCollections::HandlesObject3DStatic.push_back(handle);
 
     if(handle!=-1){
@@ -337,7 +341,7 @@ void GLMaterialPreview::switchToCylinder()
 void GLMaterialPreview::switchToCustom()
 {
 
-    time->blockSignals(true);
+    /*time->blockSignals(true);
     QString filter = "Wavefront format (*.sobj)";
 
     std::string path = QFileDialog::getOpenFileName(this, "Select a file...",QString(FolderGestion::rootProjectsFolderPath), filter).toStdString();
@@ -352,7 +356,7 @@ void GLMaterialPreview::switchToCustom()
             m_newObject = AssetsCollections::Object3DStaticCollection.GetElement(handle);
     }
 
-    time->blockSignals(false);
+    time->blockSignals(false);*/
 }
 
 void GLMaterialPreview::lightAutoRotate(bool check)

@@ -6,6 +6,8 @@
 #include "glm/vec3.hpp"
 #include "glm/mat4x4.hpp"
 #include <glm/gtc/matrix_transform.hpp>
+#include "src/Engine/Entities/camerathird.h"
+#include "src/Engine/Entities/camera.h"
 
 class Matrix
 {

@@ -29,13 +29,13 @@ void CustomLabelType::mousePressEvent(QMouseEvent *)
         fileName =
                 QFileDialog::getOpenFileName(nullptr,
                                              QObject::tr("Open HDR Texture"),
-                                             QString(FolderGestion::rootProjectsFolderPath),
+                                             QString(FolderGestion::currentWorkingDir.c_str()),
                                              QObject::tr("HDR Texture Files (*.shdrtex)"));
     }else{
         fileName =
                 QFileDialog::getOpenFileName(nullptr,
                                              QObject::tr("Open Texture"),
-                                             QString(FolderGestion::rootProjectsFolderPath),
+                                             QString(FolderGestion::currentWorkingDir.c_str()),
                                              QObject::tr("Texture Files (*.stex)"));
     }
     if(fileName.at(0)!=0){

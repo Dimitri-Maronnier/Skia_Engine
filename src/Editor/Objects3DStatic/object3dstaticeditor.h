@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QPushButton>
+#include "src/Engine/Entities/object3dstatic.h"
 
 class MatButton : public QPushButton
 {
@@ -41,6 +42,8 @@ public:
 public slots:
     void setMaterial(MatButton *button);
     void saveObject();
+    void setRadius(double f);
+    void setTag(int index);
 
 private:
     Ui::Object3DStaticEditor *ui;
@@ -48,6 +51,7 @@ private:
     QString m_path;
     unsigned int m_models_count;
     std::vector<QString>* m_materialsPath;
+    Object3DStatic* object;
 
 };
 

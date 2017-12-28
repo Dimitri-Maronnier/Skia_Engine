@@ -11,6 +11,7 @@ class ShaderProgram
 {
 public:
     ShaderProgram();
+    void init(QString vertexStr);
     void init(QString vertexStr,QString fragmentStr);
     void init(QString vertexStr,QString geoStr,QString fragmentStr);
     void initWithSource(QString vertexStr,QString fragmentStr);

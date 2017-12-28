@@ -18,6 +18,8 @@ public:
     explicit ContentBrowser( QWidget *parent = 0);
     ~ContentBrowser();
     void reloadEditor();
+signals:
+    void mapSelected(const QString&);
 public slots:
     void prepareMenuContentBrowser(const QPoint &);
     void newFolder();
@@ -27,12 +29,14 @@ public slots:
     void importHDRI();
     void newMat();
     void newMap();
+    void newActor();
     void renameItem();
     void triggerRename();
 private:
     int contain(QString str);
     void ContentBrowser::visitTree(QTreeWidgetItem *item, bool fill);
     void addChildren(CTreeWidgetItem *item, QString filePath);
+    void modulesSearch(CTreeWidgetItem *item, QString filePath);
     void dropEvent(QDropEvent* event);
     void keyPressEvent ( QKeyEvent * event );
     void keyReleaseEvent ( QKeyEvent * event );

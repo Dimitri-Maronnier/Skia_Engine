@@ -62,14 +62,12 @@ QString Material::DefaultSourceFragmentShader =
         "   vec3 F0 = vec3(0.04);\n"
         "   F0 = mix(F0, albedo, metallic);\n"
 
-        "   // reflectance equation\n"
-        "   vec3 Lo = vec3(0.0);\n"
-
-        "   // calculate per-light radiance\n"
+        "   // L0 = reflectance equation\n"
+        "   vec3 L0 = vec3(0.0);\n"
         "   unitLightVector = normalize(fs_in.toLightVector);\n"
         "   vec3 unitHalfway = normalize(unitVectorToCamera + unitLightVector);\n"
-        "   float distance = length(fs_in.toLightVector);\n"
-        "   float attenuation = 1.0 / (distance * distance);\n"
+
+
         "   vec3 radiance = lightTint;\n"
 
         "   // Cook-Torrance Term BRDF\n"
@@ -90,7 +88,7 @@ QString Material::DefaultSourceFragmentShader =
 
         "   float brightNess = max(dot(unitNormal, unitLightVector), 0.0);\n"
         "   vec3 emittance = radiance * brightNess;\n"
-        "   Lo += (kD * albedo / PI + specular) * emittance;\n"
+        "   L0 += (kD * albedo / PI + specular) * emittance;\n"
 
         "   F = fresnelSchlickRoughness(max(dot(unitNormal, unitVectorToCamera), 0.0), F0, roughness);\n"
 
@@ -99,7 +97,7 @@ QString Material::DefaultSourceFragmentShader =
         "   kD *= 1.0 - metallic;\n"
 
         "   vec3 irradiance = texture(irradianceMap, unitNormal).rgb;\n"
-        "   vec3 diffuse      = irradiance * albedo;\n"
+        "   vec3 diffuse = irradiance * albedo;\n"
 
         "   const float MAX_REFLECTION_LOD = 4.0;\n"
         "   vec3 prefilteredColor = textureLod(prefilterMap, reflectNormal,  roughness * MAX_REFLECTION_LOD).rgb;\n"
@@ -108,11 +106,11 @@ QString Material::DefaultSourceFragmentShader =
 
         "   vec3 ambient = (kD * diffuse + specular) * ao;\n"
 
-        "   vec3 color = ambient + Lo;\n"
+        "   vec3 color = ambient + L0;\n"
 
-        "   // HDR tonemapping\n"
+        "   // tonemapping HDR\n"
         "   color = color / (color + vec3(1.0));\n"
-        "   // gamma correct\n"
+        "   //correction gamma\n"
         "   color = pow(color, vec3(1.0/2.2));\n"
 
         "   FragColor = vec4(color , 1.0);\n"

@@ -6,10 +6,15 @@
 #include "Editor/ctreewidgetitem.h"
 #include "src/Assets/assetscollections.h"
 #include "src/Editor/Utils/foldergestion.h"
+#include "src/Editor/Utils/compressor.h"
+#include "src/Game/game.h"
+#include <Xinput.h>
 
 #include <QFileDialog>
 
 QGLContext *MainWindow::contxt;
+bool MainWindow::ContextBlock;
+GLWidget *MainWindow::mainGl;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -25,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QGLFormat format;
     contxt=new QGLContext(format);
-
+    mainGl = ui->GL;
     CTreeWidgetItem* headerItem = new CTreeWidgetItem();
     headerItem->setText(0,QString("File Name"));
     headerItem->setText(1,QString("Size (Bytes)"));
@@ -35,7 +40,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->contentBrowserTree->setHeaderItem(headerItem);
     ui->contentBrowserTree->setIconSize(QSize(32,32));
     connect(ui->GL->getScene(),SIGNAL(oneEntityHaveBeenSelected(Object3DStatic*)),ui->DetailsToolBox,SLOT(initDetailArena(Object3DStatic*)));
+    connect(ui->actionSave_Map,SIGNAL(triggered(bool)),this,SLOT(saveMap()));
+    connect(ui->contentBrowserTree,SIGNAL(mapSelected(QString)), ui->GL->getScene(),SLOT(setScene(QString)));
+    connect(ui->PlayButton,SIGNAL(clicked(bool)),ui->GL,SLOT(gameRun()));
+    connect(ui->compileButton,SIGNAL(clicked(bool)),this,SLOT(compileGame()));
     this->openProject();
+    ProjectInfo::loadModules();
+
 }
 
 
@@ -43,6 +54,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     AssetsCollections::cleanUp();
+    ProjectInfo::cleanUp();
     delete ui;
 }
 
@@ -70,7 +82,31 @@ void MainWindow::openProject()
         std::replace( fileName.begin(), fileName.end(), '/', '\\');
         std::vector<std::string> split = Utils::split(fileName.toStdString(),'\\');
         ProjectInfo::name = split.at(split.size()-1);
+        FolderGestion::currentWorkingDir = fileName.toStdString();
         ui->contentBrowserTree->reloadEditor();
         ui->ProjectName->setText(QString(split.at(split.size()-1).c_str()));
+    }else{
+        FolderGestion::currentWorkingDir = FolderGestion::rootProjectsFolderPath;
+        FolderGestion::currentWorkingDir += "\\";
+        FolderGestion::currentWorkingDir += ProjectInfo::name;
+        ui->contentBrowserTree->reloadEditor();
+        ui->ProjectName->setText(QString(ProjectInfo::name.c_str()));
     }
+
+}
+
+void MainWindow::saveMap()
+{
+    Compressor::compressMap(ProjectInfo::currentMap,*ui->GL->getScene());
+}
+
+void MainWindow::gameRun()
+{
+    GLWidget::GameRun = true;
+
+}
+
+void MainWindow::compileGame()
+{
+    ProjectInfo::compileModules();
 }

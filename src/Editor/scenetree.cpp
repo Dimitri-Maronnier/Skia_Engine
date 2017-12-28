@@ -20,7 +20,7 @@ void SceneTree::mouseReleaseEvent(QMouseEvent *mouseEvent)
 {
     if(mouseEvent->button() == Qt::LeftButton){
         EntityTreeWidgetItem *item = (EntityTreeWidgetItem*)this->itemAt( mouseEvent->pos() );
-        if(item && item->entity){
+        if(item!=nullptr && item->entity){
             emit clicked(item->entity);
         }
 
@@ -34,17 +34,23 @@ void SceneTree::dropEvent(QDropEvent *event)
 
     if(item){
         EntityTreeWidgetItem* parent = (EntityTreeWidgetItem*)item->parent();
-        if(parent)
+        if(parent!=nullptr)
             parent->entity->removeChild(item->entity);
         parent = (EntityTreeWidgetItem*)this->itemAt( event->pos() );
-        if(parent){
-            //parent->addChild(item);
+        if(parent!=nullptr){
             item->entity->setParent(parent->entity);
             parent->entity->addChild(item->entity);
             this->repaint();
+        }else{
+            item->entity->setParent(nullptr);
         }
     }
 
+}
+
+void SceneTree::cleanUp()
+{
+    this->clear();
 }
 
 void SceneTree::addEntity(Entity *entity)
@@ -52,6 +58,12 @@ void SceneTree::addEntity(Entity *entity)
     EntityTreeWidgetItem* treeWidgetItem = new EntityTreeWidgetItem();
     treeWidgetItem->entity = entity;
     treeWidgetItem->setText(0,entity->getLabel());
-    this->addTopLevelItem(treeWidgetItem);
+    if(entity->getParent() == nullptr)
+        this->addTopLevelItem(treeWidgetItem);
+    else{
+        Entity* parent = entity->getParent();
+        QList<QTreeWidgetItem*> l = this->findItems(parent->getLabel(),Qt::MatchContains | Qt::MatchRecursive);
+        l.at(0)->addChild(treeWidgetItem);
+    }
 
 }

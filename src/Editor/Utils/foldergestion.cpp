@@ -9,7 +9,7 @@ char FolderGestion::rootProjectsFolderPath[MAX_PATH] = "";
 char FolderGestion::my_documentsPath[MAX_PATH] = "";
 WCHAR FolderGestion::rootProjectsFolderPathAddr[MAX_PATH];
 WCHAR FolderGestion::my_documentsAddr[MAX_PATH];
-
+std::string FolderGestion::currentWorkingDir;
 FolderGestion::FolderGestion()
 {
 
@@ -25,8 +25,7 @@ bool FolderGestion::isRootProjectsFolderExists(){
 
     struct stat sb;
     char* ProjectFolder = (char*)"\\SkiaProjects";
-
-    for(int i = 0;i<MAX_PATH;i++){
+    for(int i = 0;i<15;i++){
         rootProjectsFolderPathAddr[i] = ProjectFolder[i];
     }
 
@@ -42,13 +41,15 @@ int FolderGestion::createRootProjectsFolder(){
     std::cout << "Creating Folder Projects at " << my_documentsPath << std::endl;
     if(CreateDirectory(wcsncat(my_documentsAddr,rootProjectsFolderPathAddr,MAX_PATH),NULL)){
         std::cout << "Folder create" << std::endl;
-        return 1;
     }
     else{
         std::cout << "Cannot create folder" << std::endl;
-        return 0;
     }
-
+    boost::filesystem::path bPath(rootProjectsFolderPath);
+    bPath += "/";
+    bPath += "default";
+    boost::filesystem::create_directory(bPath);
+    return 1;
 }
 
 int FolderGestion::createProjectFolder(std::string name){
@@ -75,6 +76,11 @@ int FolderGestion::createProjectFolder(std::string name){
 
         if(CreateDirectory(wcsncat(copyRootProjectsFolderPathAddr,ProjectFolderAddr,MAX_PATH),NULL)){
             std::cout << "Folder create" << std::endl;
+            boost::filesystem::path bPath2 = bPath;
+            bPath += "/modules";
+            bPath2 += "/contents";
+            boost::filesystem::create_directory(bPath);
+            boost::filesystem::create_directory(bPath2);
             return 1;
         }
         else{
@@ -153,7 +159,7 @@ void FolderGestion::recursive_copy(const boost::filesystem::path &src, const boo
 
 QString FolderGestion::addProjectPath(const QString str)
 {
-    QString path = QString(rootProjectsFolderPath);
+    QString path = QString(currentWorkingDir.c_str());
     path += str;
     return path;
 }
@@ -195,9 +201,8 @@ QString FolderGestion::checkoutReferences(const QString path)
 
     const std::string name = (split.size()>0)?split.at(split.size()-1):path.toStdString();
     char temp[MAX_PATH]="";
-    strcat(temp,FolderGestion::rootProjectsFolderPath);
-    strcat(temp,"\\");
-    QDir* rootDir = new QDir(strcat(temp,ProjectInfo::name.c_str()));
+
+    QDir* rootDir = new QDir(currentWorkingDir.c_str());
 
     QFileInfoList filesList = rootDir->entryInfoList(QDir::NoDotAndDotDot|QDir::AllEntries);
 
@@ -207,7 +212,7 @@ QString FolderGestion::checkoutReferences(const QString path)
 
         if(fileInfo.isFile() && !(fileInfo.baseName() + "." + fileInfo.suffix()).toStdString().compare(name))//The reference still right
         {
-            return FolderGestion::addProjectPath("\\" + QString(ProjectInfo::name.c_str()) + "\\" + QString(name.c_str()));
+            return FolderGestion::addProjectPath( "\\" + QString(name.c_str()));
         }
 
         if(fileInfo.isDir())
@@ -230,7 +235,7 @@ QString FolderGestion::removeProjectPath(const QString str)
 {
     std::string varUtf8 = str.toUtf8().constData();
     unsigned int position = 0;
-    while(position<MAX_PATH && rootProjectsFolderPath[position] == varUtf8.at(position))
+    while(position<MAX_PATH && currentWorkingDir[position] == varUtf8.at(position))
         position++;
     std::string var = varUtf8.substr(position,varUtf8.size()-1);
     return QString(var.c_str());

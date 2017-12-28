@@ -2,7 +2,6 @@
     <qresource prefix="/">
         <file>Shaders/fs.glsl</file>
         <file>Shaders/vs.glsl</file>
-        <file>Images/test.png</file>
         <file>Images/folder.png</file>
         <file>Images/file.png</file>
         <file>DarkOrangeStyle.qss</file>
@@ -24,5 +23,13 @@
         <file>Shaders/Utils/pivotVertex.glsl</file>
         <file>Shaders/Utils/pivotArrowGeo.glsl</file>
         <file>Shaders/Utils/pivotArrowFragment.glsl</file>
+        <file>Images/gamepad.png</file>
+        <file>Shaders/Shadows/shadowPassVertex.glsl</file>
+        <file>Images/compile.png</file>
+        <file>Mesh/cube_previewMat.sobj</file>
+        <file>Mesh/cylinder_previewMat.sobj</file>
+        <file>Mesh/plane_previewMat.sobj</file>
+        <file>Mesh/sphere_previewMat.sobj</file>
+        <file>Images/reflexion.shdrtex</file>
     </qresource>
 </RCC>

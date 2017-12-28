@@ -15,6 +15,9 @@
 #include "Engine/scene.h"
 #include "Engine/Shaders/simpleskyboxshader.h"
 #include <QTime>
+#include <QElapsedTimer>
+#include "src/Game/game.h"
+
 
 class GLWidget : public QGLWidget
 {
@@ -36,12 +39,16 @@ public:
     void setScene(Scene scene);
 
     static QGLContext *mainHandle;
+    static bool GameRun;
 
 public slots:
     void update();
-
+    void gameRun();
+signals:
+    void quitGame();
+    void drawStandAlone();
 private:
-
+    QElapsedTimer _elapsedTime;
     virtual  void dragEnterEvent(QDragEnterEvent *event);
 
     virtual  void dragLeaveEvent(QDragLeaveEvent *event){
@@ -71,6 +78,8 @@ private:
     bool haveBeenRezizeOnce;
     Scene scene;
     bool _zKeyPressed,_sKeyPressed,_qKeyPressed,_dKeyPressed;
+
+    Game _game;
 };
 
 #endif // GLWIDGET_H

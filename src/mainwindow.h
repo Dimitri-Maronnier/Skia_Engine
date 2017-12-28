@@ -7,7 +7,9 @@
 #include <GL/glew.h>
 #include <QGLWidget>
 #include <QGLContext>
+#include "glwidget.h"
 #include "Editor/scenetree.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -23,10 +25,15 @@ public:
     ~MainWindow();
     SceneTree *getSceneTree();
     static QGLContext *contxt;
+    static bool ContextBlock;
+    static GLWidget *mainGl;
 
 public slots:
     void newProject();
     void openProject();
+    void saveMap();
+    void gameRun();
+    void compileGame();
 
 private:
     Ui::MainWindow *ui;

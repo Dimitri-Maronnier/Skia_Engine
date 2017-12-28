@@ -6,111 +6,106 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1280</width>
-    <height>720</height>
+    <width>280</width>
+    <height>677</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Object Editor</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="gridLayoutWidget">
+   <widget class="QToolBox" name="toolBox">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>1281</width>
-      <height>681</height>
+      <width>256</width>
+      <height>624</height>
      </rect>
     </property>
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="1">
-      <widget class="QToolBox" name="toolBox">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>256</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="currentIndex">
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>256</width>
+      <height>0</height>
+     </size>
+    </property>
+    <property name="currentIndex">
+     <number>1</number>
+    </property>
+    <widget class="QWidget" name="ElementsSlots">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>256</width>
+       <height>570</height>
+      </rect>
+     </property>
+     <attribute name="label">
+      <string>Elements Slots</string>
+     </attribute>
+     <widget class="QWidget" name="formLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>251</width>
+        <height>621</height>
+       </rect>
+      </property>
+      <layout class="QFormLayout" name="layoutElements"/>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_2">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>256</width>
+       <height>570</height>
+      </rect>
+     </property>
+     <attribute name="label">
+      <string>Page 2</string>
+     </attribute>
+     <widget class="QWidget" name="verticalLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>251</width>
+        <height>611</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="spacing">
         <number>0</number>
        </property>
-       <widget class="QWidget" name="ElementsSlots">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>256</width>
-          <height>625</height>
-         </rect>
-        </property>
-        <attribute name="label">
-         <string>Elements Slots</string>
-        </attribute>
-        <widget class="QWidget" name="formLayoutWidget">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>0</y>
-           <width>251</width>
-           <height>621</height>
-          </rect>
-         </property>
-         <layout class="QFormLayout" name="layoutElements"/>
-        </widget>
-       </widget>
-       <widget class="QWidget" name="page_2">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>256</width>
-          <height>625</height>
-         </rect>
-        </property>
-        <attribute name="label">
-         <string>Page 2</string>
-        </attribute>
-       </widget>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="GLObjectPreview" name="objectGLWidget">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="mouseTracking">
-        <bool>true</bool>
-       </property>
-       <property name="focusPolicy">
-        <enum>Qt::ClickFocus</enum>
-       </property>
-       <property name="autoFillBackground">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
+       <item>
+        <widget class="QDoubleSpinBox" name="Radius"/>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="Tag"/>
+       </item>
+      </layout>
+     </widget>
+    </widget>
    </widget>
+   <zorder>formLayoutWidget</zorder>
+   <zorder>toolBox</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1280</width>
+     <width>280</width>
      <height>21</height>
     </rect>
    </property>
@@ -129,13 +124,6 @@
    </property>
   </action>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>GLObjectPreview</class>
-   <extends>QOpenGLWidget</extends>
-   <header>src/Editor/globjectpreview.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

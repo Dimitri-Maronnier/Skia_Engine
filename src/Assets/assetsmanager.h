@@ -21,7 +21,9 @@ Happy coding :)
 
 #include "src/define.h"
 #include <QString>
-
+#include <QFileInfo>
+#include <QMessageBox>
+#include <QTimer>
 #include <string>
 #include <vector>
 #include <stack>
@@ -59,7 +61,7 @@ public:
     ~AssetsManager()
     {
         EmptyList();
-        delete m_list;
+        SAFE_DELETE(m_list);
     }
 
     //-------------------------------------------------------------------------
@@ -68,7 +70,7 @@ public:
     void cleanUp()
     {
         EmptyList();
-        delete m_list;
+        //SAFE_DELETE(m_list);
     }
 
 
@@ -184,6 +186,19 @@ public:
     //-------------------------------------------------------------------------
     unsigned int Add( const std::string& name, const std::string& path = "./" )
     {
+        QMessageBox *msgBox=new QMessageBox();
+        msgBox->setText("Loading .." + QString(name.c_str()));
+
+        QTimer *msgBoxCloseTimer = new QTimer();
+        msgBoxCloseTimer->setInterval(400);
+        msgBoxCloseTimer->setSingleShot(true);
+        QObject::connect(msgBoxCloseTimer, SIGNAL(timeout()), msgBox, SLOT(accept()));
+
+        msgBoxCloseTimer->start();
+
+        msgBox->exec();
+        delete msgBox;
+        delete msgBoxCloseTimer;
         // Ensure the list, the asset name, and its path are valid.
         if( m_list == NULL || name.empty() || path.empty() )
             return -1;
@@ -191,6 +206,53 @@ public:
         //Ensure File Exist
         boost::filesystem::path bPath = path;
         if(!boost::filesystem::exists(bPath))
+            return -1;
+
+        // If the element already exists, then return a pointer to it.
+        T *element = GetElement( name, path );
+        if( element != NULL )
+        {
+            element->IncRef();
+            return element->GetHandle();
+        }
+
+
+        //Check if there is an available handle. If not, use new handle.
+        bool handleAvailable = !m_handles.empty();
+        unsigned int handle;
+        if(handleAvailable)
+        {
+            handle = m_handles.top();
+            m_handles.pop();
+        }
+        else handle = (unsigned int)m_list->size();
+
+        // Create the asset, preferably through the application specific
+        // function if it is available.
+        T *asset = NULL;
+        if( Createasset != NULL )
+            Createasset( &asset, handle, name, path );
+        else
+            asset = new T( handle, name, path );
+
+
+        //Add the asset to the manager. If there is an available handle, then
+        //we store the asset using the handle. Otherwise we add it to the vector.
+        if(handleAvailable)
+            (*m_list)[handle] = asset;
+        else
+            m_list->push_back(asset);
+
+
+        //return the handle
+        return handle;
+    }
+
+    //Add from Ressources
+    unsigned int AddR( const std::string& name, const std::string& path = "./" )
+    {
+        // Ensure the list, the asset name, and its path are valid.
+        if( m_list == NULL || name.empty() || path.empty() )
             return -1;
 
         // If the element already exists, then return a pointer to it.

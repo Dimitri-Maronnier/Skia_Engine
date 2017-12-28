@@ -67,9 +67,11 @@ QVector<QString> Compressor::uncompressTextureData(QString archive,Texture *text
 
     /*Create tmp folder*/
     boost::filesystem::create_directory(skiaTmp);
+    std::string name = archive.toStdString();
     QString folderDataStr =  skiaTmp.string().c_str();
     folderDataStr += "\\" ;
-    std::vector<std::string> split = Utils::split(archive.toStdString(),'\\');
+    std::replace( name.begin(), name.end(), '/', '\\');
+    std::vector<std::string> split = Utils::split(name,'\\');
     folderDataStr += Utils::removeExtension(QString(split.at(split.size()-1).c_str()));
 
     boost::filesystem::path folderData = folderDataStr.toStdString();
@@ -254,11 +256,13 @@ int Compressor::compressObject3D(QString archive,const aiScene *scene)
 
     dataStream << "Properties";
     dataStream << 0;
+    dataStream << 0;
+    dataStream << 0;
     archiveFile.close();
     return 1;
 }
 
-bool Compressor::uncompressObject3D(const QString archive, unsigned int *nomberMeshs, std::vector<Object3dData *> *meshs,std::vector<QString>* materialsPath)
+bool Compressor::uncompressObject3D(const QString archive, unsigned int *nomberMeshs, std::vector<Object3dData *> *meshs,std::vector<QString>* materialsPath,float &radius,int& tag)
 {
     try{
         QFile archiveFile;
@@ -346,9 +350,100 @@ bool Compressor::uncompressObject3D(const QString archive, unsigned int *nomberM
                 materialsPath->push_back("");
             }
         }
-
+        dataStream >> radius;
+        dataStream >> tag;
         archiveFile.close();
     }catch(const std::exception &e){
         std::cerr << "Excption rise while uncompressing " << archive.toStdString() << " " << e.what() << std::endl;
+    }
+}
+
+bool Compressor::compressMap(const QString &archive, const Scene &scene)
+{
+    try{
+        QFile archiveFile;
+        archiveFile.setFileName(archive);
+        if (!archiveFile.open(QIODevice::WriteOnly))
+            return false;
+
+        QDataStream dataStream;
+        dataStream.setDevice(&archiveFile);
+        size_t nbSuperFather=0;
+        foreach(auto object,scene.StaticObjects){
+            if(object->getParent()==nullptr){
+                nbSuperFather++;
+            }
+        }
+
+        dataStream << nbSuperFather;
+        std::cout << nbSuperFather << std::endl;
+        foreach(auto object,scene.StaticObjects){
+            if(object->getParent()==nullptr){
+                object->serialization(dataStream);
+            }
+        }
+
+    }catch(const std::exception &e){
+        std::cerr << "Exception rise while compressing " << archive.toStdString() << " " << e.what() << std::endl;
+    }
+    return true;
+}
+
+bool Compressor::uncompressMap(const QString &archive, Scene &scene)
+{
+    try{
+        QFile archiveFile;
+        archiveFile.setFileName(archive);
+        if (!archiveFile.open(QIODevice::ReadOnly))
+            return false;
+
+        QDataStream dataStream;
+        dataStream.setDevice(&archiveFile);
+        size_t nbStaticObjectsSuperFather;
+        dataStream >> nbStaticObjectsSuperFather;
+        for(size_t i=0;i<nbStaticObjectsSuperFather;i++){
+            entityLoad(dataStream,scene,nullptr);
+        }
+    }catch(const std::exception& e){
+        std::cerr << "Exception rise while compressing " << archive.toStdString() << " " << e.what() << std::endl;
+    }
+}
+
+void Compressor::entityLoad(QDataStream &dataStream, Scene &scene,Entity*parent)
+{
+    size_t nChilds;
+    dataStream >> nChilds;
+
+    QString label;
+    dataStream >> label;
+    glm::vec3 position,rotation,scale;
+    dataStream >> position.x;
+    dataStream >> position.y;
+    dataStream >> position.z;
+    dataStream >> rotation.x;
+    dataStream >> rotation.y;
+    dataStream >> rotation.z;
+    dataStream >> scale.x;
+    dataStream >> scale.y;
+    dataStream >> scale.z;
+
+    char* qpath;
+    dataStream >> qpath;
+
+    unsigned int handle = AssetsCollections::Object3DStaticCollection.Add(label.toStdString(),FolderGestion::checkoutReferences(QString(qpath)).toStdString());
+    AssetsCollections::HandlesObject3DStatic.push_back(handle);
+    Object3DStatic* object = AssetsCollections::Object3DStaticCollection.GetElement(handle);
+    object->setPosition(position);
+    object->setRotation(rotation);
+    object->setScale(scale);
+
+    if(parent!=nullptr){
+        object->setParent(parent);
+        parent->addChild(object);
+    }
+    scene.addObject3DStatic(object);
+    while(nChilds>0){
+        entityLoad(dataStream,scene,object);
+        nChilds--;
     }
 }

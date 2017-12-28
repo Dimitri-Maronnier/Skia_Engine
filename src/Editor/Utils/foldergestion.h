@@ -20,6 +20,7 @@ public:
     static int removeFolder(std::string path);
     static bool isFileExists(std::string path);
     static char rootProjectsFolderPath[MAX_PATH];
+    static std::string currentWorkingDir;
     static char my_documentsPath[MAX_PATH];
     static WCHAR my_documentsAddr[MAX_PATH];
     static void recursive_copy(const boost::filesystem::path &src, const boost::filesystem::path &dst);

@@ -7,6 +7,7 @@ Model::Model()
 
 Model::~Model()
 {
+    SAFE_DELETE(m_material);
 }
 
 Model::Model(Mesh mesh, Material *material, std::string name){

@@ -2,7 +2,7 @@
 
 ShadowMap::ShadowMap()
 {
-
+    _shader.init("vs.glsl");
 }
 
 void ShadowMap::cleanUp()
@@ -37,8 +37,23 @@ void ShadowMap::shadowPass(Scene &scene)
 {
     glViewport(0, 0, _WIDTH, _HEIGHT);
     glBindFramebuffer(GL_FRAMEBUFFER, _depthFBO);
-        glClear(GL_DEPTH_BUFFER_BIT);
-        //Configure Shadow Matrix
-        //render scene
+    glClear(GL_DEPTH_BUFFER_BIT);
+    _shader.start();
+    _shader.loadLightMatrix(scene.light.computeLightProjectionViewMatrix());
+    foreach(auto entity,scene.StaticObjects){
+        auto object = dynamic_cast<Object3DStatic*>(entity);
+        _shader.loadModelMatrix(object->getModelMatrix());
+        foreach(Model* model,object->getModels()){
+
+            glBindVertexArray(model->getMesh().getVaoID());
+            glEnableVertexAttribArray(0);
+
+            glDrawElements(GL_TRIANGLES,model->getMesh().getVertexCount(),GL_UNSIGNED_INT, 0);
+
+            glDisableVertexAttribArray(0);
+            glBindVertexArray(0);
+        }
+    }
+    _shader.stop();
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

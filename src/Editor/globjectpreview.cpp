@@ -12,11 +12,12 @@ GLObjectPreview::GLObjectPreview( QWidget *parent) : QGLWidget(parent){
 
     time = new QTimer;
     connect(time,SIGNAL(timeout()),this,SLOT(update()));
+
     time->start(16);
     timer.start();
-    //this->setContext(MainWindow::contxt,GLWidget::mainHandle);
+    this->setContext(MainWindow::contxt,GLWidget::mainHandle);
     //this->setContext(GLWidget::mainHandle,GLMaterialPreview::materialHandle);
-    this->context()->create(GLWidget::mainHandle);
+    //this->context()->create(GLWidget::mainHandle);
     this->makeCurrent();
     m_isInitialize = false;
 }
@@ -94,7 +95,10 @@ void GLObjectPreview::initializeGL(){
     glDepthFunc(GL_LEQUAL);
     camera.setProjectionMatrix(glm::perspective(45.0f,(float)width/(float)height,1.0f,1000.0f));
 
-    hdr = Loader::loadHdr((char*)"reflexion.hdr");
+    unsigned int handleTex = AssetsCollections::TexturesCollection.AddR("reflexion",":/Images/reflexion.shdrtex");
+    AssetsCollections::HandlesTextures.push_back(handleTex);
+
+    hdr = AssetsCollections::TexturesCollection.GetElement(handleTex)->getTextureID();
     m_skyboxHdr = RenderTools::equirectangularToCubeMap(hdr);
     m_irradianceMap = RenderTools::irradianceConvolution(m_skyboxHdr);
     m_prefilterMap = RenderTools::prefilterCubeMap(m_skyboxHdr);
@@ -118,6 +122,7 @@ void GLObjectPreview::initializeGL(){
     light.setPosition(glm::vec3(-200,200,0));
 
     m_isInitialize = true;
+    haveBeenRezizeOnce = true;
 }
 
 
@@ -127,7 +132,9 @@ void GLObjectPreview::update()
 }
 
 
+
 void GLObjectPreview::paintGL(){
+    glFlush();
     this->makeCurrent();
     if(m_isInitialize){
 
@@ -189,6 +196,8 @@ void GLObjectPreview::paintGL(){
             glBindVertexArray(0);
         }
 
+
+
         m_skyShader.start();
         m_skyShader.loadView( camera.getViewMatrix());
         glActiveTexture(GL_TEXTURE0);
@@ -198,6 +207,9 @@ void GLObjectPreview::paintGL(){
         swapBuffers();
 
     }
+
+    glFlush();
+
 }
 
 void GLObjectPreview::rezizeGL(int w, int h){

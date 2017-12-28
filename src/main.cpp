@@ -5,12 +5,9 @@
 #include "Editor/Utils/projectinfo.h"
 #include <QFile>
 #include "Editor/Materials/materialeditorwindow.h"
-#include "bullet/btBulletDynamicsCommon.h"
+
 
 #pragma comment(lib, "shell32.lib")
-
-
-
 
 
 int main(int argc, char *argv[])
@@ -32,6 +29,13 @@ int main(int argc, char *argv[])
     }
 
     MainWindow w;
+    /*XINPUT_STATE state;
+    ZeroMemory(&state, sizeof(XINPUT_STATE));
+
+    /*if (XInputGetState(1, &state) == ERROR_SUCCESS)
+    {
+        qDebug() << "controller connected";
+    }*/
     w.show();
 
 

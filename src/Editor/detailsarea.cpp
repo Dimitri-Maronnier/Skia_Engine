@@ -51,7 +51,7 @@ void DetailsArea::initDetailArena(Object3DStatic* entity)
     scaleZ->setMaximum(std::numeric_limits<float>::max());
     scaleZ->setMinimum(-std::numeric_limits<float>::max());
 
-    glm::vec3 position = entity->getPostion();
+    glm::vec3 position = entity->getPosition();
     glm::vec3 rotation = entity->getRotation();
     glm::vec3 scale = entity->getScale();
 

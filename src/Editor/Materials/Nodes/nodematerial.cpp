@@ -310,7 +310,7 @@ void NodeMaterial::load(QDataStream &ds)
        ds >> value;
        ds >> b;
        m_value.push_back(new Param(value,b));
-       connect(m_value.at(i),SIGNAL(paramHaveBeenChanged(float,bool)),this,SLOT(paramChanged(float,bool)));
+       connect(m_value.at(i),SIGNAL(paramHaveBeenChanged(float,bool)),this,SLOT(paramChanged()));
     }
 
     ds >> m_imageLoad;

@@ -16,6 +16,7 @@
 #include <string>
 #include "src/Engine/Materials/material.h"
 #include "src/define.h"
+#include "newactordialog.h"
 
 
 ContentBrowser::ContentBrowser( QWidget *parent) : QTreeWidget(parent)
@@ -57,7 +58,7 @@ void ContentBrowser::mouseDoubleClickEvent(QMouseEvent *event)
      CTreeWidgetItem *item = (CTreeWidgetItem*)this->itemAt( event->pos() );
      std::string path = FolderGestion::rootProjectsFolderPath;
      path += "\\";
-     path += ProjectInfo::name;
+     path = FolderGestion::currentWorkingDir;
      CTreeWidgetItem *upperParent = (CTreeWidgetItem *)this->itemAt( event->pos() );
      std::vector<std::string> reversePath;
      reversePath.push_back(upperParent->getOldName());
@@ -109,7 +110,9 @@ void ContentBrowser::mouseDoubleClickEvent(QMouseEvent *event)
                 objectEditor->show();
              }
 
-         }
+         }else if(item->getExt().compare("smap") == 0){
+            emit mapSelected(QString(path.c_str()));
+        }
      }
 }
 
@@ -120,9 +123,9 @@ void ContentBrowser::dropEvent(QDropEvent* event){
         std::string path = FolderGestion::rootProjectsFolderPath;
         std::string npath = FolderGestion::rootProjectsFolderPath;
         path += "\\";
-        path += ProjectInfo::name;
+        path = FolderGestion::currentWorkingDir;
         npath += "\\";
-        npath += ProjectInfo::name;
+        npath = FolderGestion::currentWorkingDir;
         CTreeWidgetItem *upperParent = (CTreeWidgetItem *)this->currentItem();
         std::vector<std::string> reversePath;
         std::string fileName = upperParent->text(0).toStdString();
@@ -179,9 +182,9 @@ void ContentBrowser::dropEvent(QDropEvent* event){
         std::string path = FolderGestion::rootProjectsFolderPath;
         std::string npath = FolderGestion::rootProjectsFolderPath;
         path += "\\";
-        path += ProjectInfo::name;
+        path = FolderGestion::currentWorkingDir;
         npath += "\\";
-        npath += ProjectInfo::name;
+        npath = FolderGestion::currentWorkingDir;
         CTreeWidgetItem *upperParent = (CTreeWidgetItem *)this->currentItem();
         std::vector<std::string> reversePath;
         std::string fileName = upperParent->text(0).toStdString();
@@ -253,7 +256,11 @@ void ContentBrowser::prepareMenuContentBrowser( const QPoint & pos )
 
     QAction *newMap = new QAction( tr("&New Map"), this);
     newMap->setStatusTip(tr("new Map"));
-    connect(newMap, SIGNAL(triggered()), this, SLOT(newMat()));
+    connect(newMap, SIGNAL(triggered()), this, SLOT(newMap()));
+
+    QAction *newActor = new QAction( tr("&New Actor"), this);
+    newActor->setStatusTip(tr("new Actor"));
+    connect(newActor, SIGNAL(triggered()), this, SLOT(newActor()));
 
     QAction *renameAct = new QAction( tr("&Rename"), this);
     renameAct->setStatusTip(tr("rename file/folder"));
@@ -275,6 +282,7 @@ void ContentBrowser::prepareMenuContentBrowser( const QPoint & pos )
 
     newMenu->addAction(newMat);
     newMenu->addAction(newMap);
+    newMenu->addAction(newActor);
 
     menu.exec( tree->mapToGlobal(pos) );
 }
@@ -292,7 +300,7 @@ void ContentBrowser::importStaticMesh(){
 
         std::string pathProject = FolderGestion::rootProjectsFolderPath;
         pathProject += "\\";
-        pathProject += ProjectInfo::name;
+        pathProject = FolderGestion::currentWorkingDir;
         CTreeWidgetItem *upperParent = (CTreeWidgetItem *)this->currentItem();
         if(upperParent){
             if(!upperParent->isDirectory() && upperParent->parent()){
@@ -359,7 +367,7 @@ void ContentBrowser::importTexture()
 
         std::string pathProject = FolderGestion::rootProjectsFolderPath;
         pathProject += "\\";
-        pathProject += ProjectInfo::name;
+        pathProject = FolderGestion::currentWorkingDir;
         CTreeWidgetItem *upperParent = (CTreeWidgetItem *)this->currentItem();
         if(upperParent){
             if(!upperParent->isDirectory() && upperParent->parent()){
@@ -424,7 +432,7 @@ void ContentBrowser::importHDRI()
 
         std::string pathProject = FolderGestion::rootProjectsFolderPath;
         pathProject += "\\";
-        pathProject += ProjectInfo::name;
+        pathProject = FolderGestion::currentWorkingDir;
         CTreeWidgetItem *upperParent = (CTreeWidgetItem *)this->currentItem();
         if(upperParent){
             if(!upperParent->isDirectory() && upperParent->parent()){
@@ -483,7 +491,7 @@ void ContentBrowser::newMap()
 
     std::string pathProject = FolderGestion::rootProjectsFolderPath;
     pathProject += "\\";
-    pathProject += ProjectInfo::name;
+    pathProject = FolderGestion::currentWorkingDir;
     CTreeWidgetItem *upperParent = (CTreeWidgetItem *)this->currentItem();
     if(upperParent){
         if(!upperParent->isDirectory() && upperParent->parent()){
@@ -526,22 +534,40 @@ void ContentBrowser::newMap()
         else{
              this->addTopLevelItem(newItem);
         }
+        ProjectInfo::currentMap = QString(nameFile.c_str());
+        ProjectInfo::currentMap = ".smap";
+        QFile archiveFile;
+        archiveFile.setFileName(QString(pathProject.c_str()));
+        if (!archiveFile.open(QIODevice::WriteOnly))
+            return;
 
-        Material::newEmptyMat(QString(pathProject.c_str()));
+        QDataStream dataStream;
+        dataStream.setDevice(&archiveFile);
+
+        dataStream << 0;
+
+        archiveFile.close();
 
 
+    }
+}
+
+void ContentBrowser::newActor()
+{
+    NewActorDialog newActorDialog;
+    if(newActorDialog.exec() == QDialog::Accepted){
+       reloadEditor();
     }
 }
 
 void ContentBrowser::newMat()
 {
 
-
     std::string nameFile = "new";
 
     std::string pathProject = FolderGestion::rootProjectsFolderPath;
     pathProject += "\\";
-    pathProject += ProjectInfo::name;
+    pathProject = FolderGestion::currentWorkingDir;
     CTreeWidgetItem *upperParent = (CTreeWidgetItem *)this->currentItem();
     if(upperParent){
         if(!upperParent->isDirectory() && upperParent->parent()){
@@ -585,9 +611,8 @@ void ContentBrowser::newMat()
              this->addTopLevelItem(newItem);
         }
 
+
         Material::newEmptyMat(QString(pathProject.c_str()));
-
-
     }
 }
 
@@ -602,9 +627,9 @@ void ContentBrowser::renameItem(){
     std::string path = FolderGestion::rootProjectsFolderPath;
     std::string npath = FolderGestion::rootProjectsFolderPath;
     path += "\\";
-    path += ProjectInfo::name;
+    path = FolderGestion::currentWorkingDir;
     npath += "\\";
-    npath += ProjectInfo::name;
+    npath = FolderGestion::currentWorkingDir;
     CTreeWidgetItem *upperParent = (CTreeWidgetItem *)this->currentItem();
     std::vector<std::string> reversePath;
     reversePath.push_back(upperParent->getOldName());
@@ -645,7 +670,7 @@ void ContentBrowser::newFolder(){
 
     std::string pathProject = FolderGestion::rootProjectsFolderPath;
     pathProject += "\\";
-    pathProject += ProjectInfo::name;
+    pathProject = FolderGestion::currentWorkingDir;
     CTreeWidgetItem *upperParent = (CTreeWidgetItem *)this->currentItem();
     if(upperParent){
         if(!upperParent->isDirectory() && upperParent->parent()){
@@ -691,7 +716,7 @@ void ContentBrowser::removeItem(){
     if(this->currentItem() && this->selectedItems().size()>0){
         std::string path = FolderGestion::rootProjectsFolderPath;
         path += "\\";
-        path += ProjectInfo::name;
+        path = FolderGestion::currentWorkingDir;
         CTreeWidgetItem *upperParent = (CTreeWidgetItem *)this->currentItem();
         CTreeWidgetItem *copy = upperParent;
         std::vector<std::string> reversePath;
@@ -758,7 +783,7 @@ void ContentBrowser::reloadEditor(){
     char temp[MAX_PATH]="";
     strcat(temp,FolderGestion::rootProjectsFolderPath);
     strcat(temp,"\\");
-    QDir* rootDir = new QDir(strcat(temp,ProjectInfo::name.c_str()));
+    QDir* rootDir = new QDir(FolderGestion::currentWorkingDir.c_str());
 
     QFileInfoList filesList = rootDir->entryInfoList(QDir::NoDotAndDotDot|QDir::AllEntries);
 
@@ -791,7 +816,12 @@ void ContentBrowser::reloadEditor(){
         item->setType(directory);
 
         //item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
-        addChildren(item,fileInfo.filePath());
+
+        if(!fileInfo.baseName().compare("modules")){
+            modulesSearch(item,fileInfo.filePath());
+        }
+        else
+            addChildren(item,fileInfo.filePath());
       }
 
 
@@ -831,6 +861,39 @@ void ContentBrowser::addChildren(CTreeWidgetItem* item,QString filePath)
         }
 
         item->addChild(child);
+
+    }
+}
+
+void ContentBrowser::modulesSearch(CTreeWidgetItem *item, QString filePath)
+{
+    QDir* rootDir = new QDir(filePath);
+    QFileInfoList filesList = rootDir->entryInfoList(QDir::NoDotAndDotDot|QDir::AllEntries);
+
+    foreach(QFileInfo fileInfo, filesList)
+    {
+        CTreeWidgetItem* child = new CTreeWidgetItem();
+        child->setText(0,fileInfo.baseName());
+        child->setOldName(fileInfo.baseName().toStdString());
+
+        if(fileInfo.isDir())
+        {
+          child->setIcon(0,*(new QIcon(":/Images/folder.png")));
+          child->setType(directory);
+
+          //child->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
+          modulesSearch(item,fileInfo.filePath());
+        }
+
+        if(!fileInfo.suffix().compare("dll")){
+            child->setText(1,QString::number(fileInfo.size()));
+            child->setIcon(0,*(new QIcon(":/Images/file.png")));
+
+            child->setType(file);
+            child->setText(2,"Actor");
+            child->setExt("Actor");
+            item->addChild(child);
+        }
 
     }
 }

@@ -12,12 +12,7 @@ Object3DStatic::Object3DStatic(Object3DStatic const&toCopy)
     :Asset(toCopy), Entity(toCopy),
       m_models(toCopy.m_models),m_materialsPath(toCopy.m_materialsPath)
 {
-    /*foreach(Model*model,toCopy.getModels()){
-        m_models.push_back(model);
-    }
-    foreach(QString string,toCopy.getMaterialsPath()){
-        m_materialsPath.push_back(string);
-    }*/
+    setLabel(toCopy._label);
 }
 
 Object3DStatic::~Object3DStatic()
@@ -33,14 +28,55 @@ Object3DStatic::Object3DStatic(const unsigned int handle, const std::string name
         std::vector<Object3dData*> *meshs = new  std::vector<Object3dData*>;
         unsigned int nomberMesh;
 
-        Compressor::uncompressObject3D(QString(path.c_str()),&nomberMesh,meshs,&m_materialsPath);
+        Compressor::uncompressObject3D(QString(path.c_str()),&nomberMesh,meshs,&m_materialsPath,_sphericRadius,_tag);
 
         for(unsigned int numMesh=0;numMesh<nomberMesh;numMesh++){
 
             Mesh mesh = Loader::loadToVAO(*meshs->at(numMesh));
 
             m_models.push_back(new Model(mesh,NULL,meshs->at(numMesh)->name));
+
         }
+
+        /*Crostructor bounding box/sphere*/
+        glm::vec3 center = glm::vec3();
+
+        glm::vec3 points[2] = {glm::vec3()};
+
+        unsigned int counter = 0;
+        for(unsigned int numMesh=0;numMesh<nomberMesh;numMesh++){
+            for(unsigned int i=0;i<meshs->at(numMesh)->nomberVertices;i+=3){
+                glm::vec3 current = glm::vec3(meshs->at(numMesh)->positionsArray[i],meshs->at(numMesh)->positionsArray[i]+1,meshs->at(numMesh)->positionsArray[i]+2);
+                if(current.x < points[0].x)
+                    points[0].x = current.x;
+                else if(points[1].x < current.x)
+                    points[1].x = current.x;
+                if(current.y < points[0].y)
+                    points[0].y = current.y;
+                else if(points[1].y < current.y)
+                    points[1].y = current.y;
+                if(current.z < points[0].z)
+                    points[0].z = current.z;
+                else if(points[1].z < current.z)
+                    points[1].z = current.z;
+                center+= current;
+                counter++;
+            }
+        }
+        center /= counter;
+        for(int i=0; i<8; i++){
+            int x=  i & 1;
+            int y= (i & 2)>>1;
+            int z = (i & 4)>>2;
+            _boundingBox[i]= glm::vec3(points[x].x, points[y].y, points[z].z);
+            //std::cout << "point :" << i << "( " << points[x].x << " , " << points[y].y << " , " << points[z].z << ") " << std::endl;
+        }
+        _sphereColliderCenter = center;
+
+
+
+
+
 
         for(unsigned int numMesh=0;numMesh<nomberMesh;numMesh++){
             SAFE_DELETE(meshs->at(numMesh)->facesArray);

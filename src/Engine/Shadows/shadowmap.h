@@ -4,6 +4,7 @@
 #include "src/Engine/scene.h"
 #include <stdlib.h>
 #include <GL/glew.h>
+#include "shadowpassshader.h"
 
 class ShadowMap
 {
@@ -29,6 +30,8 @@ private:
     GLuint _depthFBO;
     GLuint _shadowMap;
     const unsigned int _WIDTH = 1024,_HEIGHT = 1024;
+    ShadowPassShader _shader;
+
 };
 
 #endif // SHADOWMAP_H

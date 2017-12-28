@@ -10,6 +10,7 @@ class Texture :public Asset
 {
 public:
     Texture();
+    ~Texture();
     Texture(const unsigned int handle, const std::string name, const std::string path );
     Texture(const unsigned int handle, const std::string name, const std::string path,GLuint min_filter,GLuint max_filter,GLuint s_wrap, GLuint t_wrap, bool useMipMap,float baseLevel, float maxLevel, float lodBias, bool useAnisotropy, float quantity,bool useCompresion, GLuint compressionFormat);
 

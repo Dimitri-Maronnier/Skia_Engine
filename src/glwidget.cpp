@@ -12,8 +12,10 @@
 #include "Loaders/loader.h"
 #include <QGLContext>
 #include <src/mainwindow.h>
+#include "Engine/Controller/inputhandler.h"
 
 QGLContext *GLWidget::mainHandle;
+bool GLWidget::GameRun = false;
 
 GLWidget::GLWidget( QWidget *parent) : QGLWidget(parent){
 
@@ -23,13 +25,15 @@ GLWidget::GLWidget( QWidget *parent) : QGLWidget(parent){
     connect(time,SIGNAL(timeout()),this,SLOT(update()));
     time->start(16);
     timer.start();
-    this->setContext(MainWindow::contxt);
+    //this->setContext(MainWindow::contxt);
     mainHandle = this->context();
 
     this->makeCurrent();
     m_isInitialize = false;
 
     _zKeyPressed=false;_sKeyPressed=false;_qKeyPressed=false;_dKeyPressed=false;
+    _elapsedTime.start();
+
 }
 
 GLWidget::~GLWidget(){
@@ -42,10 +46,10 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event){
 
     float dx = (event->x()-anchor.x());
     float dy = (event->y()-anchor.y());
-    if(click)
+    if(click && !GameRun)
         Scene::camera.move(dx,dy,0,0,0,0,0);
     anchor = event->pos();
-
+    InputHandler::MousePos = glm::vec2(event->pos().x(),event->pos().y());
 }
 
 void GLWidget::mousePressEvent(QMouseEvent * event){
@@ -54,17 +58,20 @@ void GLWidget::mousePressEvent(QMouseEvent * event){
     } else if (event->buttons() & Qt::RightButton) {
 
     }
+    InputHandler::MouseHandle[event->button()] = true;
 }
 
 void GLWidget::mouseReleaseEvent(QMouseEvent *event){
     if (event->button() == Qt::LeftButton){
-        click = false;
+        click = false();
     }
+    InputHandler::MouseHandle[event->button()] = false;
 }
 
 void GLWidget::wheelEvent ( QWheelEvent * event )
 {
-    Scene::camera.move(0,0,event->delta()/120,0,0,0,0);
+    if(!GameRun)
+        Scene::camera.move(0,0,event->delta()/120,0,0,0,0);
 }
 
 
@@ -82,6 +89,11 @@ void GLWidget::keyPressEvent(QKeyEvent* event){
     if(event->text() == "d"){
         _dKeyPressed=true;
     }
+    if(event->key() == Qt::Key_Escape){
+        GameRun=false;
+        scene.cleanGameAsset();
+    }
+    InputHandler::KeyboardHandle[event->key()] = true;
 
 }
 
@@ -99,6 +111,8 @@ void GLWidget::keyReleaseEvent(QKeyEvent *event)
     if(event->text() == "d"){
         _dKeyPressed=false;
     }
+
+    InputHandler::KeyboardHandle[event->key()] = false;
 
 }
 
@@ -142,6 +156,12 @@ void GLWidget::update()
     paintGL();
 }
 
+void GLWidget::gameRun()
+{
+    GameRun = true;
+    _game.gameRun(&scene);
+}
+
 void GLWidget::dropEvent(QDropEvent *event)
 {
     if (event->mimeData()->hasFormat("application/x-qabstractitemmodeldatalist"))
@@ -161,7 +181,7 @@ void GLWidget::dropEvent(QDropEvent *event)
         {
             std::string path = FolderGestion::rootProjectsFolderPath;
             path += "\\";
-            path += ProjectInfo::name;
+            path = FolderGestion::currentWorkingDir;
             CTreeWidgetItem *upperParent = item;
             std::vector<std::string> reversePath;
             reversePath.push_back(item->text(0).toStdString());
@@ -177,7 +197,6 @@ void GLWidget::dropEvent(QDropEvent *event)
             }
             path += ".sobj";
 
-
             unsigned int handle = AssetsCollections::Object3DStaticCollection.Add(item->text(0).toStdString(),path);
             AssetsCollections::HandlesObject3DStatic.push_back(handle);
             scene.addObject3DStatic(AssetsCollections::Object3DStaticCollection.GetElement(handle));
@@ -192,9 +211,21 @@ void GLWidget::dragEnterEvent(QDragEnterEvent *event)
 }
 
 void GLWidget::paintGL(){
+
     this->makeCurrent();
-    if(click)
+
+    if(click && !GameRun)
         Scene::camera.move(0,0,0,_zKeyPressed,_sKeyPressed,_qKeyPressed,_dKeyPressed);
+    double deltaTime = _elapsedTime.elapsed()/1000.0f;
+    _elapsedTime.restart();
+    if(GameRun){
+        //Modules loop not done yet
+        /*foreach(Actor* actor,Actor::Actors){
+            actor->update(deltaTime);
+        }*/
+        _game.gameLoop(deltaTime);
+    }
+
     if(m_isInitialize){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -209,7 +240,8 @@ void GLWidget::paintGL(){
            std::cerr << "OpenGL error: " << err << " " << gluErrorString(err)<< std::endl;
         }
     }
-
+    glFinish();
+    emit drawStandAlone();
 }
 
 void GLWidget::rezizeGL(int w, int h){

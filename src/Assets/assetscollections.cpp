@@ -16,6 +16,9 @@ void AssetsCollections::cleanUp()
     HandlesTextures.clear();
     HandlesMaterials.clear();
     HandlesObject3DStatic.clear();
+    AssetsCollections::TexturesCollection.cleanUp();
+    AssetsCollections::MaterialsCollection.cleanUp();
+    AssetsCollections::Object3DStaticCollection.cleanUp();
 }
 
 unsigned int AssetsCollections::addTexture(std::string name, std::string path)

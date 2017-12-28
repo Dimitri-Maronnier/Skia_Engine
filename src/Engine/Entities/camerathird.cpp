@@ -70,6 +70,7 @@ void CameraThird::move(float dx, float dy, int dw, int z, int s, int q, int d){
 
     }
 
+
     float horizontalDistance = calculateHorizontal();
     float verticalDistance = calculateVertical();
     calculateCameraPosition(horizontalDistance,verticalDistance);
@@ -77,7 +78,30 @@ void CameraThird::move(float dx, float dy, int dw, int z, int s, int q, int d){
     yaw = 180 - angleAroundPivot;
 }
 
+void CameraThird::move(float dx, float dy, int dw,Entity*e){
+    float zoomLevel = dw;
 
+    if(distanceFromPivot - zoomLevel > 1.0f && distanceFromPivot - zoomLevel < 3000 )
+        distanceFromPivot -= zoomLevel;
+
+
+
+    float pitchChange = dy * 0.3f;
+    //if(pitch - pitchChange >0 && pitch - pitchChange <85)
+        pitch = pitchChange;
+    float angleChange = dx * 0.3f;
+    angleAroundPivot = angleChange;
+
+
+   lookAt = e->getPosition();
+
+
+    float horizontalDistance = calculateHorizontal();
+    float verticalDistance = calculateVertical();
+    calculateCameraPosition(horizontalDistance,verticalDistance);
+
+    yaw = 180 - angleAroundPivot;
+}
 
 void CameraThird::calculateCameraPosition(float hD, float vD){
     float offsetX = (float) (hD * sin(Utils::toRadians(angleAroundPivot)));
@@ -104,5 +128,10 @@ glm::mat4 CameraThird::getViewMatrix(){
                 glm::vec3(lookAt.x,lookAt.y,lookAt.z), // et regarde l'origine
                 glm::vec3(0,1,0)  // La tête est vers le haut (utilisez 0,-1,0 pour regarder à l'envers)
             );*/
+}
+
+void CameraThird::setDistanceFromPivot(float d)
+{
+    distanceFromPivot = d;
 }
 

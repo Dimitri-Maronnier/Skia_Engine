@@ -24,6 +24,11 @@ Texture::Texture()
 
 }
 
+Texture::~Texture()
+{
+
+}
+
 Texture::Texture(const unsigned int handle, const std::string name, const std::string path)
     :Asset(handle, name, path)
 {

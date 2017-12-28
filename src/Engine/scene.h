@@ -10,6 +10,8 @@
 #include "src/Editor/scenetree.h"
 #include "Shaders/pivotshader.h"
 #include <QObject>
+#include "Entities/camerathird.h"
+#include "src/Engine/Entities/collision.h"
 
 class Scene: public QObject
 {
@@ -33,6 +35,9 @@ public:
      */
     void addObject3DStatic(Object3DStatic* object);
 
+    Object3DStatic* addObject(Object3DStatic* entity);
+    void destroyObject(Object3DStatic* entity);
+    void cleanGameAsset();
     /**
      * @brief cleanUp
      */
@@ -49,18 +54,24 @@ public:
      */
     void resize(glm::mat4 matrix);
 
-    std::vector<Object3DStatic*> StaticObjects;
-    Object3DStatic* selectedEntity;
+    Entity* getEntity(QString label);
+
+    std::vector<Entity*> StaticObjects;
+
+    Entity* selectedEntity;
 
     static CameraThird camera;//Main current Camera
 
+    Light light;
 signals:
     void oneEntityHaveBeenSelected(Object3DStatic* entity);
     void oneEntityHaveBeenAdded(Entity* entity);
 public slots:
     void selectEntity(Entity* entity);
+    void setScene(const QString& map);
+
 private:
-    Light light;
+    std::vector<Entity*> Cache;
     GLuint texture;
     GLuint hdr;
     GLuint m_skyboxHdr;
@@ -72,6 +83,7 @@ private:
     GLuint *cubeVAO;
     GLuint *cubeVBO;
     Shader shader;
+    SceneTree* _sceneTree;
 
     bool _entitySelected;
 };
