@@ -64,11 +64,11 @@ void ProjectInfo::compileModules()
         //jom.exe in C:\Users\C17\Documents\SkiaProjects\test\modules
         //jom.exe clean in C:\Users\C17\Documents\SkiaProjects\test\modules
         //ShellExecuteW(NULL, NULL, L"qmake.exe test.pro -spec win32-msvc2015", NULL, NULL, SW_SHOWNORMAL);
-        system("C:\\Qt\\Qt5.8.0\\5.8\\msvc2015_64\\bin\\qmake.exe C:\\Users\\C17\\Documents\\SkiaProjects\\test\\modules\\test.pro -spec win32-msvc2015");
+        /*system("C:\\Qt\\Qt5.8.0\\5.8\\msvc2015_64\\bin\\qmake.exe C:\\Users\\C17\\Documents\\SkiaProjects\\test\\modules\\test.pro -spec win32-msvc2015");
         //ShellExecuteW(NULL, NULL, L"jom.exe in C:\\Users\\C17\\Documents\\SkiaProjects\\test\\modules", NULL, NULL, SW_SHOWNORMAL);
         system("C:\\Qt\\Qt5.8.0\\Tools\\QtCreator\\bin\\jom.exe in C:\\Users\\C17\\Documents\\SkiaProjects\\test\\modules");
         //ShellExecuteW(NULL, NULL, L"jom.exe clean in C:\\Users\\C17\\Documents\\SkiaProjects\\test\\modules", NULL, NULL, SW_SHOWNORMAL);
-        system("C:\\Qt\\Qt5.8.0\\Tools\\QtCreator\\bin\\jom.exe clean in C:\\Users\\C17\\Documents\\SkiaProjects\\test\\modules");
+        system("C:\\Qt\\Qt5.8.0\\Tools\\QtCreator\\bin\\jom.exe clean in C:\\Users\\C17\\Documents\\SkiaProjects\\test\\modules");*/
 
         typedef Actor* (*create_DLL_lib_fun)();
 

@@ -63,8 +63,9 @@ void NewActorDialog::accept(){
 
     std::string path = FolderGestion::rootProjectsFolderPath;
     path += "/";
-    path += ProjectInfo::name;
-    path += "/modules";
+    path = FolderGestion::currentWorkingDir;
+    path += "\\modules";
+    std::cout << path << std::endl;
     if(FolderGestion::createFolder(path,ui->name->text().toStdString())){
         QString upper = ui->name->text().toUpper();
         QString lower = ui->name->text().toLower();
