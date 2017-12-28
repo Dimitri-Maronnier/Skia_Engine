@@ -17,6 +17,7 @@ void NewProjectDialog::accept(){
     if(FolderGestion::createProjectFolder(ui->name->text().toStdString()) == -1)
         std::cout << "Project already exists" << std::endl;
     ProjectInfo::name = ui->name->text().toStdString();
+
     done(QDialog::Accepted);
 
 }

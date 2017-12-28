@@ -1456,12 +1456,18 @@ QPushButton:pressed
                <property name="prefix">
                 <string>X: </string>
                </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
+               </property>
               </widget>
              </item>
              <item row="2" column="1">
               <widget class="QDoubleSpinBox" name="ScaleX">
                <property name="prefix">
                 <string>X: </string>
+               </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
                </property>
               </widget>
              </item>
@@ -1487,12 +1493,18 @@ QPushButton:pressed
                <property name="prefix">
                 <string>Y: </string>
                </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
+               </property>
               </widget>
              </item>
              <item row="0" column="2">
               <widget class="QDoubleSpinBox" name="LocationY">
                <property name="prefix">
                 <string>Y: </string>
+               </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
                </property>
               </widget>
              </item>
@@ -1501,12 +1513,18 @@ QPushButton:pressed
                <property name="prefix">
                 <string>Y: </string>
                </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
+               </property>
               </widget>
              </item>
              <item row="0" column="3">
               <widget class="QDoubleSpinBox" name="LocationZ">
                <property name="prefix">
                 <string>Z: </string>
+               </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
                </property>
               </widget>
              </item>
@@ -1515,12 +1533,18 @@ QPushButton:pressed
                <property name="prefix">
                 <string>Z: </string>
                </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
+               </property>
               </widget>
              </item>
              <item row="2" column="3">
               <widget class="QDoubleSpinBox" name="ScaleZ">
                <property name="prefix">
                 <string>Z: </string>
+               </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
                </property>
               </widget>
              </item>

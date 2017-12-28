@@ -74,8 +74,12 @@ int FolderGestion::createProjectFolder(std::string name){
         wcsncat(copyRootProjectsFolderPathAddr,my_documentsAddr,MAX_PATH);
         wcsncat(copyRootProjectsFolderPathAddr,rootProjectsFolderPathAddr,MAX_PATH);
 
+
         if(CreateDirectory(wcsncat(copyRootProjectsFolderPathAddr,ProjectFolderAddr,MAX_PATH),NULL)){
             std::cout << "Folder create" << std::endl;
+            FolderGestion::currentWorkingDir = rootProjectsFolderPath;
+            FolderGestion::currentWorkingDir += "\\";
+            FolderGestion::currentWorkingDir += name;
             boost::filesystem::path bPath2 = bPath;
             bPath += "/modules";
             bPath2 += "/contents";
