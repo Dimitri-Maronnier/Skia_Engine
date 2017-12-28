@@ -61,7 +61,69 @@ vec3 ImportanceSampleGGX(vec2 Xi, vec3 N, float roughness)
 */
 
 /*
+*   Implicit
+*/
+
+float GeometryImplicit(vec3 N, vec3 V, vec3 L)
+{
+    float nDotV = max(dot(N, V), 0.0);
+    float nDotL = max(dot(N, L), 0.0);
+    return nDotV * nDotL;
+}
+
+/*
+*   Neumann
+*/
+float GeometryNeumann(vec3 N, vec3 V, vec3 L)
+{
+    float nDotV = max(dot(N, V), 0.0);
+    float nDotL = max(dot(N, L), 0.0);
+    float num = nDotV * nDotL;
+    float denum = max(nDotV,nDotL);
+    return num/denum;
+}
+
+/*
+*   Cook-Torrance
+*/
+float GeometryCookTorrance(vec3 N, vec3 V, vec3 L,vec3 H)
+{
+    float nDotV = max(dot(N, V), 0.0);
+    float nDotL = max(dot(N, L), 0.0);
+    float nDotH = max(dot(N, H), 0.0);
+    float vDotH = max(dot(V, H), 0.0);
+    float A = (2*nDotH*nDotV)/vDotH;
+    float B = (2*nDotH*nDotL)/vDotH;
+    return min(min(1,A),B);
+}
+
+/*
+*   Kelemen
+*/
+float Geometry(vec3 N, vec3 V, vec3 L,vec3 H)
+{
+    float nDotV = max(dot(N, V), 0.0);
+    float nDotL = max(dot(N, L), 0.0);
+    float vDotH = max(dot(V, H), 0.0);
+    float num = nDotL*nDotV;
+    float denum = vDotH*vDotH;
+    return num/denum;
+
+}
+
+/*
 *   GGX
+*/
+float GeometryGGX(float nDotV, float roughness)
+{
+    float a2 = roughness*roughness;
+    float num = 2*nDotV;
+    float denum = nDotV * sqrt(a2 + (1 - a2)*nDotV*nDotV);
+    return num/denum;
+}
+
+/*
+*   SchlickGGX
 */
 float Geometry_SchlickGGX(float nDotv, float roughness)
 {

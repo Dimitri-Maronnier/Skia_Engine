@@ -49,8 +49,36 @@ vec2 parallaxMapping(vec2 texCoords,sampler2D depthMap,float heightScale, bool d
 *   Normal Distribution Functions : Approximate the ratio of microfacets aligned to some HalWay vector
 */
 
+
 /*
-*   GGX (Trowbridge-Reitz) : We adopted Disney's solution about squared the roughness
+*   Blin-Phong
+*/
+float DistributionBlinPhong(vec3 N, vec3 H, float roughness)
+{
+    float a2 = roughness*roughness;
+    float power = 2/a2 - 2;
+    float nDotH = max(dot(N, H), 0.0);
+    float right = 1/(PI*a2);
+    float left = pow(nDotH,power);
+    return right*left;
+}
+
+/*
+*   Beckmann
+*/
+float DistributionBeckmann(vec3 N, vec3 H, float roughness)
+{
+    float a2 = roughness*roughness;
+    float nDotH = max(dot(N, H), 0.0);
+    float denum = PI*a2*(nDotH*nDotH*nDotH*nDotH);
+    float numExp = nDotH*nDotH -1;
+    float denumExp = a2 * nDotH*nDotH;
+    float Exp = exp(numExp/denumExp);
+    return 1/denum * Exp;
+}
+
+/*
+*   GGX (Trowbridge-Reitz) : We adopted Disney's solution about squared twice the roughness
 */
 float DistributionGGX(vec3 N, vec3 H, float roughness)
 {
@@ -71,7 +99,69 @@ float DistributionGGX(vec3 N, vec3 H, float roughness)
 */
 
 /*
+*   Implicit
+*/
+
+float GeometryImplicit(vec3 N, vec3 V, vec3 L)
+{
+    float nDotV = max(dot(N, V), 0.0);
+    float nDotL = max(dot(N, L), 0.0);
+    return nDotV * nDotL;
+}
+
+/*
+*   Neumann
+*/
+float GeometryNeumann(vec3 N, vec3 V, vec3 L)
+{
+    float nDotV = max(dot(N, V), 0.0);
+    float nDotL = max(dot(N, L), 0.0);
+    float num = nDotV * nDotL;
+    float denum = max(nDotV,nDotL);
+    return num/denum;
+}
+
+/*
+*   Cook-Torrance
+*/
+float GeometryCookTorrance(vec3 N, vec3 V, vec3 L,vec3 H)
+{
+    float nDotV = max(dot(N, V), 0.0);
+    float nDotL = max(dot(N, L), 0.0);
+    float nDotH = max(dot(N, H), 0.0);
+    float vDotH = max(dot(V, H), 0.0);
+    float A = (2*nDotH*nDotV)/vDotH;
+    float B = (2*nDotH*nDotL)/vDotH;
+    return min(min(1,A),B);
+}
+
+/*
+*   Kelemen
+*/
+float Geometry(vec3 N, vec3 V, vec3 L,vec3 H)
+{
+    float nDotV = max(dot(N, V), 0.0);
+    float nDotL = max(dot(N, L), 0.0);
+    float vDotH = max(dot(V, H), 0.0);
+    float num = nDotL*nDotV;
+    float denum = vDotH*vDotH;
+    return num/denum;
+
+}
+
+/*
 *   GGX
+*/
+float GeometryGGX(float nDotV, float roughness)
+{
+    float a2 = roughness*roughness;
+    float num = 2*nDotV;
+    float denum = nDotV * sqrt(a2 + (1 - a2)*nDotV*nDotV);
+    return num/denum;
+}
+
+/*
+*   SchlickGGX
 */
 float GeometrySchlickGGX(float nDotV, float roughness)
 {

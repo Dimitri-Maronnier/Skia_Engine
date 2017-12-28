@@ -40,6 +40,33 @@ vec2 Hammersley(uint i, uint N)
 */
 
 /*
+*   Blin-Phong
+*/
+float DistributionBlinPhong(vec3 N, vec3 H, float roughness)
+{
+    float a2 = roughness*roughness;
+    float power = 2/a2 - 2;
+    float nDotH = max(dot(N, H), 0.0);
+    float right = 1/(M_PI*a2);
+    float left = pow(nDotH,power);
+    return right*left;
+}
+
+/*
+*   Beckmann
+*/
+float DistributionBeckmann(vec3 N, vec3 H, float roughness)
+{
+    float a2 = roughness*roughness;
+    float nDotH = max(dot(N, H), 0.0);
+    float denum = M_PI*a2*(nDotH*nDotH*nDotH*nDotH);
+    float numExp = nDotH*nDotH -1;
+    float denumExp = a2 * nDotH*nDotH;
+    float Exp = exp(numExp/denumExp);
+    return 1/denum * Exp;
+}
+
+/*
 *   GGX (Trowbridge-Reitz) : We adopted Disney's to squared the roughness
 */
 float DistributionGGX(vec3 N, vec3 H, float roughness)
