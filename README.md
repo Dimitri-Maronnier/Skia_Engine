@@ -4,13 +4,20 @@ The rendering Engine of Skia Engine is OpenGL-based, support Physically Based Re
 The Engine aim to make recents looking games with an easy Material Editor based Nodes.
 
 ## Platforms
-- Windows(Win32, x64, msvc 14.0): [![Build Status](https://travis-ci.org/simkimsia/UtilityBehaviors.png)](https://travis-ci.org/simkimsia/UtilityBehaviors)
+- Windows(x64, msvc 14.0)
 
 ## Dependencies
-- QT>5.2
+- QT>5.8.0 MSVC2015_64bit
 - CMake 3.2
-- OpenGL>=4.1
-- [External Libraries](https://www.dropbox.com/s/4ref9596ppjznti/external.zip?dl=0)
+- OpenGL>=4.3
+- [External Libraries](https://www.dropbox.com/s/kkdauhit33vue5c/external.zip?dl=0)
+
+## Executable
+- [Executable](https://www.dropbox.com/s/u41e9nefehkxab6/Skia_Engine.zip?dl=0)
+
+## Usage
+- Choose your working directory (e.g lab/VersusDanmaku)
+- You can pick Arena Scene from VersusDanmaku to test the game
 
 ## Current State
 - PBR
@@ -21,11 +28,16 @@ The Engine aim to make recents looking games with an easy Material Editor based 
 - Objects Edition
 
 ## RoadMap
-- Script Engine
+- Finish Actor/Modules Engine
 - Animation Import
-- Scene Editor
-- Scene Save
 - GPU Particles Engine
+- Post Processing
+- Physics Engine
 
 ## ScreenShots
 ![Alt text](Images/ScreenMaterialEditor.png?raw=true "Material Editor")
+
+![Alt text](Images/ScreenEditor.png?raw=true "Editor")
+
+## Thanks
+- LoneWolf for is wonderful QT StyleSheet
