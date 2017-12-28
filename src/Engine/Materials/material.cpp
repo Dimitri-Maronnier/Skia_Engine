@@ -4,7 +4,7 @@
 #include "src/Editor/Utils/foldergestion.h"
 
 QString Material::DefaultSourceFragmentShader =
-        "#version 430 core\n"
+        "#version 330 core\n"
         "in VS_OUT{\n"
         "    vec3 normal;\n"
         "    vec3 toLightVector;\n"
@@ -117,7 +117,7 @@ QString Material::DefaultSourceFragmentShader =
     "}\n";
 
 /*QString Material::DefaultSourceFragmentShader =
-    "#version 430 core\n"
+    "#version 330 core\n"
     "in VS_OUT{\n"
     "   vec3 normal;\n"
     "   vec3 toLightVector;\n"
@@ -158,7 +158,7 @@ QString Material::DefaultSourceFragmentShader =
 "}\n";*/
 
 /*Init Vertex Shader*/
-QString Material::DefaultSourceVertexShader = "#version 430 core\n"
+QString Material::DefaultSourceVertexShader = "#version 330 core\n"
 
         "in vec3 position;\n"
         "in vec2 textureCoord;\n"

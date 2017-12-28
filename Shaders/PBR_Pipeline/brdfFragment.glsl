@@ -11,6 +11,7 @@ const float M_PI = 3.14159265359;
 
 
 /*
+*   http://holger.dammertz.org/stuff/notes_HammersleyOnHemisphere.html
 *   Ven Der Corpus : mirrors a decimal binary around decimal representation
 */
 float RadicalInverse_VanDerCorpus(uint bits)
@@ -42,18 +43,16 @@ vec3 ImportanceSampleGGX(vec2 Xi, vec3 N, float roughness)
     float cosTheta = sqrt((1.0 - Xi.y) / (1.0 + (a*a - 1.0) * Xi.y));
     float sinTheta = sqrt(1.0 - cosTheta*cosTheta);
 
-    // from spherical coordinates to cartesian coordinates - halfway vector
     vec3 HalfWay;
     HalfWay.x = sinTheta * cos(Phi);
     HalfWay.y = sinTheta * sin(Phi);
     HalfWay.z = cosTheta;
 
-    // from tangent-space H vector to world-space sample vector
-    vec3 up        = abs(N.z) < 0.999 ? vec3(0.0, 0.0, 1.0) : vec3(1.0, 0.0, 0.0);
+    vec3 up        = abs(N.z) < 0.9 ? vec3(0.0, 0.0, 1.0) : vec3(1.0, 0.0, 0.0);//Float Accurate
     vec3 Tangent   = normalize(cross(up, N));
     vec3 Bitangent = cross(N, Tangent);
 
-    //Tangent to world space
+
     return normalize(vec3(Tangent * HalfWay.x + Bitangent * HalfWay.y + N * HalfWay.z));
 }
 
@@ -64,16 +63,16 @@ vec3 ImportanceSampleGGX(vec2 Xi, vec3 N, float roughness)
 /*
 *   GGX
 */
-float GeometrySchlickGGX(float nDotv, float roughness)
+float Geometry_SchlickGGX(float nDotv, float roughness)
 {
 
     float a = roughness;
     float k = (a * a) / 2.0;
 
-    float nom   = nDotv;
-    float denom = nDotv * (1.0 - k) + k;
+    float num   = nDotv;
+    float denum = nDotv * (1.0 - k) + k;
 
-    return nom / denom;
+    return num / denum;
 }
 
 /*
@@ -81,12 +80,12 @@ float GeometrySchlickGGX(float nDotv, float roughness)
 */
 float Geometry_Smith(vec3 N, vec3 V, vec3 L, float roughness)
 {
-    float NdotV = max(dot(N, V), 0.0);
-    float NdotL = max(dot(N, L), 0.0);
-    float ggx2 = GeometrySchlickGGX(NdotV, roughness);
-    float ggx1 = GeometrySchlickGGX(NdotL, roughness);
+    float nDotV = max(dot(N, V), 0.0);
+    float nDotL = max(dot(N, L), 0.0);
+    float oclude = Geometry_SchlickGGX(nDotV, roughness);
+    float shadowing = Geometry_SchlickGGX(nDotL, roughness);
 
-    return ggx1 * ggx2;
+    return oclude * shadowing;
 }
 
 vec2 IntegrateBRDF(float nDotv, float roughness)

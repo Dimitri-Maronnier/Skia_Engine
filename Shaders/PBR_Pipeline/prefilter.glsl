@@ -14,6 +14,7 @@ const float M_PI = 3.14159265359;
 const float Resolution = 512.0; //TODO pass Uniform
 
 /*
+*   http://holger.dammertz.org/stuff/notes_HammersleyOnHemisphere.html
 *   Ven Der Corpus : mirrors a decimal binary around decimal representation
 */
 float RadicalInverse_VanDerCorpus(uint bits)
@@ -45,14 +46,14 @@ float DistributionGGX(vec3 N, vec3 H, float roughness)
 {
     float a = roughness*roughness;
     float a2 = a*a;
-    float NdotH = max(dot(N, H), 0.0);
-    float NdotH2 = NdotH*NdotH;
+    float ndotH = max(dot(N, H), 0.0);
+    float ndotH2 = ndotH*ndotH;
 
     float numerator   = a2;
-    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
-    denom = M_PI * denom * denom;
+    float denum = (ndotH2 * (a2 - 1.0) + 1.0);
+    denum = M_PI * denum * denum;
 
-    return numerator / denom;
+    return numerator / denum;
 }
 
 /*
@@ -66,18 +67,18 @@ vec3 ImportanceSampleGGX(vec2 Xi, vec3 N, float roughness)
 	float cosTheta = sqrt((1.0 - Xi.y) / (1.0 + (a*a - 1.0) * Xi.y));
 	float sinTheta = sqrt(1.0 - cosTheta*cosTheta);
 	
-	// from spherical coordinates to cartesian coordinates - halfway vector
-	vec3 H;
-	H.x = cos(phi) * sinTheta;
-	H.y = sin(phi) * sinTheta;
-	H.z = cosTheta;
+
+        vec3 HalfWay;
+        HalfWay.x = cos(phi) * sinTheta;
+        HalfWay.y = sin(phi) * sinTheta;
+        HalfWay.z = cosTheta;
 	
-	// from tangent-space H vector to world-space sample vector
-	vec3 up          = abs(N.z) < 0.999 ? vec3(0.0, 0.0, 1.0) : vec3(1.0, 0.0, 0.0);
+
+        vec3 up          = abs(N.z) < 0.9 ? vec3(0.0, 0.0, 1.0) : vec3(1.0, 0.0, 0.0);
 	vec3 tangent   = normalize(cross(up, N));
 	vec3 bitangent = cross(N, tangent);
 	
-	vec3 sampleVec = tangent * H.x + bitangent * H.y + N * H.z;
+        vec3 sampleVec = tangent * HalfWay.x + bitangent * HalfWay.y + N * HalfWay.z;
 	return normalize(sampleVec);
 }
 

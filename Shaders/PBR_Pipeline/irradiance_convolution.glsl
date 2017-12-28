@@ -29,9 +29,9 @@ void main()
     {
         for(float theta = 0.0; theta < 0.5 * M_PI; theta += delta)//zenith
         {
-            // spherical coords to cartesian coords (in tangent space)
+            // spherical coords to cartesian coords
             vec3 tangentSample = vec3(sin(theta) * cos(phi),  sin(theta) * sin(phi), cos(theta));
-            // tangent space to world space
+
             vec3 vector = tangentSample.x * right + tangentSample.y * up + tangentSample.z * N;
 
             irradianceValue += texture(environmentMap, vector).rgb * cos(theta) * sin(theta);

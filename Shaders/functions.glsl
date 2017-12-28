@@ -1,5 +1,7 @@
 
 const float PI = 3.14159265359;
+
+//LearnOpengl parallaxMapping
 vec2 parallaxMapping(vec2 texCoords,sampler2D depthMap,float heightScale, bool discardOver,float minLayers,float maxLayers)
 {
     vec3 viewDir = normalize(fs_in.toCameraVectorTangent);
@@ -54,14 +56,14 @@ float DistributionGGX(vec3 N, vec3 H, float roughness)
 {
     float a = roughness*roughness;
     float a2 = a*a;
-    float NdotH = max(dot(N, H), 0.0);
-    float NdotH2 = NdotH*NdotH;
+    float nDotH = max(dot(N, H), 0.0);
+    float nDotH2 = nDotH*nDotH;
 
-    float nom   = a2;
-    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
-    denom = PI * denom * denom;
+    float num   = a2;
+    float denum = (nDotH2 * (a2 - 1.0) + 1.0);
+    denum = PI * denum * denum;
 
-    return nom / denom;
+    return num / denum;
 }
 
 /*
@@ -71,15 +73,15 @@ float DistributionGGX(vec3 N, vec3 H, float roughness)
 /*
 *   GGX
 */
-float GeometrySchlickGGX(float NdotV, float roughness)
+float GeometrySchlickGGX(float nDotV, float roughness)
 {
     float r = (roughness + 1.0);
     float k = (r*r) / 8.0;
 
-    float nom   = NdotV;
-    float denom = NdotV * (1.0 - k) + k;
+    float num   = nDotV;
+    float denum = nDotV * (1.0 - k) + k;
 
-    return nom / denom;
+    return num / denum;
 }
 
 /*
@@ -87,12 +89,12 @@ float GeometrySchlickGGX(float NdotV, float roughness)
 */
 float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
 {
-    float NdotV = max(dot(N, V), 0.0);
-    float NdotL = max(dot(N, L), 0.0);
-    float ggx2 = GeometrySchlickGGX(NdotV, roughness);
-    float ggx1 = GeometrySchlickGGX(NdotL, roughness);
+    float nDotV = max(dot(N, V), 0.0);
+    float nDotL = max(dot(N, L), 0.0);
+    float occlude = GeometrySchlickGGX(nDotV, roughness);
+    float shadow = GeometrySchlickGGX(nDotL, roughness);
 
-    return ggx1 * ggx2;
+    return occlude * shadow;
 }
 
 /*
