@@ -44,7 +44,8 @@ vec2 Hammersley(uint i, uint N)
 */
 float DistributionBlinPhong(vec3 N, vec3 H, float roughness)
 {
-    float a2 = roughness*roughness;
+    float a = roughness*roughness;
+    float a2 = a*a;
     float power = 2/a2 - 2;
     float nDotH = max(dot(N, H), 0.0);
     float right = 1/(M_PI*a2);
@@ -57,7 +58,8 @@ float DistributionBlinPhong(vec3 N, vec3 H, float roughness)
 */
 float DistributionBeckmann(vec3 N, vec3 H, float roughness)
 {
-    float a2 = roughness*roughness;
+    float a = roughness*roughness;
+    float a2 = a*a;
     float nDotH = max(dot(N, H), 0.0);
     float denum = M_PI*a2*(nDotH*nDotH*nDotH*nDotH);
     float numExp = nDotH*nDotH -1;
@@ -101,8 +103,8 @@ vec3 ImportanceSampleGGX(vec2 Xi, vec3 N, float roughness)
         HalfWay.z = cosTheta;
 	
 
-        vec3 up          = abs(N.z) < 0.9 ? vec3(0.0, 0.0, 1.0) : vec3(1.0, 0.0, 0.0);
-	vec3 tangent   = normalize(cross(up, N));
+        vec3 up = abs(N.z) < 0.9 ? vec3(0.0, 0.0, 1.0) : vec3(1.0, 0.0, 0.0);
+        vec3 tangent = normalize(cross(up, N));
 	vec3 bitangent = cross(N, tangent);
 	
         vec3 sampleVec = tangent * HalfWay.x + bitangent * HalfWay.y + N * HalfWay.z;
@@ -131,7 +133,7 @@ void main()
         float NdotL = max(dot(N, L), 0.0);
         if(NdotL > 0.0)
         {
-            // get mip map level based on roughness/pdf
+            // get mip map level based on roughness
             float D   = DistributionGGX(N, H, roughness);
             float NdotH = max(dot(N, H), 0.0);
             float HdotV = max(dot(H, V), 0.0);

@@ -55,7 +55,8 @@ vec2 parallaxMapping(vec2 texCoords,sampler2D depthMap,float heightScale, bool d
 */
 float DistributionBlinPhong(vec3 N, vec3 H, float roughness)
 {
-    float a2 = roughness*roughness;
+    float a = roughness*roughness;
+    float a2 = a*a;
     float power = 2/a2 - 2;
     float nDotH = max(dot(N, H), 0.0);
     float right = 1/(PI*a2);
@@ -68,7 +69,8 @@ float DistributionBlinPhong(vec3 N, vec3 H, float roughness)
 */
 float DistributionBeckmann(vec3 N, vec3 H, float roughness)
 {
-    float a2 = roughness*roughness;
+    float a = roughness*roughness;
+    float a2 = a*a;
     float nDotH = max(dot(N, H), 0.0);
     float denum = PI*a2*(nDotH*nDotH*nDotH*nDotH);
     float numExp = nDotH*nDotH -1;
@@ -154,7 +156,8 @@ float Geometry(vec3 N, vec3 V, vec3 L,vec3 H)
 */
 float GeometryGGX(float nDotV, float roughness)
 {
-    float a2 = roughness*roughness;
+    float a = roughness*roughness;
+    float a2 = a*a;
     float num = 2*nDotV;
     float denum = nDotV * sqrt(a2 + (1 - a2)*nDotV*nDotV);
     return num/denum;

@@ -48,8 +48,8 @@ vec3 ImportanceSampleGGX(vec2 Xi, vec3 N, float roughness)
     HalfWay.y = sinTheta * sin(Phi);
     HalfWay.z = cosTheta;
 
-    vec3 up        = abs(N.z) < 0.9 ? vec3(0.0, 0.0, 1.0) : vec3(1.0, 0.0, 0.0);//Float Accurate
-    vec3 Tangent   = normalize(cross(up, N));
+    vec3 up = abs(N.z) < 0.9 ? vec3(0.0, 0.0, 1.0) : vec3(1.0, 0.0, 0.0);//Float Accurate
+    vec3 Tangent = normalize(cross(up, N));
     vec3 Bitangent = cross(N, Tangent);
 
 
@@ -116,7 +116,8 @@ float Geometry(vec3 N, vec3 V, vec3 L,vec3 H)
 */
 float GeometryGGX(float nDotV, float roughness)
 {
-    float a2 = roughness*roughness;
+    float a = roughness*roughness;
+    float a2 = a*a;
     float num = 2*nDotV;
     float denum = nDotV * sqrt(a2 + (1 - a2)*nDotV*nDotV);
     return num/denum;
@@ -128,7 +129,7 @@ float GeometryGGX(float nDotV, float roughness)
 float Geometry_SchlickGGX(float nDotv, float roughness)
 {
 
-    float a = roughness;
+    float a = roughness*roughness;
     float k = (a * a) / 2.0;
 
     float num   = nDotv;
