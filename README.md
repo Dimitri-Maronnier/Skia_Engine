@@ -40,4 +40,4 @@ The Engine aim to make recents looking games with an easy Material Editor based 
 ![Alt text](Images/ScreenEditor.png?raw=true "Editor")
 
 ## Thanks
-- LoneWolf for is wonderful QT StyleSheet
+- LoneWolf for his wonderful QT StyleSheet
