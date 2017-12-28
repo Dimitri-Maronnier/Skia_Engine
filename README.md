@@ -36,6 +36,7 @@ The Engine aim to make recents looking games with an easy Material Editor based 
 - GPU Particles Engine
 - Post Processing
 - Physics Engine
+- Scene Reflection Capture
 
 ## ScreenShots
 ![Alt text](Images/ScreenMaterialEditor.png?raw=true "Material Editor")
@@ -44,4 +45,4 @@ The Engine aim to make recents looking games with an easy Material Editor based 
 
 ## Thanks
 - LoneWolf for his wonderful QT StyleSheet
-- LearnOpenGL and Epic's game documentations for the comprehension of IBL PBR
+- LearnOpenGL and Epic's Game documentations for the comprehension of IBL PBR
