@@ -16,6 +16,7 @@ public:
 
     void loadProjection(glm::mat4 projection);
     void loadView(glm::mat4 view);
+    void loadDelta(float delta);
 
 protected:
     void bindAttributes();
@@ -25,6 +26,7 @@ private:
     int location_environmentMap;
     int location_projection;
     int location_view;
+    int location_delta;
 };
 
 

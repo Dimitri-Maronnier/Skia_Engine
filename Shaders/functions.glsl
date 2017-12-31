@@ -1,5 +1,5 @@
 
-const float PI = 3.14159265359;
+const float PI = 3.1415;
 
 //LearnOpengl parallaxMapping
 vec2 parallaxMapping(vec2 texCoords,sampler2D depthMap,float heightScale, bool discardOver,float minLayers,float maxLayers)

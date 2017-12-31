@@ -89,12 +89,12 @@ GLuint RenderTools::irradianceConvolution(GLuint envCubemap)
     glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
 
     IrradianceConvolutionShader irradianceShader;
-    irradianceShader.init("cubemapVertex.glsl","PBR_Pipeline/irradiance_convolution.glsl");
+    irradianceShader.init("cubemapVertex.glsl","PBR_Pipeline/irradianceConvolution.glsl");
     //Compute Irradiance Map
     GLuint irradianceMap;
     glGenTextures(1, &irradianceMap);
     glBindTexture(GL_TEXTURE_CUBE_MAP, irradianceMap);
-    for (unsigned int i = 0; i < 6; ++i)
+    for (unsigned int i = 0; i < 6; i++)
     {
         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, 32, 32, 0, GL_RGB, GL_FLOAT, nullptr);
     }
@@ -129,7 +129,7 @@ GLuint RenderTools::irradianceConvolution(GLuint envCubemap)
 
     glViewport(0, 0, 32, 32);
     glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
-    for (unsigned int i = 0; i < 6; ++i)
+    for (unsigned int i = 0; i < 6; i++)
     {
         irradianceShader.loadView( captureViews[i]);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, irradianceMap, 0);
@@ -149,6 +149,7 @@ GLuint RenderTools::irradianceConvolution(GLuint envCubemap)
 
 GLuint RenderTools::prefilterCubeMap(GLuint envCubemap)
 {
+    const unsigned float Res = 1024.0f;
     GLuint *cubeVAO;
     GLuint *cubeVBO;
     cubeVAO = new GLuint(1);
@@ -179,14 +180,14 @@ GLuint RenderTools::prefilterCubeMap(GLuint envCubemap)
     GLuint prefilterMap;
     glGenTextures(1, &prefilterMap);
     glBindTexture(GL_TEXTURE_CUBE_MAP, prefilterMap);
-    for (unsigned int i = 0; i < 6; ++i)
+    for (unsigned int i = 0; i < 6; i++)
     {
         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, 128, 128, 0, GL_RGB, GL_FLOAT, nullptr);
     }
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); // be sure to set minifcation filter to mip_linear
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
@@ -195,25 +196,26 @@ GLuint RenderTools::prefilterCubeMap(GLuint envCubemap)
     prefilterShader.start();
     prefilterShader.connectTextureUnits();
     prefilterShader.loadProjection(captureProjection);
+    prefilterShader.loadResolution(Res);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
 
     glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
-    unsigned int maxMipLevels = 5;
-    for (unsigned int mip = 0; mip < maxMipLevels; ++mip)
+    const unsigned int maxMipLevels = 5;
+    for (unsigned int i = 0; i < maxMipLevels; i++)
     {
-        unsigned int mipWidth = 128 * std::pow(0.5, mip);
-        unsigned int mipHeight = 128 * std::pow(0.5, mip);
+        unsigned int Width = 128 * std::pow(0.5, i);
+        unsigned int Height = 128 * std::pow(0.5, i);
         glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, mipWidth, mipHeight);
-        glViewport(0, 0, mipWidth, mipHeight);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, Width, Height);
+        glViewport(0, 0, Width, Height);
 
-        float roughness = (float)mip / (float)(maxMipLevels - 1);
+        float roughness = (float)i / (float)(maxMipLevels - 1);
         prefilterShader.loadRoughness(roughness);
-        for (unsigned int i = 0; i < 6; ++i)
+        for (unsigned int j = 0; j < 6; j++)
         {
-            prefilterShader.loadView(captureViews[i]);
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, prefilterMap, mip);
+            prefilterShader.loadView(captureViews[j]);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + j, prefilterMap, i);
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             renderCube(*cubeVAO);
@@ -232,7 +234,7 @@ GLuint RenderTools::prefilterCubeMap(GLuint envCubemap)
 
 GLuint RenderTools::generate2DLut()
 {
-
+    const int Res = 512;
     GLuint *quadVAO;
     GLuint *quadVBO;
 
@@ -252,7 +254,7 @@ GLuint RenderTools::generate2DLut()
     brdfShader.init("PBR_Pipeline/brdfVertex.glsl","PBR_Pipeline/brdfFragment.glsl");
 
     glBindTexture(GL_TEXTURE_2D, brdfLUTTexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RG16F, 512, 512, 0, GL_RG, GL_FLOAT, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RG16F, Res, Res, 0, GL_RG, GL_FLOAT, 0);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -262,10 +264,10 @@ GLuint RenderTools::generate2DLut()
 
     glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
     glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 512, 512);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, Res, Res);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, brdfLUTTexture, 0);
 
-    glViewport(0, 0, 512, 512);
+    glViewport(0, 0, Res, Res);
     brdfShader.start();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     renderQuad(*quadVAO);

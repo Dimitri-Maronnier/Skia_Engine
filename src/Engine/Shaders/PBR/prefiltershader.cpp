@@ -10,6 +10,8 @@ void PreFilterShader::getAllUniformLocations(){
     location_view = ShaderProgram::getUniformLocation("view");
     location_projection = ShaderProgram::getUniformLocation("projection");
     location_roughness = ShaderProgram::getUniformLocation("roughness");
+    location_nbSample = ShaderProgram::getUniformLocation("nbSample");
+    location_resolution = ShaderProgram::getUniformLocation("resolution");
 }
 
 void PreFilterShader::connectTextureUnits(){
@@ -29,4 +31,14 @@ void PreFilterShader::loadView(glm::mat4 view)
 void PreFilterShader::loadRoughness(float roughness)
 {
     ShaderProgram::loadFloat(location_roughness,roughness);
+}
+
+void PreFilterShader::loadNbSample(int n)
+{
+    ShaderProgram::loadInt(location_nbSample,n);
+}
+
+void PreFilterShader::loadResolution(float resolution)
+{
+    ShaderProgram::loadFloat(location_resolution,resolution);
 }

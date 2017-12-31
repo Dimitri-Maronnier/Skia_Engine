@@ -16,7 +16,7 @@
         <file>Shaders/deferredShadingVertex.glsl</file>
         <file>Shaders/PBR_Pipeline/brdfFragment.glsl</file>
         <file>Shaders/PBR_Pipeline/brdfVertex.glsl</file>
-        <file>Shaders/PBR_Pipeline/irradiance_convolution.glsl</file>
+        <file>Shaders/PBR_Pipeline/irradianceConvolution.glsl</file>
         <file>Shaders/PBR_Pipeline/prefilter.glsl</file>
         <file>Shaders/Utils/fromEquirectangularToCubemapFragment.glsl</file>
         <file>Shaders/Utils/glslOverall</file>

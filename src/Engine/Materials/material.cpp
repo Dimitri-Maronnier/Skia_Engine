@@ -4,7 +4,7 @@
 #include "src/Editor/Utils/foldergestion.h"
 
 QString Material::DefaultSourceFragmentShader =
-        "#version 330 core\n"
+        "#version 420 core\n"
         "in VS_OUT{\n"
         "    vec3 normal;\n"
         "    vec3 toLightVector;\n"
@@ -33,14 +33,11 @@ QString Material::DefaultSourceFragmentShader =
        "    float ao = 1;\n"
        "    vec4 BaseColor=vec4(1);\n"
        "    vec4 normalValue = vec4(0);\n"
-
         "//#toReplace\n"
-
        "    vec3 albedo = pow(BaseColor.rgb, vec3(2.2));"
        "    vec3 unitLightVector;\n"
        "    vec3 unitVectorToCamera = normalize(fs_in.toCameraVector);\n"
        "    vec3 unitNormal;\n"
-
        "    unitNormal = normalize(fs_in.normal);\n"
        " if(normalMapped){\n"
        "     unitLightVector = normalize(fs_in.toLightVectorTangent);\n"
@@ -52,72 +49,48 @@ QString Material::DefaultSourceFragmentShader =
        "     unitNormal = normalize(fs_in.normal);\n"
         "}\n"
         "unitVectorToCamera = normalize(fs_in.toCameraVector);\n"
-
         "   if(normalMapped){\n"
         "   	unitNormal = normalize(fs_in.RM * (unitNormal * fs_in.TBN))\n;"
         "   }\n"
-
         "   vec3 reflectNormal = reflect(-unitVectorToCamera, unitNormal);\n"
-
         "   vec3 F0 = vec3(0.04);\n"
         "   F0 = mix(F0, albedo, metallic);\n"
-
         "   // L0 = reflectance equation\n"
         "   vec3 L0 = vec3(0.0);\n"
         "   unitLightVector = normalize(fs_in.toLightVector);\n"
         "   vec3 unitHalfway = normalize(unitVectorToCamera + unitLightVector);\n"
-
-
         "   vec3 radiance = lightTint;\n"
-
-        "   // Cook-Torrance Term BRDF\n"
         "   float NDF = DistributionGGX(unitNormal, unitHalfway, roughness);\n"
-        "   float G   = GeometrySmith(unitNormal, unitVectorToCamera, unitLightVector, roughness);\n"
-        "   vec3 F    = fresnelSchlick(max(dot(unitHalfway, unitVectorToCamera), 0.0), F0);\n"
-
-        "   vec3 nominator    = NDF * G * F;\n"
-        "   float denominator = 4 * max(dot(unitNormal, unitVectorToCamera), 0.0) * max(dot(unitNormal, unitLightVector), 0.0) + 0.001; // 0.001 to prevent divide by zero.\n"
-        "   vec3 specular = nominator / denominator;\n"
-
-        "   // Specular amount\n"
+        "   float G = GeometrySmith(unitNormal, unitVectorToCamera, unitLightVector, roughness);\n"
+        "   vec3 F = fresnelSchlick(max(dot(unitHalfway, unitVectorToCamera), 0.0), F0);\n"
+        "   vec3 num = NDF * G * F;\n"
+        "   float denum = 4 * max(dot(unitNormal, unitVectorToCamera), 0.0) * max(dot(unitNormal, unitLightVector), 0.0) + 0.001; // 0.001 to prevent divide by zero.\n"
+        "   vec3 specular = num / denum;\n"
         "   vec3 kS = F;\n"
-        "   // Diffuse amount\n"
         "   vec3 kD = vec3(1.0) - kS;\n"
         "   kD *= 1.0 - metallic;\n"
-
-
         "   float brightNess = max(dot(unitNormal, unitLightVector), 0.0);\n"
         "   vec3 emittance = radiance * brightNess;\n"
         "   L0 += (kD * albedo / PI + specular) * emittance;\n"
-
         "   F = fresnelSchlickRoughness(max(dot(unitNormal, unitVectorToCamera), 0.0), F0, roughness);\n"
-
         "   kS = F;\n"
         "   kD = 1.0 - kS;\n"
         "   kD *= 1.0 - metallic;\n"
-
         "   vec3 irradiance = texture(irradianceMap, unitNormal).rgb;\n"
         "   vec3 diffuse = irradiance * albedo;\n"
-
         "   const float MAX_REFLECTION_LOD = 4.0;\n"
         "   vec3 prefilteredColor = textureLod(prefilterMap, reflectNormal,  roughness * MAX_REFLECTION_LOD).rgb;\n"
         "   vec2 brdf  = texture(brdfLUT, vec2(max(dot(unitNormal, unitVectorToCamera), 0.0), roughness)).rg;\n"
         "   specular = prefilteredColor * (F * brdf.x + brdf.y);\n"
-
         "   vec3 ambient = (kD * diffuse + specular) * ao;\n"
-
         "   vec3 color = ambient + L0;\n"
-
-        "   // tonemapping HDR\n"
         "   color = color / (color + vec3(1.0));\n"
-        "   //correction gamma\n"
         "   color = pow(color, vec3(1.0/2.2));\n"
-
         "   FragColor = vec4(color , 1.0);\n"
     "}\n";
 
 /*QString Material::DefaultSourceFragmentShader =
-    "#version 330 core\n"
+    "#version 420 core\n"
     "in VS_OUT{\n"
     "   vec3 normal;\n"
     "   vec3 toLightVector;\n"
@@ -158,7 +131,7 @@ QString Material::DefaultSourceFragmentShader =
 "}\n";*/
 
 /*Init Vertex Shader*/
-QString Material::DefaultSourceVertexShader = "#version 330 core\n"
+QString Material::DefaultSourceVertexShader = "#version 420 core\n"
 
         "in vec3 position;\n"
         "in vec2 textureCoord;\n"

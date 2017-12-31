@@ -4,14 +4,18 @@
 *
 */
 #version 330 core
-out vec4 FragColor;
-in vec3 worldPosition;
+in VS_OUT{
+    vec3 position;
+}fs_in;
 
 uniform samplerCube environmentMap;
 uniform float roughness;
+uniform uint nbSample = 1024u;
+uniform uint type = 3u;
 
-const float M_PI = 3.14159265359;
-const float Resolution = 512.0; //TODO pass Uniform
+const float M_PI = 3.1415;
+uniform float resolution = 512.0;
+
 
 /*
 *   http://holger.dammertz.org/stuff/notes_HammersleyOnHemisphere.html
@@ -19,12 +23,12 @@ const float Resolution = 512.0; //TODO pass Uniform
 */
 float RadicalInverse_VanDerCorpus(uint bits)
 {
-     bits = (bits << 16u) | (bits >> 16u);
-     bits = ((bits & 0x55555555u) << 1u) | ((bits & 0xAAAAAAAAu) >> 1u);
-     bits = ((bits & 0x33333333u) << 2u) | ((bits & 0xCCCCCCCCu) >> 2u);
-     bits = ((bits & 0x0F0F0F0Fu) << 4u) | ((bits & 0xF0F0F0F0u) >> 4u);
-     bits = ((bits & 0x00FF00FFu) << 8u) | ((bits & 0xFF00FF00u) >> 8u);
-     return float(bits) * 2.3283064365386963e-10;
+    bits = (bits << 16u) | (bits >> 16u);
+    bits = ((bits & 0x55555555u) << 1u) | ((bits & 0xAAAAAAAAu) >> 1u);
+    bits = ((bits & 0x33333333u) << 2u) | ((bits & 0xCCCCCCCCu) >> 2u);
+    bits = ((bits & 0x0F0F0F0Fu) << 4u) | ((bits & 0xF0F0F0F0u) >> 4u);
+    bits = ((bits & 0x00FF00FFu) << 8u) | ((bits & 0xFF00FF00u) >> 8u);
+    return float(bits) * 2.3283064365386963e-10;
 }
 
 /*
@@ -32,7 +36,7 @@ float RadicalInverse_VanDerCorpus(uint bits)
 */
 vec2 Hammersley(uint i, uint N)
 {
-        return vec2(float(i)/float(N), RadicalInverse_VanDerCorpus(i));
+    return vec2(float(i)/float(N), RadicalInverse_VanDerCorpus(i));
 }
 
 /*
@@ -42,7 +46,7 @@ vec2 Hammersley(uint i, uint N)
 /*
 *   Blin-Phong
 */
-float DistributionBlinPhong(vec3 N, vec3 H, float roughness)
+float DistributionBlinPhong(vec3 N, vec3 H)
 {
     float a = roughness*roughness;
     float a2 = a*a;
@@ -56,7 +60,7 @@ float DistributionBlinPhong(vec3 N, vec3 H, float roughness)
 /*
 *   Beckmann
 */
-float DistributionBeckmann(vec3 N, vec3 H, float roughness)
+float DistributionBeckmann(vec3 N, vec3 H)
 {
     float a = roughness*roughness;
     float a2 = a*a;
@@ -71,7 +75,7 @@ float DistributionBeckmann(vec3 N, vec3 H, float roughness)
 /*
 *   GGX (Trowbridge-Reitz) : We adopted Disney's to squared the roughness
 */
-float DistributionGGX(vec3 N, vec3 H, float roughness)
+float DistributionGGX(vec3 N, vec3 H)
 {
     float a = roughness*roughness;
     float a2 = a*a;
@@ -86,70 +90,86 @@ float DistributionGGX(vec3 N, vec3 H, float roughness)
 }
 
 /*
-*   ImportanceSampleGGX
+*   ImportanceSample
 */
-vec3 ImportanceSampleGGX(vec2 Xi, vec3 N, float roughness)
+vec3 ImportanceSample(vec2 Xi, vec3 normal)
 {
-	float a = roughness*roughness;
-	
-        float phi = 2.0 * M_PI * Xi.x;
-	float cosTheta = sqrt((1.0 - Xi.y) / (1.0 + (a*a - 1.0) * Xi.y));
-	float sinTheta = sqrt(1.0 - cosTheta*cosTheta);
-	
+    float a = roughness*roughness;
 
-        vec3 HalfWay;
-        HalfWay.x = cos(phi) * sinTheta;
-        HalfWay.y = sin(phi) * sinTheta;
-        HalfWay.z = cosTheta;
-	
+    float phi = 2.0 * M_PI * Xi.x;
+    float cosTheta = sqrt((1.0 - Xi.y) / (1.0 + (a*a - 1.0) * Xi.y));
+    float sinTheta = sqrt(1.0 - cosTheta*cosTheta);
 
-        vec3 up = abs(N.z) < 0.9 ? vec3(0.0, 0.0, 1.0) : vec3(1.0, 0.0, 0.0);
-        vec3 tangent = normalize(cross(up, N));
-	vec3 bitangent = cross(N, tangent);
-	
-        vec3 sampleVec = tangent * HalfWay.x + bitangent * HalfWay.y + N * HalfWay.z;
-	return normalize(sampleVec);
+    vec3 halfWay = vec3(sinTheta * cos(phi),sinTheta * sin(phi),cosTheta);
+
+    vec3 up = abs(normal.z) < 0.9 ? vec3(0.0, 0.0, 1.0) : vec3(1.0, 0.0, 0.0);
+    vec3 Tangent = normalize(cross(up, normal));
+    vec3 Bitangent = cross(normal, Tangent);
+
+    vec3 sampleVec = Tangent * halfWay.x + Bitangent * halfWay.y + normal * halfWay.z;
+    return normalize(sampleVec);
+}
+
+vec3 prefilterEnvMap(vec3 normal)
+{
+    // Epic Games is simplification assume than normal=reflectVector=viewVector (cannot handle Grazing Specular Reflections)
+    vec3 reflectVector = normal;
+    vec3 viewVector = reflectVector;
+
+    vec3 prefilteredColor = vec3(0.0);
+    float totalWeight = 0.0;
+
+    for(uint i = 0u; i < nbSample; i++)
+    {
+
+        vec2 Xi = Hammersley(i, nbSample);
+        vec3 halfWay = ImportanceSample(Xi, normal);
+        vec3 lightVector  = normalize(2.0 * dot(viewVector, halfWay) * halfWay - viewVector);
+
+        float ndotL = max(dot(normal, lightVector), 0.0);
+        float ndotH = max(dot(normal, halfWay), 0.0);
+        float hdotV = max(dot(halfWay, viewVector), 0.0);
+        if(ndotL > 0.0)
+        {
+            // get mip map level based on roughness
+            float D;
+            switch(type){
+                case 1://BlinPhong
+                    D = DistributionBlinPhong(normal, halfWay);
+                    break;
+                case 2://Beckmann
+                    D = DistributionBeckmann(normal, halfWay);
+                    break;
+                case 3://GGX
+                    D = DistributionGGX(normal, halfWay);
+                    break;
+                default://GGX
+                    D = DistributionGGX(normal, halfWay);
+                    break;
+            }
+            /*vec3 FC = pow( 1 - hdotV, 5 );
+            vec3 F = (1 - Fc) * SpecularColor + Fc;*/
+
+            /*Chetan Jags's method to reduce artifact*/
+            float pdf = D * ndotH / (4.0 * hdotV + 0.0001);//Prevent zero division
+            float saTexel  = 4.0 * M_PI / (6.0 * resolution * resolution);
+            float saSample = 1.0 / (float(nbSample) * pdf + 0.0001);//Prevent zero division
+            float mipLevel = roughness == 0.0 ? 0.0 : 0.5 * log2(saSample / saTexel);
+
+            prefilteredColor += textureLod(environmentMap, lightVector, mipLevel).rgb * ndotL;
+
+            totalWeight += ndotL;
+        }
+    }
+
+    return prefilteredColor / totalWeight;
+
 }
 
 void main()
 {		
-    vec3 N = normalize(worldPosition);
+    vec3 N = normalize(fs_in.position);
     
-    // Epic Games is simplification assume than N=R=V (cannot handle Grazing Specular Reflections)
-    vec3 R = N;
-    vec3 V = R;
 
-    const uint NUM_SAMPLE = 1024u;
-    vec3 prefilteredColor = vec3(0.0);
-    float totalWeight = 0.0;
-    
-    for(uint i = 0u; i < NUM_SAMPLE; ++i)
-    {
-
-        vec2 Xi = Hammersley(i, NUM_SAMPLE);
-        vec3 H = ImportanceSampleGGX(Xi, N, roughness);
-        vec3 L  = normalize(2.0 * dot(V, H) * H - V);
-
-        float NdotL = max(dot(N, L), 0.0);
-        if(NdotL > 0.0)
-        {
-            // get mip map level based on roughness
-            float D   = DistributionGGX(N, H, roughness);
-            float NdotH = max(dot(N, H), 0.0);
-            float HdotV = max(dot(H, V), 0.0);
-            float pdf = D * NdotH / (4.0 * HdotV) + 0.0001; 
-
-            float saTexel  = 4.0 * M_PI / (6.0 * Resolution * Resolution);
-            float saSample = 1.0 / (float(NUM_SAMPLE) * pdf + 0.0001);
-
-            float mipLevel = roughness == 0.0 ? 0.0 : 0.5 * log2(saSample / saTexel); 
-            
-            prefilteredColor += textureLod(environmentMap, L, mipLevel).rgb * NdotL;
-            totalWeight      += NdotL;
-        }
-    }
-
-    prefilteredColor = prefilteredColor / totalWeight;
-
-    FragColor = vec4(prefilteredColor, 1.0);
+    gl_FragColor = vec4(prefilterEnvMap(N), 1.0);
 }
