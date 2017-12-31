@@ -9,11 +9,11 @@ The Engine aim to make recents looking games with an easy Material Editor based 
 ## Dependencies
 - QT>5.8.0 MSVC2015_64bit
 - CMake 3.2
-- OpenGL>=4.3
+- OpenGL>=4.2(except VersusDanmaku need 4.3)
 - [External Libraries](https://www.dropbox.com/s/kkdauhit33vue5c/external.zip?dl=0)
 
 ## Executable
-- [Executable](https://www.dropbox.com/s/u41e9nefehkxab6/Skia_Engine.zip?dl=0)
+- [Executable](https://www.dropbox.com/s/x9crp5q92ntfytk/Skia_Engine.zip?dl=0)
 
 ## Usage
 - Choose your working directory (e.g lab/VersusDanmaku)
