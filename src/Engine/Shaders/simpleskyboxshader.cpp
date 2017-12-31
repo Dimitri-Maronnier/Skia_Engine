@@ -7,20 +7,20 @@ void SimpleSkyboxShader::bindAttributes(){
 void SimpleSkyboxShader::getAllUniformLocations(){
 
     location_environmentMap = ShaderProgram::getUniformLocation("environmentMap");
-    location_view = ShaderProgram::getUniformLocation("view");
-    location_projection = ShaderProgram::getUniformLocation("projection");
+    location_viewMatrix = ShaderProgram::getUniformLocation("viewMatrix");
+    location_projectionMatrix = ShaderProgram::getUniformLocation("projectionMatrix");
 }
 
 void SimpleSkyboxShader::connectTextureUnits(){
     ShaderProgram::loadInt(location_environmentMap,0);
 }
 
-void SimpleSkyboxShader::loadProjection(glm::mat4 projection)
+void SimpleSkyboxShader::loadProjectionMatrix(glm::mat4 projectionMatrix)
 {
-    ShaderProgram::loadMatrix(location_projection,projection);
+    ShaderProgram::loadMatrix(location_projectionMatrix,projectionMatrix);
 }
 
-void SimpleSkyboxShader::loadView(glm::mat4 view)
+void SimpleSkyboxShader::loadViewMatrix(glm::mat4 viewMatrix)
 {
-    ShaderProgram::loadMatrix(location_view,view);
+    ShaderProgram::loadMatrix(location_viewMatrix,viewMatrix);
 }

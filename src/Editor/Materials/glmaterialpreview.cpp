@@ -164,7 +164,7 @@ void GLMaterialPreview::initializeGL(){
     m_skyShader.init("simpleSyboxVertex.glsl","simpleSkyboxFragment.glsl");
     m_skyShader.start();
     m_skyShader.connectTextureUnits();
-    m_skyShader.loadProjection(camera.getProjectionMatrix());
+    m_skyShader.loadProjectionMatrix(camera.getProjectionMatrix());
     m_skyShader.stop();
 
     //m_deferredShader.init("deferredShadingVertex.glsl","deferredShadingFragment.glsl");
@@ -460,7 +460,7 @@ void GLMaterialPreview::paintGL(){
 
         }
         m_skyShader.start();
-        m_skyShader.loadView( camera.getViewMatrix());
+        m_skyShader.loadViewMatrix( camera.getViewMatrix());
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_CUBE_MAP, m_skyboxHdr);
         RenderTools::renderCube(*cubeVAO);
@@ -530,7 +530,7 @@ void GLMaterialPreview::rezizeGL(int w, int h){
         m_shader.at(m_currentShader).loadProjectionMatrix(camera.getProjectionMatrix());
         m_shader.at(m_currentShader).stop();
         m_skyShader.start();
-        m_skyShader.loadProjection(camera.getProjectionMatrix());
+        m_skyShader.loadProjectionMatrix(camera.getProjectionMatrix());
         m_skyShader.stop();
     }
 }

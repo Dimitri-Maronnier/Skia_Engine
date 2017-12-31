@@ -13,8 +13,8 @@ public:
 
     void connectTextureUnits();
 
-    void loadProjection(glm::mat4 projection);
-    void loadView(glm::mat4 view);
+    void loadProjectionMatrix(glm::mat4 projectionMatrix);
+    void loadViewMatrix(glm::mat4 viewMatrix);
 
 protected:
     void bindAttributes();
@@ -22,8 +22,8 @@ protected:
 
 private:
     int location_environmentMap;
-    int location_projection;
-    int location_view;
+    int location_projectionMatrix;
+    int location_viewMatrix;
 };
 
 #endif // SIMPLESKYBOXSHADER_H

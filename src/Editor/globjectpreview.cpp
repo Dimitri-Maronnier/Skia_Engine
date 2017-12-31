@@ -107,7 +107,7 @@ void GLObjectPreview::initializeGL(){
     m_skyShader.init("simpleSyboxVertex.glsl","simpleSkyboxFragment.glsl");
     m_skyShader.start();
     m_skyShader.connectTextureUnits();
-    m_skyShader.loadProjection(camera.getProjectionMatrix());
+    m_skyShader.loadProjectionMatrix(camera.getProjectionMatrix());
     m_skyShader.stop();
 
     shader.init("vs.glsl","fs.glsl");
@@ -199,7 +199,7 @@ void GLObjectPreview::paintGL(){
 
 
         m_skyShader.start();
-        m_skyShader.loadView( camera.getViewMatrix());
+        m_skyShader.loadViewMatrix( camera.getViewMatrix());
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_CUBE_MAP, m_skyboxHdr);
         RenderTools::renderCube(*cubeVAO);

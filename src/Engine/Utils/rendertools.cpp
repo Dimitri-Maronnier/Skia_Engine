@@ -16,9 +16,9 @@ GLuint RenderTools::equirectangularToCubeMap(GLuint hdrTexture)
 
     generateCube(cubeVAO,cubeVBO);
 
-    unsigned int captureFBO;
-    glGenFramebuffers(1, &captureFBO);
-    glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+    GLuint FBO;
+    glGenFramebuffers(1, &FBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
     EquirectangularToCubemapShader equirectangularToCubemapShader;
     equirectangularToCubemapShader.init("cubemapVertex.glsl","Utils/fromEquirectangularToCubemapFragment.glsl");
 
@@ -55,7 +55,7 @@ GLuint RenderTools::equirectangularToCubeMap(GLuint hdrTexture)
     glBindTexture(GL_TEXTURE_2D, hdrTexture);
 
     glViewport(0, 0, Res, Res);
-    glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
     for (unsigned int i = 0; i < 6; ++i)
     {
         equirectangularToCubemapShader.loadView(captureViews[i]);
@@ -84,9 +84,9 @@ GLuint RenderTools::irradianceConvolution(GLuint envCubemap)
 
     generateCube(cubeVAO,cubeVBO);
 
-    unsigned int captureFBO;
-    glGenFramebuffers(1, &captureFBO);
-    glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+    GLuint FBO;
+    glGenFramebuffers(1, &FBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 
     IrradianceConvolutionShader irradianceShader;
     irradianceShader.init("cubemapVertex.glsl","PBR_Pipeline/irradianceConvolution.glsl");
@@ -128,7 +128,7 @@ GLuint RenderTools::irradianceConvolution(GLuint envCubemap)
     glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
 
     glViewport(0, 0, 32, 32);
-    glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
     for (unsigned int i = 0; i < 6; i++)
     {
         irradianceShader.loadView( captureViews[i]);
@@ -156,10 +156,8 @@ GLuint RenderTools::prefilterCubeMap(GLuint envCubemap)
     cubeVBO = new GLuint(1);
     generateCube(cubeVAO,cubeVBO);
 
-    unsigned int captureFBO;
-    unsigned int captureRBO;
-    glGenFramebuffers(1, &captureFBO);
-    glGenRenderbuffers(1, &captureRBO);
+    GLuint FBO;
+    glGenFramebuffers(1, &FBO);
 
     PreFilterShader prefilterShader;
     prefilterShader.init("cubemapVertex.glsl","PBR_Pipeline/prefilter.glsl");
@@ -200,13 +198,12 @@ GLuint RenderTools::prefilterCubeMap(GLuint envCubemap)
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
 
-    glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
     const unsigned int maxMipLevels = 5;
     for (unsigned int i = 0; i < maxMipLevels; i++)
     {
         unsigned int Width = 128 * std::pow(0.5, i);
         unsigned int Height = 128 * std::pow(0.5, i);
-        glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, Width, Height);
         glViewport(0, 0, Width, Height);
 
@@ -243,10 +240,8 @@ GLuint RenderTools::generate2DLut()
 
     generateQuad(quadVAO,quadVBO);
 
-    unsigned int captureFBO;
-    unsigned int captureRBO;
-    glGenFramebuffers(1, &captureFBO);
-    glGenRenderbuffers(1, &captureRBO);
+    GLuint FBO;
+    glGenFramebuffers(1, &FBO);
     GLuint brdfLUTTexture;
     glGenTextures(1, &brdfLUTTexture);
 
@@ -262,8 +257,7 @@ GLuint RenderTools::generate2DLut()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 
-    glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
-    glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, Res, Res);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, brdfLUTTexture, 0);
 
