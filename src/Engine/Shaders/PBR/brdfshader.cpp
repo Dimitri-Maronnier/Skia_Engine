@@ -1,4 +1,4 @@
-#include "src/Engine/Shaders/brdfshader.h"
+#include "brdfshader.h"
 
 void BRDFShader::bindAttributes(){
 
